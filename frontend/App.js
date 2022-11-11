@@ -1,29 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Button, Alert, Platform, StatusBar } from "react-native";
-import * as ImagePicker from "expo-image-picker"
+import React, { useEffect, useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  Button,
+  Alert,
+  Platform,
+  StatusBar,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import Constants from "expo-constants";
 
-import colors from "./app/config/colors.js"
+import colors from "./app/config/colors.js";
 
 export default function App() {
-
   const [image, setImage] = useState(null);
   const [hasCamerPermission, setHasCameraPermission] = useState(null);
-  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(null);
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] =
+    useState(null);
 
   useEffect(() => {
-    (async () =>{
-      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
-      const mediaLibraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    (async () => {
+      const cameraPermission =
+        await ImagePicker.requestCameraPermissionsAsync();
+      const mediaLibraryPermission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       setHasCameraPermission(cameraPermission.status === "granted");
       setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     })();
-  }, [])
+  }, []);
 
   takePicture = async () => {
-    if (!hasCamerPermission) Alert.alert("No camera permission", "Please enable camera permission in settings");
-    else{
+    if (!hasCamerPermission)
+      Alert.alert(
+        "No camera permission",
+        "Please enable camera permission in settings"
+      );
+    else {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: false,
       });
@@ -33,7 +50,10 @@ export default function App() {
 
   selectPicture = async () => {
     if (!hasMediaLibraryPermission) {
-      Alert.alert("No library permission", "Please enable library permission in settings");
+      Alert.alert(
+        "No library permission",
+        "Please enable library permission in settings"
+      );
     }
     if (hasMediaLibraryPermission) {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,13 +69,13 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require("./app/assets/icon.png")}/>
+        <Image style={styles.logo} source={require("./app/assets/icon.png")} />
         <Text>Food Tracker: Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title = "Take Picture" onPress={ this.takePicture }/>
-        <Button title = "Choose From Library" onPress={ this.selectPicture }/>
-        <Button title = "Search"/>
+        <Button title="Take Picture" onPress={this.takePicture} />
+        <Button title="Choose From Library" onPress={this.selectPicture} />
+        <Button title="Search" />
       </View>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -73,7 +93,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     flex: 2,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   logo: {
     width: 100,
@@ -82,5 +102,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: "space-evenly",
-  }
+  },
 });
