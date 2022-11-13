@@ -9,10 +9,12 @@ TEST_KEY = "wypfPDS0hGT0tCQDPQWYQ32mUgT1OKmpWvTskcwC"
 our_foods_filename = "food_data/our_foods.csv"
 # food_data[food_id] = food object
 food_data = {}
+# food_name_id[food_name] = food_id
+food_name_id = {}
 
 # this will not work when default quantity unit is not in grams!!!!
 def calculate_calories(food, mass):
-    if food.get_default_quantity == -1:
+    if food.get_default_quantity == -1 or food.get_default_quantity == 0:
         return -1
     return food.get_calories * mass / food.get_default_quantity
 
@@ -62,3 +64,8 @@ def get_food_data_from_csv():
             food.set_default_quantity(row[2])
             food.set_deafult_quantity_unit(row[3])
             food_data[row[0]] = food
+            food_name_id[row[1]] = row[0]
+
+# return list of all food names
+def get_food_names():
+    return list(food_name_id.keys())
