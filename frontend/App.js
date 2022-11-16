@@ -6,13 +6,13 @@ import {
   Image,
   SafeAreaView,
   TouchableOpacity,
-  Button,
   Alert,
   Platform,
   StatusBar,
   TextInput,
   KeyboardAvoidingView,
   Pressable,
+  Keyboard,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -20,6 +20,7 @@ import Constants from "expo-constants";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "./app/config/colors.js";
+import Search from "./app/components/Search.js";
 
 const light = "#eee";
 const medium = "grey";
@@ -82,14 +83,7 @@ export default function App() {
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <View
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.searchBar}
-        >
-          <FontAwesome name="search" size={24} color={medium} />
-          <TextInput style={styles.searchText} placeholder="Search food" />
-          <FontAwesome name="close" size={24} color={medium} />
-        </View>
+        <Search iconColor={medium} />
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Take Picture</Text>
           <FontAwesome name="camera" size={24} color={light} />
@@ -132,7 +126,7 @@ const styles = StyleSheet.create({
     color: dark,
   },
   buttonContainer: {
-    flex: 1,
+    flex: 1.25, // magic number for iphone se
     justifyContent: "space-evenly",
   },
   button: {
@@ -149,18 +143,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: light,
     marginRight: 8,
-  },
-  searchBar: {
-    borderWidth: 2,
-    borderColor: medium,
-    padding: 10,
-    borderRadius: 40,
-    flexDirection: "row",
-  },
-  searchText: {
-    color: dark,
-    fontSize: 24,
-    marginLeft: 10,
-    flex: 1,
   },
 });
