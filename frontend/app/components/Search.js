@@ -8,16 +8,14 @@ import {
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
-const light = "#eee";
-const medium = "grey";
-const dark = "#222";
+import theme from "../config/theme";
 
 const Search = () => {
   const [input, setInput] = useState("");
 
   return (
     <View style={styles.searchBar}>
-      <FontAwesome name="search" size={24} color={medium} />
+      <FontAwesome name="search" size={24} color={theme.medium} />
       <TextInput
         style={styles.searchText}
         placeholder="Search food"
@@ -28,7 +26,7 @@ const Search = () => {
         <FontAwesome5
           name="times-circle"
           size={24}
-          color={medium}
+          color={theme.medium}
           style={styles.closeSearch}
           onPress={() => setInput("")}
         />
@@ -37,7 +35,7 @@ const Search = () => {
         <FontAwesome5
           name="arrow-alt-circle-down"
           size={24}
-          color={medium}
+          color={theme.medium}
           onPress={Keyboard.dismiss}
         />
       </TouchableOpacity>
@@ -50,14 +48,14 @@ export default Search;
 const styles = StyleSheet.create({
   searchBar: {
     borderWidth: 2,
-    borderColor: medium,
+    borderColor: theme.medium,
     padding: 16,
     borderRadius: 40,
     flexDirection: "row",
     alignItems: "center",
   },
   searchText: {
-    color: dark,
+    color: theme.dark,
     fontSize: 18,
     marginLeft: 10,
     flex: 1,
