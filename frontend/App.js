@@ -10,12 +10,20 @@ import {
   Alert,
   Platform,
   StatusBar,
+  TextInput,
+  KeyboardAvoidingView,
+  Pressable,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import Constants from "expo-constants";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "./app/config/colors.js";
+
+const light = "#eee";
+const medium = "grey";
+const dark = "#222";
 
 export default function App() {
   const [image, setImage] = useState(null);
@@ -34,7 +42,7 @@ export default function App() {
     })();
   }, []);
 
-  takePicture = async () => {
+  const takePicture = async () => {
     if (!hasCamerPermission)
       Alert.alert(
         "No camera permission",
@@ -48,7 +56,7 @@ export default function App() {
     }
   };
 
-  selectPicture = async () => {
+  const selectPicture = async () => {
     if (!hasMediaLibraryPermission) {
       Alert.alert(
         "No library permission",
@@ -70,12 +78,26 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require("./app/assets/icon.png")} />
-        <Text>Food Tracker: Analyze your food anywhere</Text>
+        <Text style={styles.appTitle}>Food Tracker</Text>
+        <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Take Picture" onPress={this.takePicture} />
-        <Button title="Choose From Library" onPress={this.selectPicture} />
-        <Button title="Search" />
+        <View
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.searchBar}
+        >
+          <FontAwesome name="search" size={24} color={medium} />
+          <TextInput style={styles.searchText} placeholder="Search food" />
+          <FontAwesome name="close" size={24} color={medium} />
+        </View>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Take Picture</Text>
+          <FontAwesome name="camera" size={24} color={light} />
+        </Pressable>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Pick from Photo Library</Text>
+          <FontAwesome5 name="images" size={24} color={light} />
+        </Pressable>
       </View>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -89,18 +111,56 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: light,
   },
   logoContainer: {
-    flex: 2,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 1024 / 4,
+    height: 768 / 4,
+  },
+  appTitle: {
+    fontSize: 48,
+    fontWeight: "bold",
+    paddingBottom: 10,
+    color: dark,
+  },
+  appSubtitle: {
+    color: dark,
   },
   buttonContainer: {
     flex: 1,
     justifyContent: "space-evenly",
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 24,
+    borderRadius: 4,
+    backgroundColor: dark,
+    paddingVertical: 24,
+  },
+  buttonText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: light,
+    marginRight: 8,
+  },
+  searchBar: {
+    borderWidth: 2,
+    borderColor: medium,
+    padding: 10,
+    borderRadius: 40,
+    flexDirection: "row",
+  },
+  searchText: {
+    color: dark,
+    fontSize: 24,
+    marginLeft: 10,
+    flex: 1,
   },
 });
