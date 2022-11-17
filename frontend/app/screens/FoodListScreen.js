@@ -10,19 +10,17 @@ import Search from "../components/Search";
 import FoodListItem from "../components/FoodListItem";
 
 import theme from "../config/theme";
+import FoodList from "../components/FoodList";
 
-export default function FoodListScreen() {
+export default function FoodListScreen({ navigation }) {
+  const searchTerm = navigation.getParam("searchTerm");
   const foods = ["Green Apple", "Red Apple", "Crabapple", "Pineapple"];
 
   return (
     <View style={styles.foodList}>
-      <Search atFoodList />
+      <Search atFoodList initialInput={searchTerm} />
       <Text style={styles.header}>Top Results</Text>
-      <FlatList
-        data={foods}
-        keyExtractor={food => food}
-        renderItem={({ item }) => <FoodListItem food={item} />}
-      />
+      <FoodList foods={foods} />
     </View>
   );
 }

@@ -1,5 +1,6 @@
 export default {
   light: "#eee",
-  medium: "grey",
   dark: "#222",
+  medium: "grey",
+  accent: "rgb(164, 208, 80)",
 };

@@ -11,8 +11,8 @@ import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 
-function Search({ atFoodList, navigation }) {
-  const [input, setInput] = useState("");
+function Search({ initialInput = "", atFoodList, navigation }) {
+  const [input, setInput] = useState(initialInput);
 
   return (
     <View style={styles.searchBar}>
@@ -23,7 +23,7 @@ function Search({ atFoodList, navigation }) {
         value={input}
         onChangeText={text => setInput(text)}
         returnKeyType="search"
-        onEndEditing={() =>
+        onSubmitEditing={() =>
           input.trim() &&
           !atFoodList &&
           navigation.navigate("FoodList", { searchTerm: input })
