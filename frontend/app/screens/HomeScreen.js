@@ -79,7 +79,7 @@ export default function App() {
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Search iconColor={theme.medium} />
+        <Search atFoodList={false} />
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Take Picture</Text>
           <FontAwesome name="camera" size={24} color={theme.light} />

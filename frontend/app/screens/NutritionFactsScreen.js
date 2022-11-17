@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-export default function CameraScreen() {
+export default function NutritionFactsScreen() {
   return (
     <View>
-      <Text>CameraScreen</Text>
+      <Text>NutritionFactsScreen</Text>
     </View>
   );
 }

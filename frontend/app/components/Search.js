@@ -7,10 +7,11 @@ import {
   View,
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 
-const Search = () => {
+function Search({ atFoodList, navigation }) {
   const [input, setInput] = useState("");
 
   return (
@@ -21,6 +22,12 @@ const Search = () => {
         placeholder="Search food"
         value={input}
         onChangeText={text => setInput(text)}
+        returnKeyType="search"
+        onEndEditing={() =>
+          input.trim() &&
+          !atFoodList &&
+          navigation.navigate("FoodList", { searchTerm: input })
+        }
       />
       <TouchableOpacity>
         <FontAwesome5
@@ -41,9 +48,9 @@ const Search = () => {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
-export default Search;
+export default withNavigation(Search);
 
 const styles = StyleSheet.create({
   searchBar: {
