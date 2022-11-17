@@ -1,4 +1,3 @@
-import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,39 +6,49 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
-  Pressable,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 import Search from "../components/Search";
 import BorderButton from "../components/BorderButton";
 
-const App = ({ navigation }) => (
-  <SafeAreaView style={styles.container}>
-    <View style={styles.logoContainer}>
-      <Image style={styles.logo} source={require("../assets/icon.png")} />
-      <Text style={styles.appTitle}>Food Tracker</Text>
-      <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
-    </View>
-    <View style={styles.buttonContainer}>
-      <Search atFoodList={false} />
-      <BorderButton
-        label="Take Picture"
-        icon="camera"
-        onPress={() => navigation.navigate("Camera")}
-      />
-      <BorderButton
-        label="Pick from Photo Library"
-        icon="images"
-        onPress={() => navigation.navigate("Camera")}
-      />
-    </View>
-    <StatusBar style="auto" />
-  </SafeAreaView>
-);
+function HomeScreen({ navigation }) {
+  async function openImagePicker() {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (!pickerResult.cancelled) {
+      const { uri, width, height } = pickerResult;
+      navigation.navigate("Camera", { image: uri, width, height });
+    }
+  }
 
-export default App;
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require("../assets/icon.png")} />
+        <Text style={styles.appTitle}>Food Tracker</Text>
+        <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Search atFoodList={false} />
+        <BorderButton
+          label="Take Picture"
+          icon="camera"
+          onPress={() => navigation.navigate("Camera")}
+        />
+        <BorderButton
+          label="Pick from Photo Library"
+          icon="images"
+          onPress={openImagePicker}
+        />
+      </View>
+      <StatusBar style="auto" />
+    </SafeAreaView>
+  );
+}
+
+export default withNavigation(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

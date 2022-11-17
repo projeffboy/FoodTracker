@@ -12,12 +12,24 @@ import { withNavigation } from "react-navigation";
 import FoodList from "../components/FoodList";
 
 function CameraScreen({ navigation }) {
+  const galleryImage = navigation.getParam("image");
+  const width = navigation.getParam("width");
+  const height = navigation.getParam("height");
+
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(galleryImage);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  const foods = ["Green Apple", "Red Apple", "Crabapple", "Pineapple"];
+  const foods = [
+    "Green Apple",
+    "Red Apple",
+    "Crabapple",
+    "Pineapple",
+    "Caramel Apple",
+    "Snapple",
+    "Rotten Apple",
+  ];
 
   useEffect(() => {
     // I have to put async func in another func or i get error
@@ -74,11 +86,25 @@ function CameraScreen({ navigation }) {
           </View>
         </Camera>
       ) : (
-        <Image source={{ uri: image }} style={styles.camera} />
+        <View style={styles.camera}>
+          <Image
+            source={{ uri: image }}
+            style={
+              width && height ? { aspectRatio: width / height } : { flex: 1 }
+            }
+          />
+        </View>
       )}
 
       {image && (
-        <View style={styles.suggestions}>
+        <View
+          style={[
+            styles.suggestions,
+            width && height && width > height
+              ? styles.suggestionsForLandscape
+              : styles.suggestionsForPortrait,
+          ]}
+        >
           <FoodList foods={foods} />
         </View>
       )}
@@ -142,14 +168,20 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   suggestions: {
+    flex: 1,
+    backgroundColor: theme.light,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  suggestionsForPortrait: {
     position: "absolute",
     zIndex: 1,
     width: "100%",
     bottom: 88, // magic number
-    backgroundColor: theme.light,
     height: 130, // magic number for 2 and a half list items
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+  },
+  suggestionsForLandscape: {
+    flex: 1,
   },
   buttonContainer: {
     flexDirection: "row",
