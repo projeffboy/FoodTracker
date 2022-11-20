@@ -6,8 +6,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():  # put application's code here
-    get_food_data_from_csv()
-    return str(get_food_info("1750339")) + " " + str(get_food_info("334536"))
+    output_from_ml = ["1750339", "Apples, red delicious, with skin, raw", None, "g"]
+    food = Food(output_from_ml[0],output_from_ml[1],output_from_ml[2],output_from_ml[3])
+    get_food_info(food)
+    return str(food)
 
 
 if __name__ == '__main__':
