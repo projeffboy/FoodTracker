@@ -20,9 +20,7 @@ const navigator = createStackNavigator(
     Camera: { screen: CameraScreen, navigationOptions: { headerShown: false } },
     NutritionFacts: {
       screen: NutritionFactsScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: navigation.state.params.food,
-      }),
+      navigationOptions: { title: "" },
     },
   },
   {
