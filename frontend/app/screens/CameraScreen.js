@@ -105,7 +105,7 @@ function CameraScreen({ navigation }) {
               : styles.suggestionsForPortrait,
           ]}
         >
-          <FoodList foods={foods} />
+          {/* <FoodList foods={foods} /> */}
         </View>
       )}
 
