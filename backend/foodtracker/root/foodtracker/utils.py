@@ -36,14 +36,17 @@ def get_food_info(food):
     for food_nutrient in food_nutrients:
         # find energy value
         nutrient_id = food_nutrient["nutrient"]["id"]
-        energy_id1, energy_id2, energy_id3 = Calorie.get_nutrientId()
+        energy_id1, energy_id2, energy_id3, energy_id4 = Calorie.get_nutrientId()
         # get calorie
         if(nutrient_id == energy_id1):
             energy = convert_KJ_to_kCal(float(food_nutrient["amount"]))
             break
         elif(nutrient_id == energy_id2):
-            atwater_general_factor = float(food_nutrient["amount"])
+            energy = float(food_nutrient["amount"])
+            break
         elif(nutrient_id == energy_id3):
+            atwater_general_factor = float(food_nutrient["amount"])
+        elif(nutrient_id == energy_id4):
             atwater_specific_factor = float(food_nutrient["amount"])
         # get protien
         if(nutrient_id==Protien.get_nutrientId()):
