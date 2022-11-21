@@ -25,3 +25,13 @@ export function percentDV([value, unit], dailyValueInG) {
 
   return Math.round((value / dailyValueInG) * 100) + "%";
 }
+
+export function kJ_to_kcal([value, unit]) {
+  if (unit.toLowerCase() == "kj") {
+    return [Math.round(value * 0.239006), "kcal"];
+  } else if (unit.toLowerCase() == "kcal") {
+    return [value, unit];
+  }
+  console.error("Unit is not in kJ or kcal");
+  return ["--", "kcal"];
+}
