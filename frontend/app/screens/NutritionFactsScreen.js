@@ -1,5 +1,6 @@
 import { StyleSheet, Image, View, Text, ScrollView } from "react-native";
 import React from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import theme from "../config/theme";
 import { getNutrient, percentDV } from "../helper";
@@ -40,7 +41,13 @@ export default function NutritionFactsScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{description}</Text>
+        <MaterialCommunityIcons
+          name="food-fork-drink"
+          size={24}
+          color={theme.dark}
+        />
+        <Text style={styles.title}> {description} </Text>
+        <Text> </Text>
       </View>
       <View style={styles.label}>
         <View style={[styles.thinBorderBottom, { paddingBottom: 0 }]}>
@@ -229,6 +236,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     marginTop: 8,
     marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   label: {
     borderWidth: 2,
@@ -285,6 +295,6 @@ const styles = StyleSheet.create({
   },
   finePrint: {
     fontSize: 10,
-    letterSpacing: -1,
+    letterSpacing: -0.5,
   },
 });
