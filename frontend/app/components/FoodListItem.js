@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TurboModuleRegistry,
+  View,
+} from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
@@ -7,7 +13,9 @@ import theme from "../config/theme";
 import { getNutrient, kJ_to_kcal } from "../helper";
 
 const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
-  const kcal = kJ_to_kcal(getNutrient(foodNutrients, "energy"));
+  const kcal = kJ_to_kcal(
+    getNutrient(foodNutrients, "energy", TurboModuleRegistry)
+  );
 
   return (
     <TouchableOpacity

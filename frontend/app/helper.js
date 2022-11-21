@@ -1,6 +1,13 @@
-export function getNutrient(nutrients, nutrientName) {
+export function getNutrient(nutrients, nutrientName, substring = false) {
   for (let nutrient of nutrients) {
-    if (nutrient.nutrientName.toLowerCase() === nutrientName.toLowerCase()) {
+    if (
+      (!substring &&
+        nutrient.nutrientName.toLowerCase() === nutrientName.toLowerCase()) ||
+      (substring &&
+        nutrient.nutrientName
+          .toLowerCase()
+          .includes(nutrientName.toLowerCase()))
+    ) {
       let unitName = nutrient.unitName;
       if (unitName === unitName.toUpperCase()) {
         unitName = unitName.toLowerCase();

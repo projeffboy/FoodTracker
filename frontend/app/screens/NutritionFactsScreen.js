@@ -1,6 +1,7 @@
 import { StyleSheet, Image, View, Text, ScrollView } from "react-native";
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 import theme from "../config/theme";
 import { getNutrient, percentDV, kJ_to_kcal } from "../helper";
@@ -8,7 +9,22 @@ import NutritionEntry from "../components/NutritionEntry";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
+const notBold = "Helvetica";
+const italic = "Helvetica-Italic";
+const bold = "Helvetica-Bold";
+const veryBold = "Helvetica-Black";
+
 export default function NutritionFactsScreen({ navigation }) {
+  const [loaded] = useFonts({
+    [notBold]: require("../assets/fonts/" + notBold + ".ttf"),
+    [italic]: require("../assets/fonts/" + italic + ".ttf"),
+    [bold]: require("../assets/fonts/" + bold + ".ttf"),
+    [veryBold]: require("../assets/fonts/" + veryBold + ".ttf"),
+  });
+  if (!loaded) {
+    return null;
+  }
+
   const description = navigation.getParam("description");
   const foodNutrients = navigation.getParam("foodNutrients");
 
@@ -32,9 +48,12 @@ export default function NutritionFactsScreen({ navigation }) {
     potassium: { longForm: "Potassium, K", dailyValueInG: 4.7 },
   };
   for (let nutrient in nutrients) {
+    let substring = nutrient === "energy";
+
     nutrients[nutrient].value = getNutrient(
       foodNutrients,
-      nutrients[nutrient].longForm
+      nutrients[nutrient].longForm,
+      substring
     );
   }
 
@@ -44,7 +63,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <MaterialCommunityIcons
           name="food-fork-drink"
           size={24}
-          color={theme.dark}
+          color={theme.darkAccent}
         />
         <Text style={styles.title}> {description} </Text>
         <Text> </Text>
@@ -52,6 +71,11 @@ export default function NutritionFactsScreen({ navigation }) {
       <View style={styles.label}>
         <View style={[styles.thinBorderBottom, { paddingBottom: 0 }]}>
           <Text style={styles.h1}>Nutrition Facts</Text>
+        </View>
+        <View style={{ ...styles.entry, marginHorizontal: 8 }}>
+          <Text style={[styles.h3, { fontFamily: notBold }]}>
+            1 servings per container
+          </Text>
         </View>
         <View style={[styles.entry, styles.veryThickBorderBottom]}>
           <Text style={[styles.h3, { marginBottom: 4 }]}>Serving size</Text>
@@ -61,7 +85,9 @@ export default function NutritionFactsScreen({ navigation }) {
           <Text style={styles.boldText}>Amount per serving</Text>
           <View style={styles.entry}>
             <Text style={styles.h2}>Calories</Text>
-            <Text style={styles.h2}>{kJ_to_kcal(nutrients.energy.value)}</Text>
+            <Text style={styles.h2}>
+              {kJ_to_kcal(nutrients.energy.value)[0]}
+            </Text>
           </View>
         </View>
         <View style={[styles.thinBorderBottom, { alignItems: "flex-end" }]}>
@@ -89,7 +115,7 @@ export default function NutritionFactsScreen({ navigation }) {
         />
         <NutritionEntry
           styles={styles}
-          italic="Trans"
+          italic="Trans "
           nutrition="Fat"
           value={nutrients.transFat.value}
           dailyValue={percentDV(
@@ -167,7 +193,6 @@ export default function NutritionFactsScreen({ navigation }) {
             nutrients.vitaminD.value,
             nutrients.vitaminD.dailyValueInG
           )}
-          bold
         />
         <NutritionEntry
           styles={styles}
@@ -177,7 +202,6 @@ export default function NutritionFactsScreen({ navigation }) {
             nutrients.calcium.value,
             nutrients.calcium.dailyValueInG
           )}
-          bold
         />
         <NutritionEntry
           styles={styles}
@@ -187,7 +211,6 @@ export default function NutritionFactsScreen({ navigation }) {
             nutrients.iron.value,
             nutrients.iron.dailyValueInG
           )}
-          bold
         />
         <NutritionEntry
           styles={styles}
@@ -197,7 +220,6 @@ export default function NutritionFactsScreen({ navigation }) {
             nutrients.potassium.value,
             nutrients.potassium.dailyValueInG
           )}
-          bold
           borderBottom={styles.thickBorderBottom}
         />
         <View style={styles.finePrintContainer}>
@@ -221,12 +243,13 @@ const borderBottom = {
 
 const header = {
   color: theme.dark,
-  fontWeight: "bold",
+  fontFamily: veryBold,
 };
 
 const text = {
   color: theme.dark,
   fontSize: 16,
+  fontFamily: notBold,
 };
 
 const styles = StyleSheet.create({
@@ -240,15 +263,16 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
   },
+  title: {
+    ...header,
+    fontFamily: bold,
+    fontSize: 20,
+    textAlign: "center",
+    color: theme.darkAccent,
+  },
   label: {
     borderWidth: 2,
     borderColor: theme.dark,
-  },
-  title: {
-    ...header,
-    fontWeight: "initial",
-    fontSize: 20,
-    textAlign: "center",
   },
   h1: {
     ...header,
