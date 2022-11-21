@@ -4,20 +4,27 @@ import { FontAwesome } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
-import { getNutrient } from "../helper";
+import { getNutrient, kJ_to_kcal } from "../helper";
 
-const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => (
-  <TouchableOpacity
-    style={styles.item}
-    onPress={() =>
-      navigation.navigate("NutritionFacts", { description, foodNutrients })
-    }
-  >
-    <Text style={styles.itemText}>{description}</Text>
-    <Text style={styles.calories}>{getNutrient(foodNutrients, "energy")}</Text>
-    <FontAwesome name="plus" size={16} color={theme.dark} />
-  </TouchableOpacity>
-);
+const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
+  const kcal = kJ_to_kcal(getNutrient(foodNutrients, "energy"));
+
+  return (
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() =>
+        navigation.navigate("NutritionFacts", { description, foodNutrients })
+      }
+    >
+      <Text style={styles.itemText}>{description}</Text>
+      <View style={styles.calories}>
+        <Text style={styles.caloriesText}>{kcal[0]}</Text>
+        <Text style={{ ...styles.caloriesText, fontSize: 10 }}>{kcal[1]}</Text>
+      </View>
+      <FontAwesome name="plus" size={16} color={theme.dark} />
+    </TouchableOpacity>
+  );
+};
 
 export default withNavigation(FoodListItem);
 
@@ -27,6 +34,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: theme.dark,
     flexDirection: "row",
+    alignItems: "center",
   },
   itemText: {
     fontSize: 16,
@@ -35,6 +43,10 @@ const styles = StyleSheet.create({
   },
   calories: {
     marginHorizontal: 8,
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  caloriesText: {
     color: theme.medium,
   },
 });

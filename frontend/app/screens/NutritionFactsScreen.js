@@ -3,7 +3,7 @@ import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import theme from "../config/theme";
-import { getNutrient, percentDV } from "../helper";
+import { getNutrient, percentDV, kJ_to_kcal } from "../helper";
 import NutritionEntry from "../components/NutritionEntry";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
@@ -61,7 +61,7 @@ export default function NutritionFactsScreen({ navigation }) {
           <Text style={styles.boldText}>Amount per serving</Text>
           <View style={styles.entry}>
             <Text style={styles.h2}>Calories</Text>
-            <Text style={styles.h2}>{nutrients.energy.value.join("")}</Text>
+            <Text style={styles.h2}>{kJ_to_kcal(nutrients.energy.value)}</Text>
           </View>
         </View>
         <View style={[styles.thinBorderBottom, { alignItems: "flex-end" }]}>
@@ -70,7 +70,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Total Fat"
-          value={nutrients.fat.value.join("")}
+          value={nutrients.fat.value}
           dailyValue={percentDV(
             nutrients.fat.value,
             nutrients.fat.dailyValueInG
@@ -80,7 +80,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Saturated Fat"
-          value={nutrients.saturatedFat.value.join("")}
+          value={nutrients.saturatedFat.value}
           dailyValue={percentDV(
             nutrients.saturatedFat.value,
             nutrients.saturatedFat.dailyValueInG
@@ -91,7 +91,7 @@ export default function NutritionFactsScreen({ navigation }) {
           styles={styles}
           italic="Trans"
           nutrition="Fat"
-          value={nutrients.transFat.value.join("")}
+          value={nutrients.transFat.value}
           dailyValue={percentDV(
             nutrients.transFat.value,
             nutrients.transFat.dailyValueInG
@@ -101,7 +101,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Cholesterol"
-          value={nutrients.cholesterol.value.join("")}
+          value={nutrients.cholesterol.value}
           dailyValue={percentDV(
             nutrients.cholesterol.value,
             nutrients.cholesterol.dailyValueInG
@@ -111,7 +111,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Sodium"
-          value={nutrients.sodium.value.join("")}
+          value={nutrients.sodium.value}
           dailyValue={percentDV(
             nutrients.sodium.value,
             nutrients.sodium.dailyValueInG
@@ -121,7 +121,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Total Carbohydrate"
-          value={nutrients.carbs.value.join("")}
+          value={nutrients.carbs.value}
           dailyValue={percentDV(
             nutrients.carbs.value,
             nutrients.carbs.dailyValueInG
@@ -131,7 +131,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Dietary Fiber"
-          value={nutrients.fiber.value.join("")}
+          value={nutrients.fiber.value}
           dailyValue={percentDV(
             nutrients.fiber.value,
             nutrients.fiber.dailyValueInG
@@ -141,7 +141,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Total Sugars"
-          value={nutrients.sugars.value.join("")}
+          value={nutrients.sugars.value}
           dailyValue={percentDV(
             nutrients.sugars.value,
             nutrients.sugars.dailyValueInG
@@ -151,7 +151,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Protein"
-          value={nutrients.protein.value.join("")}
+          value={nutrients.protein.value}
           dailyValue={percentDV(
             nutrients.protein.value,
             nutrients.protein.dailyValueInG
@@ -162,7 +162,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Vitamin D"
-          value={nutrients.vitaminD.value.join("")}
+          value={nutrients.vitaminD.value}
           dailyValue={percentDV(
             nutrients.vitaminD.value,
             nutrients.vitaminD.dailyValueInG
@@ -172,7 +172,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Calcium"
-          value={nutrients.calcium.value.join("")}
+          value={nutrients.calcium.value}
           dailyValue={percentDV(
             nutrients.calcium.value,
             nutrients.calcium.dailyValueInG
@@ -182,7 +182,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Iron"
-          value={nutrients.iron.value.join("")}
+          value={nutrients.iron.value}
           dailyValue={percentDV(
             nutrients.iron.value,
             nutrients.iron.dailyValueInG
@@ -192,7 +192,7 @@ export default function NutritionFactsScreen({ navigation }) {
         <NutritionEntry
           styles={styles}
           nutrition="Potassium"
-          value={nutrients.potassium.value.join("")}
+          value={nutrients.potassium.value}
           dailyValue={percentDV(
             nutrients.potassium.value,
             nutrients.potassium.dailyValueInG
