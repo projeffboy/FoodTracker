@@ -11,6 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():  # put application's code here
     output_from_ml = ["1750339", "Apples, red delicious, with skin, raw", None, "g"]
+    output_from_ml = ["1048343","RAW ALMONDS, RAW","28.0","g"]
     food = Food(output_from_ml[0],output_from_ml[1],output_from_ml[2],output_from_ml[3])
     get_food_info(food)
     return str(food)
@@ -51,7 +52,8 @@ def handler():
                          'fat': food.fat(),
                          'sugar': food.sugar(),
                          'fiber': food.fiber(),
-                         'calcium': food.calcium()}
+                         'calcium': food.calcium(),
+                         'sodium': food.sodium()}
             json_content.append(food_dict)
 
         return json.dumps(json_content)

@@ -16,6 +16,7 @@ class Food:
         self.sugar = 0
         self.fiber = None
         self.calcium = None
+        self.sodium = None
 
     def get_name(self):
         return self.name
@@ -99,7 +100,7 @@ class Calorie:
 
     def get_nutrientId():
         # returns the id that is used to identify energy in database (energy or Atwater Factors) found in nutrients.csv
-        return 1062, 2047, 2048
+        return 1062, 1008, 2047, 2048
 
 
 class Protien:
