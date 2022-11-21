@@ -13,8 +13,15 @@ import { withNavigation } from "react-navigation";
 import theme from "../config/theme";
 import Search from "../components/Search";
 import BorderButton from "../components/BorderButton";
+import { useState } from "react";
 
 function HomeScreen({ navigation }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  function navigate() {
+    searchTerm.trim() && navigation.navigate("FoodList", { searchTerm });
+  }
+
   async function openImagePicker() {
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (!pickerResult.cancelled) {
@@ -31,7 +38,7 @@ function HomeScreen({ navigation }) {
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Search atFoodList={false} />
+        <Search term={searchTerm} setTerm={setSearchTerm} submit={navigate} />
         <BorderButton
           label="Take Picture"
           icon="camera"

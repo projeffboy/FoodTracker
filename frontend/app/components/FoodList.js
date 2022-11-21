@@ -5,7 +5,7 @@ import FoodListItem from "./FoodListItem";
 const FoodList = ({ foods }) => (
   <FlatList
     data={foods}
-    keyExtractor={food => food}
+    keyExtractor={food => food.fdcId}
     renderItem={({ item }) => <FoodListItem food={item} />}
   />
 );

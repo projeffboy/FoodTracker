@@ -5,15 +5,28 @@ import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 
-const FoodListItem = ({ food, navigation }) => (
-  <TouchableOpacity
-    style={styles.item}
-    onPress={() => navigation.navigate("NutritionFacts", { food })}
-  >
-    <Text style={styles.itemText}>{food}</Text>
-    <FontAwesome name="plus" size={16} color={theme.dark} />
-  </TouchableOpacity>
-);
+function FoodListItem({ food: { description, foodNutrients }, navigation }) {
+  function getCalories(nutrients) {
+    for (let nutrient of nutrients) {
+      if (nutrient.nutrientName === "Energy") {
+        return nutrient.value;
+      }
+    }
+  }
+
+  return (
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() =>
+        navigation.navigate("NutritionFacts", { description, foodNutrients })
+      }
+    >
+      <Text style={styles.itemText}>{description}</Text>
+      <Text style={styles.calories}>{getCalories(foodNutrients)}kcal</Text>
+      <FontAwesome name="plus" size={16} color={theme.dark} />
+    </TouchableOpacity>
+  );
+}
 
 export default withNavigation(FoodListItem);
 
@@ -28,5 +41,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.dark,
     flex: 1,
+  },
+  calories: {
+    marginHorizontal: 8,
+    color: theme.medium,
   },
 });

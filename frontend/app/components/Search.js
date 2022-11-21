@@ -7,27 +7,20 @@ import {
   View,
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 
-function Search({ initialInput = "", atFoodList, navigation }) {
-  const [input, setInput] = useState(initialInput);
-
+export default function Search({ term, setTerm, submit }) {
   return (
     <View style={styles.searchBar}>
       <FontAwesome name="search" size={24} color={theme.medium} />
       <TextInput
         style={styles.searchText}
         placeholder="Search food"
-        value={input}
-        onChangeText={text => setInput(text)}
+        value={term}
+        onChangeText={text => setTerm(text)}
         returnKeyType="search"
-        onSubmitEditing={() =>
-          input.trim() &&
-          !atFoodList &&
-          navigation.navigate("FoodList", { searchTerm: input })
-        }
+        onSubmitEditing={submit}
       />
       <TouchableOpacity>
         <FontAwesome5
@@ -35,7 +28,7 @@ function Search({ initialInput = "", atFoodList, navigation }) {
           size={24}
           color={theme.medium}
           style={styles.closeSearch}
-          onPress={() => setInput("")}
+          onPress={() => setTerm("")}
         />
       </TouchableOpacity>
       <TouchableOpacity>
@@ -49,8 +42,6 @@ function Search({ initialInput = "", atFoodList, navigation }) {
     </View>
   );
 }
-
-export default withNavigation(Search);
 
 const styles = StyleSheet.create({
   searchBar: {
