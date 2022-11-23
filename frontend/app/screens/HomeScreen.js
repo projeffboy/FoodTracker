@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
     flex: 1.25, // magic number for iphone se
     justifyContent: "space-evenly",
     alignItems: "stretch",
-    marginHorizontal: 32,
+    marginHorizontal: 24,
   },
 });

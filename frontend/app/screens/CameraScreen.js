@@ -10,6 +10,7 @@ import BorderlessButton from "../components/BorderlessButton";
 import theme from "../config/theme";
 import { withNavigation } from "react-navigation";
 import FoodList from "../components/FoodList";
+import useFoods from "../hooks/useFoods";
 
 function CameraScreen({ navigation }) {
   const galleryImage = navigation.getParam("image");
@@ -21,15 +22,11 @@ function CameraScreen({ navigation }) {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  const foods = [
-    "Green Apple",
-    "Red Apple",
-    "Crabapple",
-    "Pineapple",
-    "Caramel Apple",
-    "Snapple",
-    "Rotten Apple",
-  ];
+  const [{ data, loading, error }, searchFoods] = useFoods();
+
+  useEffect(() => {
+    searchFoods("whole wheat bread");
+  }, []);
 
   useEffect(() => {
     // I have to put async func in another func or i get error
@@ -105,7 +102,7 @@ function CameraScreen({ navigation }) {
               : styles.suggestionsForPortrait,
           ]}
         >
-          {/* <FoodList foods={foods} /> */}
+          <FoodList foods={data?.foods} />
         </View>
       )}
 

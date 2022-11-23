@@ -1,0 +1,6 @@
+major:
+- add the brand request
+- more nutrients
+
+minor:
+- add error toast bars for invalid servings and serving size

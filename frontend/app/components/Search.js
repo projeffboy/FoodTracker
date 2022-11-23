@@ -21,6 +21,8 @@ export default function Search({ term, setTerm, submit }) {
         onChangeText={text => setTerm(text)}
         returnKeyType="search"
         onSubmitEditing={submit}
+        enablesReturnKeyAutomatically
+        cursorColor={theme.medium}
       />
       <TouchableOpacity>
         <FontAwesome5

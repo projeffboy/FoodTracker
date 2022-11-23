@@ -10,7 +10,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
-import { getNutrient, kJ_to_kcal } from "../helper";
+import { getNutrient, kJ_to_kcal } from "../helper/helper";
 
 const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
   const kcal = kJ_to_kcal(

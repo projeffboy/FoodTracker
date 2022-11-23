@@ -21,7 +21,6 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.5",
     "react-native-dotenv": "^3.4.2",
-    "react-native-web": "~0.18.7",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4"
   },
