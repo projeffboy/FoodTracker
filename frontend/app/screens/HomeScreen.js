@@ -104,11 +104,12 @@ const styles = StyleSheet.create({
   logo: {
     width: 1024 / 4,
     height: 768 / 4,
+    marginBottom: 16,
   },
   appTitle: {
     fontSize: 48,
     fontWeight: "bold",
-    paddingBottom: 10,
+    paddingBottom: 8,
     color: theme.dark,
   },
   appSubtitle: {

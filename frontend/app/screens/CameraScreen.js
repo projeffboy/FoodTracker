@@ -100,9 +100,11 @@ function CameraScreen({ navigation }) {
             width && height && width > height
               ? styles.suggestionsForLandscape
               : styles.suggestionsForPortrait,
+            { alignItems: "center", justifyContent: "center" },
           ]}
         >
-          <FoodList foods={data?.foods} />
+          <Text>Camera recognition coming soon</Text>
+          {/* <FoodList foods={data?.foods} /> */}
         </View>
       )}
 
