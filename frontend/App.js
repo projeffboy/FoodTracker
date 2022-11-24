@@ -4,6 +4,7 @@ import HomeScreen from "./app/screens/HomeScreen";
 import FoodListScreen from "./app/screens/FoodListScreen";
 import CameraScreen from "./app/screens/CameraScreen";
 import NutritionFactsScreen from "./app/screens/NutritionFactsScreen";
+import DailySummaryScreen from "./app/screens/DailySummaryScreen";
 
 const navigator = createStackNavigator(
   {
@@ -21,6 +22,10 @@ const navigator = createStackNavigator(
     NutritionFacts: {
       screen: NutritionFactsScreen,
       navigationOptions: { title: "" },
+    },
+    DailySummary: {
+      screen: DailySummaryScreen,
+      navigationOptions: { title: "Summary" },
     },
   },
   {

@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   container: {
     margin: 8,
     alignItems: "center",
+    flex: 1,
   },
   titleContainer: {
     marginTop: 8,

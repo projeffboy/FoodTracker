@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, Image } from "react-native";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import BorderlessButton from "../components/BorderlessButton";
+import CameraButton from "../components/CameraButton";
 
 import theme from "../config/theme";
 import { withNavigation } from "react-navigation";
@@ -65,7 +65,7 @@ function CameraScreen({ navigation }) {
       {!image ? (
         <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
           <View style={styles.flashContainer}>
-            <BorderlessButton
+            <CameraButton
               onPress={() =>
                 setFlash(
                   flash === Camera.Constants.FlashMode.off
@@ -109,19 +109,19 @@ function CameraScreen({ navigation }) {
       )}
 
       <View style={styles.buttonContainer}>
-        <BorderlessButton
+        <CameraButton
           label="Go back"
           onPress={() => navigation.navigate("Home")}
           icon="arrow-left"
         />
         {!image ? (
-          <BorderlessButton
+          <CameraButton
             label="Take a picture"
             onPress={takePicture}
             icon="camera"
           />
         ) : (
-          <BorderlessButton
+          <CameraButton
             label="Re-take"
             onPress={() => setImage(null)}
             icon="retweet"

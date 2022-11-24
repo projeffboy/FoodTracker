@@ -6,6 +6,7 @@ import { EditServing, ServingInput } from "../components/ServingInput";
 import { kJ_to_kcal } from "../helper/helper";
 import theme from "../config/theme";
 import Picker from "../components/Picker";
+import MainMenuButton from "./MainMenuButton";
 
 const veryBold = "Helvetica-Black"; // font has to be initialized in parent component
 
@@ -32,7 +33,7 @@ const NutritionFactsHeader = ({
       </View>
       <View style={styles.servings}>
         <ServingInput
-          style={[styles.h3, styles.notBold]}
+          style={[styles.h3, styles.notBold, { textAlign: "center" }]}
           ref={servingsRef}
           maxLength={2}
           value={servings}
@@ -57,7 +58,7 @@ const NutritionFactsHeader = ({
         </View>
         <View style={styles.textAndButtons}>
           <ServingInput
-            style={[styles.h3, styles.bold]}
+            style={styles.h3}
             ref={servingSizeRef}
             maxLength={4}
             value={servingSize}
@@ -73,7 +74,9 @@ const NutritionFactsHeader = ({
         </View>
       </View>
       <View style={styles.thickBorderBottom}>
-        <Text style={styles.boldText}>Amount per serving</Text>
+        <View>
+          <Text style={styles.boldText}>Amount per serving</Text>
+        </View>
         <View style={styles.entry}>
           <Text style={styles.h2}>Calories</Text>
           <Text style={styles.h2}>

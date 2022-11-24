@@ -5,7 +5,6 @@ import {
   Image,
   SafeAreaView,
   Platform,
-  StatusBar,
   Keyboard,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -13,7 +12,7 @@ import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 import Search from "../components/Search";
-import BorderButton from "../components/BorderButton";
+import MainMenuButton from "../components/MainMenuButton";
 import { useEffect, useState } from "react";
 
 function HomeScreen({ navigation }) {
@@ -41,8 +40,12 @@ function HomeScreen({ navigation }) {
     };
   }, []);
 
-  function navigate() {
+  function goToFoodList() {
     searchTerm.trim() && navigation.navigate("FoodList", { searchTerm });
+  }
+
+  function goToDailySummary() {
+    navigation.navigate("DailySummary");
   }
 
   async function openImagePicker() {
@@ -66,23 +69,31 @@ function HomeScreen({ navigation }) {
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Search term={searchTerm} setTerm={setSearchTerm} submit={navigate} />
+        <Search
+          term={searchTerm}
+          setTerm={setSearchTerm}
+          submit={goToFoodList}
+        />
         {(Platform.OS !== "android" || !isKeyboardVisible) && (
           <>
-            <BorderButton
+            <MainMenuButton
               label="Take Picture"
               icon="camera"
               onPress={() => navigation.navigate("Camera")}
             />
-            <BorderButton
+            <MainMenuButton
               label="Pick from Photo Library"
               icon="images"
               onPress={openImagePicker}
             />
+            <MainMenuButton
+              label="Daily Summary"
+              icon="chart-pie"
+              onPress={goToDailySummary}
+            />
           </>
         )}
       </View>
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
@@ -116,7 +127,7 @@ const styles = StyleSheet.create({
     color: theme.dark,
   },
   buttonContainer: {
-    flex: 1.25, // magic number for iphone se
+    flex: 1.1, // magic number for iphone se
     justifyContent: "space-evenly",
     alignItems: "stretch",
     marginHorizontal: 24,

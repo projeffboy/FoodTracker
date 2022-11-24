@@ -6,14 +6,14 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import theme from "../config/theme";
 
-const BorderlessButton = ({ label, onPress, icon, color }) => (
+const CameraButton = ({ label, onPress, icon, color }) => (
   <TouchableOpacity onPress={onPress} style={styles.button}>
     <FontAwesome name={icon} size={32} color={color ? color : theme.dark} />
     <Text style={styles.text}>{label}</Text>
   </TouchableOpacity>
 );
 
-export default BorderlessButton;
+export default CameraButton;
 
 const styles = StyleSheet.create({
   button: {

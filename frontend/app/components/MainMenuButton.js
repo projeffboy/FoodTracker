@@ -4,7 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import theme from "../config/theme";
 
-const BorderButton = ({ label, icon, onPress }) => (
+export default MainMenuButton = ({ label, icon, onPress }) => (
   <Pressable style={styles.button} onPress={onPress}>
     {({ pressed }) => (
       <>
@@ -26,14 +26,12 @@ const BorderButton = ({ label, icon, onPress }) => (
   </Pressable>
 );
 
-export default BorderButton;
-
 const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    padding: 24,
+    padding: 20,
     borderRadius: 4,
     backgroundColor: theme.dark,
   },

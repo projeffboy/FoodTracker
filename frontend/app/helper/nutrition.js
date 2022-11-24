@@ -20,7 +20,11 @@ export default class Nutrition {
 
     this.nutrients = {
       Energy: { longForm: "energy", dailyValueInG: 2000 },
-      Fat: { longForm: "Total lipid (fat)", dailyValueInG: 78, bold: true },
+      "Total Fat": {
+        longForm: "Total lipid (fat)",
+        dailyValueInG: 78,
+        bold: true,
+      },
       "Saturated Fat": {
         longForm: "Fatty acids, total saturated",
         dailyValueInG: 20,
@@ -35,7 +39,7 @@ export default class Nutrition {
       },
       Cholesterol: { longForm: "Cholesterol", dailyValueInG: 0.3, bold: true },
       Sodium: { longForm: "Sodium, Na", dailyValueInG: 2.3, bold: true },
-      Carbs: {
+      "Total Carbohydrates": {
         longForm: "Carbohydrate, by difference",
         dailyValueInG: 275,
         bold: true,
@@ -45,7 +49,7 @@ export default class Nutrition {
         dailyValueInG: 28,
         indent: true,
       },
-      Sugars: {
+      "Total Sugars": {
         longForm: "Sugars, total including NLEA",
         dailyValueInG: 50,
         indent: true,

@@ -1,5 +1,6 @@
 major:
 - add the brand request
+- remove the NFS
 - more nutrients
 
 minor:
