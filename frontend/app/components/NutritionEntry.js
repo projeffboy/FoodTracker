@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 
 export default function NutritionEntry({
   styles,
-  nutrition,
+  nutrient,
   value,
   dailyValue,
   hide0Pct,
@@ -32,14 +32,14 @@ export default function NutritionEntry({
         {italic ? (
           <>
             <Text style={[styles.text, { fontFamily: "Helvetica-Italic" }]}>
-              {nutrition.split(" ")[0] + " "}
+              {nutrient.split(" ")[0] + " "}
             </Text>
             <Text style={styles[bold ? "boldText" : "text"]}>
-              {nutrition.split(" ").slice(1)}{" "}
+              {nutrient.split(" ").slice(1)}{" "}
             </Text>
           </>
         ) : (
-          <Text style={styles[bold ? "boldText" : "text"]}>{nutrition} </Text>
+          <Text style={styles[bold ? "boldText" : "text"]}>{nutrient} </Text>
         )}
         <Text style={styles.text}>{value}</Text>
       </View>

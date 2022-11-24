@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, ScrollView, FlatList } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, View, Text, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
@@ -7,7 +7,7 @@ import theme from "../config/theme";
 import NutritionEntry from "../components/NutritionEntry";
 import NutritionFactsHeader from "../components/NutritionFactsHeader";
 import NutritionFactsFooter from "../components/NutritionFactsFooter";
-import Nutrients from "../helper/nutrients";
+import Nutrition from "../helper/nutrition";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -16,35 +16,17 @@ const italic = "Helvetica-Italic";
 const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
-let nutrients;
-
 export default function NutritionFactsScreen({ navigation }) {
+  const defaultServings = "1";
+  const defaultServingSize = "100";
+  const defaultUnit = "g";
   // hooks have to be placed at the top
-  const [servings, setServings] = useState("1"); // keep it as str
-  const [servingSize, setServingSize] = useState("100"); // keep it as str
-  const [allNutrients, setAllNutrients] = useState(
-    navigation.getParam("foodNutrients")
-  );
-
+  const [servings, setServings] = useState(defaultServings); // keep it as str
+  const [servingSize, setServingSize] = useState(defaultServingSize); // keep it as str
+  const [unit, setUnit] = useState(defaultUnit);
   useEffect(() => {
-    nutrients = new Nutrients(servings, servingSize, allNutrients);
-  }, [allNutrients]);
-
-  useEffect(() => {
-    if (nutrients === undefined) {
-      return;
-    }
-
-    nutrients.servings = servings;
-  }, [servings]);
-
-  useEffect(() => {
-    if (nutrients === undefined) {
-      return;
-    }
-
-    nutrients.servingSize = servingSize;
-  }, [servingSize]);
+    setServingSize(unit === "g" || unit === "ml" ? defaultServingSize : "1");
+  }, [unit]);
 
   const [loaded] = useFonts({
     [notBold]: require("../assets/fonts/" + notBold + ".ttf"),
@@ -57,6 +39,19 @@ export default function NutritionFactsScreen({ navigation }) {
   }
 
   const foodName = navigation.getParam("description");
+  const allNutrients = navigation.getParam("foodNutrients");
+
+  // can be made more efficient but will take more code
+  let nutrition = new Nutrition(
+    servings,
+    servingSize,
+    unit,
+    allNutrients,
+    defaultServings,
+    defaultServingSize,
+    defaultUnit
+  );
+
   return (
     <View style={styles.container}>
       <View style={[styles.titleContainer, { alignItems: "center" }]}>
@@ -68,28 +63,30 @@ export default function NutritionFactsScreen({ navigation }) {
         <Text style={styles.title}> {foodName} </Text>
         <Text> </Text>
       </View>
-      {nutrients && (
+      {nutrition && (
         <FlatList
           style={styles.label}
-          data={Object.entries(nutrients.nutrients)}
+          data={Object.entries(nutrition.nutrients)}
           keyExtractor={nutrient => nutrient[0]}
           ListHeaderComponent={
             <NutritionFactsHeader
               styles={styles}
-              nutrients={nutrients}
+              nutrition={nutrition}
               servings={servings}
               setServings={setServings}
               servingSize={servingSize}
               setServingSize={setServingSize}
+              unit={unit}
+              setUnit={setUnit}
             />
           }
           renderItem={({ item: [nutrientName, nutrient] }) =>
             nutrientName !== "Energy" && (
               <NutritionEntry
                 styles={styles}
-                nutrition={nutrientName}
-                value={nutrients.getValue(nutrientName)}
-                dailyValue={nutrients.getPercentDailyValue(nutrientName)}
+                nutrient={nutrientName}
+                value={nutrition.getValue(nutrientName)}
+                dailyValue={nutrition.getPercentDailyValue(nutrientName)}
                 hide0Pct={nutrient.hide0Pct}
                 bold={nutrient.bold}
                 italic={nutrient.italic}

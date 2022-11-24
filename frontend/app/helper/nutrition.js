@@ -1,9 +1,23 @@
-import { getNutrient, percentDV, round } from "../helper/helper";
+import { getNutrient, percentDV, round } from "./helper";
 
-export default class Nutrients {
-  constructor(servings, servingSize, allNutrients) {
+export default class Nutrition {
+  constructor(
+    servings,
+    servingSize,
+    unit,
+    allNutrients,
+    defaultServings = "1",
+    defaultServingSize = "100",
+    defaultUnit = "g"
+  ) {
     this.servings = servings;
     this.servingSize = servingSize;
+    this.unit = unit;
+
+    this.defaultServings = defaultServings;
+    this.defaultServingSize = defaultServingSize;
+    this.defaultUnit = defaultUnit;
+
     this.nutrients = {
       Energy: { longForm: "energy", dailyValueInG: 2000 },
       Fat: { longForm: "Total lipid (fat)", dailyValueInG: 78, bold: true },
@@ -76,22 +90,52 @@ export default class Nutrients {
   }
 
   formula(value) {
-    return value * this.servings * (this.servingSize / 100);
+    let unitMult = 1;
+    switch (this.unit) {
+      case "g":
+        break;
+      case "oz":
+        unitMult = 28.3495;
+        break;
+      case "lb":
+        unitMult = 453.592;
+        break;
+      case "ml": // assume 1g = 1ml
+        break;
+      case "tsp":
+        unitMult = 4.92892;
+        break;
+      case "tbsp":
+        unitMult = 14.79;
+        break;
+      case "cup":
+        unitMult = 250;
+        break;
+      default:
+        console.error(this.unit + " is not one of the units.");
+        break;
+    }
+
+    return value * this.servings * ((this.servingSize * unitMult) / 100);
   }
 
-  getValue(nutrientName) {
+  getValue(nutrientName, decimalPlaces = 2) {
     if (!this.isLookupErr(nutrientName)) {
       return false;
     }
 
     const [value, unit] = this.nutrients[nutrientName].value;
 
-    if (this.servings == 1) {
+    if (
+      this.servings === this.defaultServings &&
+      this.servingSize === this.defaultServingSize &&
+      this.unit === this.defaultUnit
+    ) {
       // loose equal
       return [value, unit];
     }
 
-    let newValue = round(this.formula(value), 4);
+    let newValue = round(this.formula(value), decimalPlaces);
     if (isNaN(newValue)) {
       newValue = "--";
     }

@@ -38,9 +38,20 @@ export const ServingInput = forwardRef(
 );
 
 export const EditServing = forwardRef(
-  ({ height, iconHeight = 19, noText = "Edit ", iconName = "pencil" }, ref) => (
+  (
+    {
+      height,
+      iconHeight = 19,
+      noText = "Edit ",
+      iconName = "pencil",
+      iosTogglePicker,
+    },
+    ref
+  ) => (
     <TouchableOpacity
-      onPress={() => ref?.current?.focus()}
+      onPress={() =>
+        iosTogglePicker ? ref?.current?.togglePicker() : ref?.current?.focus()
+      }
       style={[styles.editServingButton, height ? { height } : {}]}
     >
       <Text style={styles.editServingText}>{noText}</Text>

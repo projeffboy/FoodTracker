@@ -1,25 +1,29 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useRef } from "react";
+import { Platform } from "react-native";
 
 import { EditServing, ServingInput } from "../components/ServingInput";
 import { kJ_to_kcal } from "../helper/helper";
 import theme from "../config/theme";
-import Dropdown from "./Dropdown";
+import Picker from "../components/Picker";
 
 const veryBold = "Helvetica-Black"; // font has to be initialized in parent component
 
 const NutritionFactsHeader = ({
   styles: moreStyles,
-  nutrients,
+  nutrition,
   servings,
   setServings,
   servingSize,
   setServingSize,
+  unit,
+  setUnit,
 }) => {
   styles = { ...styles, ...moreStyles };
 
   const servingsRef = useRef();
   const servingSizeRef = useRef();
+  const unitRef = useRef();
 
   return (
     <View>
@@ -30,7 +34,7 @@ const NutritionFactsHeader = ({
         <ServingInput
           style={[styles.h3, styles.notBold]}
           ref={servingsRef}
-          maxLength={3}
+          maxLength={2}
           value={servings}
           setValue={setServings}
           selectTextOnFocus
@@ -40,29 +44,18 @@ const NutritionFactsHeader = ({
         <EditServing ref={servingsRef} />
       </View>
       <View style={[styles.entry, styles.veryThickBorderBottom]}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 4,
-          }}
-        >
+        <View style={styles.textAndButtons}>
           <Text style={styles.h3}>Serving size</Text>
           <EditServing ref={servingSizeRef} height={23} noText />
           <EditServing
-            ref={servingSizeRef}
+            ref={unitRef}
             height={23}
             noText
             iconName="scale-balance"
+            iosTogglePicker={Platform.OS === "ios"}
           />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 4,
-          }}
-        >
+        <View style={styles.textAndButtons}>
           <ServingInput
             style={[styles.h3, styles.bold]}
             ref={servingSizeRef}
@@ -71,7 +64,12 @@ const NutritionFactsHeader = ({
             setValue={setServingSize}
             keyboardType="decimal-pad"
           />
-          <Text style={styles.h3}>g</Text>
+          <Picker
+            ref={unitRef}
+            value={unit}
+            onValueChange={setUnit}
+            styles={styles.h3}
+          />
         </View>
       </View>
       <View style={styles.thickBorderBottom}>
@@ -79,7 +77,7 @@ const NutritionFactsHeader = ({
         <View style={styles.entry}>
           <Text style={styles.h2}>Calories</Text>
           <Text style={styles.h2}>
-            {kJ_to_kcal(nutrients.getValue("Energy"))[0]}
+            {kJ_to_kcal(nutrition.getValue("Energy", 0))[0]}
           </Text>
         </View>
       </View>
@@ -98,6 +96,11 @@ const header = {
 };
 
 let styles = StyleSheet.create({
+  textAndButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
   h1: {
     ...header,
     fontSize: 36,
