@@ -1,2 +1,6 @@
 flask
 requests
+pillow
+torch
+open_clip_torch
+pandas
