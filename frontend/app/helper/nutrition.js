@@ -157,4 +157,15 @@ export default class Nutrition {
     } = this.nutrients[nutrientName];
     return percentDV([this.formula(value), unit], dailyValueInG);
   }
+
+  getValues() {
+    const nutrientNames = Object.keys(this.nutrients);
+    const values = nutrientNames.map(name => this.getValue(name));
+    const returnObj = {};
+    nutrientNames.forEach((name, i) => {
+      returnObj[name] = values[i];
+    });
+
+    return returnObj;
+  }
 }

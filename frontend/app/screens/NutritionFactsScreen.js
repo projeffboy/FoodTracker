@@ -8,6 +8,7 @@ import NutritionEntry from "../components/NutritionEntry";
 import NutritionFactsHeader from "../components/NutritionFactsHeader";
 import NutritionFactsFooter from "../components/NutritionFactsFooter";
 import Nutrition from "../helper/nutrition";
+import AddFood from "../components/AddFood";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -27,6 +28,20 @@ export default function NutritionFactsScreen({ navigation }) {
   useEffect(() => {
     setServingSize(unit === "g" || unit === "ml" ? defaultServingSize : "1");
   }, [unit]);
+  useEffect(() => {
+    // can be made more efficient
+    const allNutrients = navigation.getParam("foodNutrients");
+    let nutrition = new Nutrition(
+      servings,
+      servingSize,
+      unit,
+      allNutrients,
+      defaultServings,
+      defaultServingSize,
+      defaultUnit
+    );
+    navigation.setParams({ nutrients: nutrition.getValues() });
+  }, [servings, servingSize, unit]);
 
   const [loaded] = useFonts({
     [notBold]: require("../assets/fonts/" + notBold + ".ttf"),

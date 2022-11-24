@@ -1,6 +1,7 @@
 major:
 - add the brand request
 - remove the NFS
+- search peanut
 - more nutrients
 
 minor:

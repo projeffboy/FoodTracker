@@ -5,6 +5,7 @@ import FoodListScreen from "./app/screens/FoodListScreen";
 import CameraScreen from "./app/screens/CameraScreen";
 import NutritionFactsScreen from "./app/screens/NutritionFactsScreen";
 import DailySummaryScreen from "./app/screens/DailySummaryScreen";
+import AddFood from "./app/components/AddFood";
 
 const navigator = createStackNavigator(
   {
@@ -21,11 +22,21 @@ const navigator = createStackNavigator(
     Camera: { screen: CameraScreen, navigationOptions: { headerShown: false } },
     NutritionFacts: {
       screen: NutritionFactsScreen,
-      navigationOptions: { title: "" },
+      navigationOptions: ({ navigation }) => ({
+        title: "",
+        headerRight: () => (
+          <AddFood
+            food={navigation.getParam("description")}
+            nutrients={navigation.getParam("nutrients")}
+          />
+        ),
+      }),
     },
     DailySummary: {
       screen: DailySummaryScreen,
-      navigationOptions: { title: "Summary" },
+      navigationOptions: {
+        title: "Summary",
+      },
     },
   },
   {
