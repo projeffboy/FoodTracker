@@ -82,7 +82,7 @@ function HomeScreen({ navigation }) {
               onPress={() => navigation.navigate("Camera")}
             />
             <MainMenuButton
-              label="Pick from Photo Library"
+              label="Pick from Photos"
               icon="images"
               onPress={openImagePicker}
             />

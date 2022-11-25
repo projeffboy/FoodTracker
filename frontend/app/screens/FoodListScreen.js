@@ -6,16 +6,17 @@ import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "../config/theme";
 import FoodList from "../components/FoodList";
-import useFoods from "../hooks/useFoods";
+import { searchFoods } from "../helper/api";
+import useHook from "../helper/useHook";
 
 export default function FoodListScreen({ navigation }) {
   const initialSearchTerm = navigation.getParam("searchTerm");
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
-  const [{ data, loading, error }, searchFoods] = useFoods();
+  const [{ data, loading, error }, searchFoodsWrapper] = useHook(searchFoods);
 
   useEffect(() => {
-    searchFoods(searchTerm);
+    searchFoodsWrapper(searchTerm);
   }, []);
 
   return (

@@ -11,14 +11,14 @@ import {
   getKey,
 } from "../helper/async-storage";
 import DiaryDelete from "./DiaryDelete";
-import hookCreator from "../hooks/hookCreator";
+import useHook from "../helper/useHook";
 
 export default function Diary({ fmtDate }) {
-  const [{ data, loading, error }, getDiary] = hookCreator(getDiaryKey);
+  const [{ data, loading, error }, getDiaryKeyWrapper] = useHook(getDiaryKey);
 
   useEffect(() => {
     (async () => {
-      await getDiary(fmtDate);
+      await getDiaryKeyWrapper(fmtDate);
       console.log(data);
     })();
   }, []);

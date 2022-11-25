@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function hookCreator(req) {
+export default function useHook(req) {
   const [result, setResult] = useState({
     data: null,
     loading: false,

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -10,23 +11,21 @@ import CameraButton from "../components/CameraButton";
 import theme from "../config/theme";
 import { withNavigation } from "react-navigation";
 import FoodList from "../components/FoodList";
-import useFoods from "../hooks/useFoods";
+import { recognizeFood } from "../helper/api";
+import useHook from "../helper/useHook";
 
 function CameraScreen({ navigation }) {
   const galleryImage = navigation.getParam("image");
   const width = navigation.getParam("width");
   const height = navigation.getParam("height");
 
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState();
   const [image, setImage] = useState(galleryImage);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-  const cameraRef = useRef(null);
+  const cameraRef = useRef();
 
-  const [{ data, loading, error }, searchFoods] = useFoods();
-
-  useEffect(() => {
-    searchFoods("whole wheat bread");
-  }, []);
+  const [{ data, loading, error }, recognizeFoodWrapper] =
+    useHook(recognizeFood);
 
   useEffect(() => {
     // I have to put async func in another func or i get error
@@ -37,6 +36,14 @@ function CameraScreen({ navigation }) {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!image) {
+      return;
+    }
+
+    recognizeFoodWrapper(image);
+  }, [image]);
+
   async function takePicture() {
     if (cameraRef) {
       try {
@@ -46,6 +53,14 @@ function CameraScreen({ navigation }) {
       } catch (e) {
         console.error(e);
       }
+    }
+  }
+
+  async function openImagePicker() {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (!pickerResult.cancelled) {
+      const { uri, width, height } = pickerResult;
+      setImage(uri);
     }
   }
 
@@ -103,8 +118,8 @@ function CameraScreen({ navigation }) {
             { alignItems: "center", justifyContent: "center" },
           ]}
         >
-          <Text>Camera recognition coming soon</Text>
-          {/* <FoodList foods={data?.foods} /> */}
+          <Text>{JSON.stringify(data)}</Text>
+          {/* <FoodList foods={data?} /> */}
         </View>
       )}
 
@@ -120,10 +135,16 @@ function CameraScreen({ navigation }) {
             onPress={takePicture}
             icon="camera"
           />
+        ) : galleryImage ? (
+          <CameraButton
+            label="Other Photos"
+            onPress={openImagePicker}
+            icon="image"
+          />
         ) : (
           <CameraButton
             label="Re-take"
-            onPress={() => setImage(null)}
+            onPress={() => setImage()} // do not shorten this line
             icon="retweet"
           />
         )}
