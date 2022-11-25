@@ -4,7 +4,7 @@ import MyError from "../components/MyError";
 import theme from "../config/theme";
 
 export default Suggestions = ({ loading, error, data }) => {
-  if (loading === true) {
+  if (loading) {
     return (
       <View style={styles.noPredictions}>
         <ActivityIndicator size="large" />

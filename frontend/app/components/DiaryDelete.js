@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { RefreshControl, Text, View } from "react-native";
 import React from "react";
 import MyButton from "./MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -6,10 +6,11 @@ import theme from "../config/theme";
 import showToast from "../helper/toast";
 import { deleteAll, deleteKey } from "../helper/async-storage";
 
-export default function DiaryDelete({ fmtDate }) {
+export default function DiaryDelete({ fmtDate, refresh }) {
   function deleteHelper(fn) {
     const toastMsg = fn() ? "Deleted." : "Failed to delete.";
     showToast(toastMsg);
+    refresh();
   }
 
   function deleteDiaryDay() {
