@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useRef } from "react";
 import { Platform } from "react-native";
 
 import { EditServing, ServingInput } from "../components/ServingInput";

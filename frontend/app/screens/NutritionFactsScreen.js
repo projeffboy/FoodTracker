@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -9,7 +9,6 @@ import NutritionEntry from "../components/NutritionEntry";
 import NutritionFactsHeader from "../components/NutritionFactsHeader";
 import NutritionFactsFooter from "../components/NutritionFactsFooter";
 import { Nutrition } from "../helper/nutrition";
-import AddFood from "../components/AddFood";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 

@@ -1,18 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TurboModuleRegistry,
-  View,
-} from "react-native";
-import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 import { getNutrient, kJ_to_kcal } from "../helper/nutrition";
 import { Nutrition } from "../helper/nutrition";
-import { addToDiary } from "../helper/async-storage";
 import { addToDiaryWithFeedback } from "../helper/toast";
 
 const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
@@ -54,7 +46,7 @@ export default withNavigation(FoodListItem);
 const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 1,
-    borderBottomColor: theme.dark,
+    borderBottomColor: theme.medium,
     flexDirection: "row",
     alignItems: "center",
   },

@@ -1,20 +1,20 @@
 // Based off of this tutorial: https://www.youtube.com/watch?v=9EoKurp6V0I
 
-import React, { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { useState, useEffect, useRef } from "react";
+import { Text, View, StyleSheet, Image, ActivityIndicator } from "react-native";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import CameraButton from "../components/CameraButton";
 
 import theme from "../config/theme";
-import { withNavigation } from "react-navigation";
-import FoodList from "../components/FoodList";
 import { recognizeFood } from "../helper/api";
 import useHook from "../helper/useHook";
+import NoCamera from "../components/NoCamera";
+import Flash from "../components/Flash";
+import CameraBottomButtons from "../components/CameraBottomButtons";
+import Suggestions from "../components/Suggestions";
 
-function CameraScreen({ navigation }) {
+export default function CameraScreen({ navigation }) {
   const galleryImage = navigation.getParam("image");
   const width = navigation.getParam("width");
   const height = navigation.getParam("height");
@@ -44,58 +44,15 @@ function CameraScreen({ navigation }) {
     recognizeFoodWrapper(image);
   }, [image]);
 
-  async function takePicture() {
-    if (cameraRef) {
-      try {
-        const data = await cameraRef.current.takePictureAsync();
-        // console.log(data);
-        setImage(data.uri);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-
-  async function openImagePicker() {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    if (!pickerResult.cancelled) {
-      const { uri, width, height } = pickerResult;
-      setImage(uri);
-    }
-  }
-
-  if (hasCameraPermission === false) {
-    return (
-      <View style={styles.noCamera}>
-        <Text style={styles.noCameraTitle}>No camera access</Text>
-        <Text style={styles.noCameraSubtitle}>
-          Please enable camera permission in settings
-        </Text>
-      </View>
-    );
+  if (!hasCameraPermission) {
+    return <NoCamera />;
   }
 
   return (
     <View style={styles.container}>
       {!image ? (
         <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
-          <View style={styles.flashContainer}>
-            <CameraButton
-              onPress={() =>
-                setFlash(
-                  flash === Camera.Constants.FlashMode.off
-                    ? Camera.Constants.FlashMode.on
-                    : Camera.Constants.FlashMode.off
-                )
-              }
-              icon="flash"
-              color={
-                flash === Camera.Constants.FlashMode.off
-                  ? theme.medium
-                  : "#f1c40f"
-              }
-            />
-          </View>
+          <Flash flash={flash} setFlash={setFlash} />
         </Camera>
       ) : (
         <View style={styles.camera}>
@@ -115,64 +72,22 @@ function CameraScreen({ navigation }) {
             width && height && width > height
               ? styles.suggestionsForLandscape
               : styles.suggestionsForPortrait,
-            { alignItems: "center", justifyContent: "center" },
           ]}
         >
-          <Text>{JSON.stringify(data)}</Text>
-          {/* <FoodList foods={data?} /> */}
+          <Suggestions loading={loading} error={error} data={data} />
         </View>
       )}
 
-      <View style={styles.buttonContainer}>
-        <CameraButton
-          label="Go back"
-          onPress={() => navigation.navigate("Home")}
-          icon="arrow-left"
-        />
-        {!image ? (
-          <CameraButton
-            label="Take a picture"
-            onPress={takePicture}
-            icon="camera"
-          />
-        ) : galleryImage ? (
-          <CameraButton
-            label="Other Photos"
-            onPress={openImagePicker}
-            icon="image"
-          />
-        ) : (
-          <CameraButton
-            label="Re-take"
-            onPress={() => setImage()} // do not shorten this line
-            icon="retweet"
-          />
-        )}
-      </View>
+      <CameraBottomButtons
+        image={image}
+        setImage={setImage}
+        galleryImage={galleryImage}
+      />
     </View>
   );
 }
 
-export default withNavigation(CameraScreen);
-
 const styles = StyleSheet.create({
-  // camera denied
-  noCamera: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  noCameraTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: theme.dark,
-  },
-  noCameraSubtitle: {
-    fontSize: 14,
-    color: theme.dark,
-  },
-  // camera allowed
   container: {
     paddingTop: Constants.statusBarHeight,
     flex: 1,
@@ -182,16 +97,12 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  flashContainer: {
-    marginTop: 16,
-    alignItems: "flex-end",
-    paddingRight: 16,
-  },
   suggestions: {
     flex: 1,
     backgroundColor: theme.light,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
+    paddingHorizontal: 16,
   },
   suggestionsForPortrait: {
     position: "absolute",
@@ -199,14 +110,9 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 88, // magic number
     height: 130, // magic number for 2 and a half list items
+    paddingTop: 8,
   },
   suggestionsForLandscape: {
     flex: 1,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    paddingVertical: 20,
-    backgroundColor: theme.light,
   },
 });

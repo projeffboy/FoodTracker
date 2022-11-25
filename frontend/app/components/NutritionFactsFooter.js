@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
 
 export default NutritionFactsFooter = ({ textStyles }) => (
   <View style={styles.finePrintContainer}>

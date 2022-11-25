@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default MyButton = ({ text, onPress, icon, backgroundColor, color }) => {

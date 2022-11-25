@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import MyButton from "./MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "../config/theme";
