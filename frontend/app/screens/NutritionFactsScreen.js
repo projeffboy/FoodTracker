@@ -58,7 +58,7 @@ export default function NutritionFactsScreen({ navigation }) {
   useEffect(() => {
     // can be made more efficient
     const allNutrients = navigation.getParam("foodNutrients");
-    let nutrition = new Nutrition(
+    const nutrition = new Nutrition(
       allNutrients,
       servings,
       servingSize,
@@ -81,7 +81,7 @@ export default function NutritionFactsScreen({ navigation }) {
   }
 
   // can be made more efficient but will take more code
-  let nutrition = new Nutrition(
+  const nutrition = new Nutrition(
     allNutrients,
     servings,
     servingSize,
@@ -90,6 +90,8 @@ export default function NutritionFactsScreen({ navigation }) {
     defaultServingSize,
     defaultUnit
   );
+
+  const usdaDefaultServingSize = data?.foodPortions?.[0]?.portionDescription;
 
   return (
     <RootSiblingParent>
@@ -104,9 +106,13 @@ export default function NutritionFactsScreen({ navigation }) {
           <Text> </Text>
         </View>
 
-        <Text style={styles.defaultServingSize}>
-          Default serving size: {data?.foodPortions?.[0].portionDescription}
-        </Text>
+        {usdaDefaultServingSize ? (
+          <Text style={styles.defaultServingSize}>
+            Default serving size: {usdaDefaultServingSize}
+          </Text>
+        ) : (
+          <View style={{ height: 10 }}></View>
+        )}
 
         {nutrition && (
           <FlatList

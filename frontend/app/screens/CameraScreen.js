@@ -1,10 +1,11 @@
 // Based off of this tutorial: https://www.youtube.com/watch?v=9EoKurp6V0I
 
 import { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Image, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "../config/theme";
 import { recognizeFood } from "../helper/api";
@@ -26,6 +27,18 @@ export default function CameraScreen({ navigation }) {
 
   const [{ data, loading, error }, recognizeFoodWrapper] =
     useHook(recognizeFood);
+
+  async function takePicture() {
+    if (cameraRef) {
+      try {
+        const data = await cameraRef.current.takePictureAsync();
+        // console.log(data);
+        setImage(data.uri);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
 
   useEffect(() => {
     // I have to put async func in another func or i get error
@@ -49,41 +62,44 @@ export default function CameraScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      {!image ? (
-        <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
-          <Flash flash={flash} setFlash={setFlash} />
-        </Camera>
-      ) : (
-        <View style={styles.camera}>
-          <Image
-            source={{ uri: image }}
-            style={
-              width && height ? { aspectRatio: width / height } : { flex: 1 }
-            }
-          />
-        </View>
-      )}
+    <RootSiblingParent>
+      <View style={styles.container}>
+        {!image ? (
+          <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
+            <Flash flash={flash} setFlash={setFlash} />
+          </Camera>
+        ) : (
+          <View style={styles.camera}>
+            <Image
+              source={{ uri: image }}
+              style={
+                width && height ? { aspectRatio: width / height } : { flex: 1 }
+              }
+            />
+          </View>
+        )}
 
-      {image && (
-        <View
-          style={[
-            styles.suggestions,
-            width && height && width > height
-              ? styles.suggestionsForLandscape
-              : styles.suggestionsForPortrait,
-          ]}
-        >
-          <Suggestions loading={loading} error={error} data={data} />
-        </View>
-      )}
+        {image && (
+          <View
+            style={[
+              styles.suggestions,
+              width && height && width > height
+                ? styles.suggestionsForLandscape
+                : styles.suggestionsForPortrait,
+            ]}
+          >
+            <Suggestions loading={loading} error={error} data={data} />
+          </View>
+        )}
 
-      <CameraBottomButtons
-        image={image}
-        setImage={setImage}
-        galleryImage={galleryImage}
-      />
-    </View>
+        <CameraBottomButtons
+          image={image}
+          setImage={setImage}
+          galleryImage={galleryImage}
+          takePicture={takePicture}
+        />
+      </View>
+    </RootSiblingParent>
   );
 }
 
@@ -109,7 +125,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     width: "100%",
     bottom: 88, // magic number
-    height: 130, // magic number for 2 and a half list items
+    height: 140, // magic number for 2 and a half list items
     paddingTop: 8,
   },
   suggestionsForLandscape: {

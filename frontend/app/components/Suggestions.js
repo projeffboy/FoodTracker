@@ -1,9 +1,38 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import FoodList from "../components/FoodList";
 import MyError from "../components/MyError";
 import theme from "../config/theme";
+import { getFoods } from "../helper/api";
 
 export default Suggestions = ({ loading, error, data }) => {
+  const [foods, setFoods] = useState();
+
+  useEffect(() => {
+    async function getFoodNutrients() {
+      if (data) {
+        const fmtData = data?.map(food => ({
+          fdcId: food.id,
+          description: food.name.toLowerCase(),
+        }));
+        const ids = fmtData.map(food => food.fdcId);
+        const nutrition = await getFoods(ids);
+        const foodsWithNutritionInfo = fmtData.map((food, i) => ({
+          ...food,
+          foodNutrients: nutrition[i].foodNutrients.map(nutrient => ({
+            nutrientName: nutrient.nutrient.name,
+            value: nutrient.amount,
+            unitName: nutrient.nutrient.unitName,
+          })),
+        })); // assume the order is the same
+
+        setFoods(foodsWithNutritionInfo);
+      }
+    }
+
+    getFoodNutrients();
+  }, [data]);
+
   if (loading) {
     return (
       <View style={styles.noPredictions}>
@@ -17,25 +46,12 @@ export default Suggestions = ({ loading, error, data }) => {
         <MyError />
       </View>
     );
-  } else if (data?.length > 0) {
-    const modifiedData = data.map(food => ({
-      ...food,
-      description: food.name.toLowerCase(),
-      fdcId: food.id,
-      foodNutrients: [
-        {
-          nutrientName: "Energy",
-          value: "5",
-          unitName: "kcal",
-        },
-      ],
-    }));
-
-    return <FoodList foods={modifiedData} />;
+  } else if (data?.length > 0 && foods) {
+    return <FoodList foods={foods} />;
   } else {
     return (
       <View style={styles.noPredictions}>
-        <Text>No matches found.</Text>
+        <Text style={styles.noMatches}>No matches found.</Text>
       </View>
     );
   }
@@ -51,5 +67,8 @@ const styles = StyleSheet.create({
     color: theme.medium,
     fontSize: 16,
     marginTop: 16,
+  },
+  noMatches: {
+    fontSize: 16,
   },
 });
