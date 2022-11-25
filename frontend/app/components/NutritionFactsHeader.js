@@ -3,10 +3,9 @@ import React, { useRef } from "react";
 import { Platform } from "react-native";
 
 import { EditServing, ServingInput } from "../components/ServingInput";
-import { kJ_to_kcal } from "../helper/helper";
+import { kJ_to_kcal } from "../helper/nutrition";
 import theme from "../config/theme";
 import Picker from "../components/Picker";
-import MainMenuButton from "./MainMenuButton";
 
 const veryBold = "Helvetica-Black"; // font has to be initialized in parent component
 

@@ -1,11 +1,11 @@
-import { getNutrient, percentDV, round } from "./helper";
+import { round } from "./utility";
 
-export default class Nutrition {
+export class Nutrition {
   constructor(
-    servings,
-    servingSize,
-    unit,
     allNutrients,
+    servings = "1",
+    servingSize = "100",
+    unit = "g",
     defaultServings = "1",
     defaultServingSize = "100",
     defaultUnit = "g"
@@ -81,6 +81,8 @@ export default class Nutrition {
     }
   }
 
+  /* PRIVATE METHODS */
+
   isLookupErr(nutrientName) {
     if (this.nutrients[nutrientName] === undefined) {
       console.error("Nutrient name does not exist");
@@ -123,6 +125,21 @@ export default class Nutrition {
     return value * this.servings * ((this.servingSize * unitMult) / 100);
   }
 
+  percentDV([value, unit], dailyValueInG) {
+    // normalize it to grams
+    if (unit.includes("k")) {
+      value *= 1000;
+    } else if (unit.includes("m")) {
+      value /= 1000;
+    } else if (unit.includes("u")) {
+      value /= 10e6;
+    }
+
+    return Math.round((value / dailyValueInG) * 100) + "%";
+  }
+
+  /* PUBLIC METHODS */
+
   getValue(nutrientName, decimalPlaces = 2) {
     if (!this.isLookupErr(nutrientName)) {
       return false;
@@ -155,7 +172,7 @@ export default class Nutrition {
       value: [value, unit],
       dailyValueInG,
     } = this.nutrients[nutrientName];
-    return percentDV([this.formula(value), unit], dailyValueInG);
+    return this.percentDV([this.formula(value), unit], dailyValueInG);
   }
 
   getValues() {
@@ -168,4 +185,36 @@ export default class Nutrition {
 
     return returnObj;
   }
+}
+
+export function getNutrient(nutrients, nutrientName, substring = false) {
+  for (let nutrient of nutrients) {
+    if (
+      (!substring &&
+        nutrient.nutrientName.toLowerCase() === nutrientName.toLowerCase()) ||
+      (substring &&
+        nutrient.nutrientName
+          .toLowerCase()
+          .includes(nutrientName.toLowerCase()))
+    ) {
+      let unitName = nutrient.unitName;
+      if (unitName === unitName.toUpperCase()) {
+        unitName = unitName.toLowerCase();
+      }
+
+      return [nutrient.value, unitName];
+    }
+  }
+
+  return [0, "g"];
+}
+
+export function kJ_to_kcal([value, unit]) {
+  if (unit.toLowerCase() == "kj") {
+    return [Math.round(value * 0.239006), "kcal"];
+  } else if (unit.toLowerCase() == "kcal") {
+    return [value, unit];
+  }
+  console.error("Unit is not in kJ or kcal");
+  return ["--", "kcal"];
 }

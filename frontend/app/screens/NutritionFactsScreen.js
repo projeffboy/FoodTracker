@@ -2,12 +2,13 @@ import { StyleSheet, View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "../config/theme";
 import NutritionEntry from "../components/NutritionEntry";
 import NutritionFactsHeader from "../components/NutritionFactsHeader";
 import NutritionFactsFooter from "../components/NutritionFactsFooter";
-import Nutrition from "../helper/nutrition";
+import { Nutrition } from "../helper/nutrition";
 import AddFood from "../components/AddFood";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
@@ -32,10 +33,10 @@ export default function NutritionFactsScreen({ navigation }) {
     // can be made more efficient
     const allNutrients = navigation.getParam("foodNutrients");
     let nutrition = new Nutrition(
+      allNutrients,
       servings,
       servingSize,
       unit,
-      allNutrients,
       defaultServings,
       defaultServingSize,
       defaultUnit
@@ -58,64 +59,66 @@ export default function NutritionFactsScreen({ navigation }) {
 
   // can be made more efficient but will take more code
   let nutrition = new Nutrition(
+    allNutrients,
     servings,
     servingSize,
     unit,
-    allNutrients,
     defaultServings,
     defaultServingSize,
     defaultUnit
   );
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.titleContainer, { alignItems: "center" }]}>
-        <MaterialCommunityIcons
-          name="food-fork-drink"
-          size={24}
-          color={theme.dark}
-        />
-        <Text style={styles.title}> {foodName} </Text>
-        <Text> </Text>
-      </View>
-      {nutrition && (
-        <FlatList
-          style={styles.label}
-          data={Object.entries(nutrition.nutrients)}
-          keyExtractor={nutrient => nutrient[0]}
-          ListHeaderComponent={
-            <NutritionFactsHeader
-              styles={styles}
-              nutrition={nutrition}
-              servings={servings}
-              setServings={setServings}
-              servingSize={servingSize}
-              setServingSize={setServingSize}
-              unit={unit}
-              setUnit={setUnit}
-            />
-          }
-          renderItem={({ item: [nutrientName, nutrient] }) =>
-            nutrientName !== "Energy" && (
-              <NutritionEntry
+    <RootSiblingParent>
+      <View style={styles.container}>
+        <View style={[styles.titleContainer, { alignItems: "center" }]}>
+          <MaterialCommunityIcons
+            name="food-fork-drink"
+            size={24}
+            color={theme.dark}
+          />
+          <Text style={styles.title}> {foodName} </Text>
+          <Text> </Text>
+        </View>
+        {nutrition && (
+          <FlatList
+            style={styles.label}
+            data={Object.entries(nutrition.nutrients)}
+            keyExtractor={nutrient => nutrient[0]}
+            ListHeaderComponent={
+              <NutritionFactsHeader
                 styles={styles}
-                nutrient={nutrientName}
-                value={nutrition.getValue(nutrientName)}
-                dailyValue={nutrition.getPercentDailyValue(nutrientName)}
-                hide0Pct={nutrient.hide0Pct}
-                bold={nutrient.bold}
-                italic={nutrient.italic}
-                indent={nutrient.indent}
-                borderBottomStyleName={nutrient.borderBottomStyleName}
+                nutrition={nutrition}
+                servings={servings}
+                setServings={setServings}
+                servingSize={servingSize}
+                setServingSize={setServingSize}
+                unit={unit}
+                setUnit={setUnit}
               />
-            )
-          }
-          ListFooterComponent={
-            <NutritionFactsFooter textStyles={styles.text} />
-          }
-        />
-      )}
-    </View>
+            }
+            renderItem={({ item: [nutrientName, nutrient] }) =>
+              nutrientName !== "Energy" && (
+                <NutritionEntry
+                  styles={styles}
+                  nutrient={nutrientName}
+                  value={nutrition.getValue(nutrientName)}
+                  dailyValue={nutrition.getPercentDailyValue(nutrientName)}
+                  hide0Pct={nutrient.hide0Pct}
+                  bold={nutrient.bold}
+                  italic={nutrient.italic}
+                  indent={nutrient.indent}
+                  borderBottomStyleName={nutrient.borderBottomStyleName}
+                />
+              )
+            }
+            ListFooterComponent={
+              <NutritionFactsFooter textStyles={styles.text} />
+            }
+          />
+        )}
+      </View>
+    </RootSiblingParent>
   );
 }
 

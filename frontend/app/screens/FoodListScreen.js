@@ -2,6 +2,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import { FontAwesome } from "@expo/vector-icons";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "../config/theme";
 import FoodList from "../components/FoodList";
@@ -18,29 +19,35 @@ export default function FoodListScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.foodList}>
-      <Search
-        term={searchTerm}
-        setTerm={setSearchTerm}
-        submit={() => searchTerm.trim() !== "" && searchFoods(searchTerm)}
-      />
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Top Results</Text>
-        <Text>(Per 100g)</Text>
-      </View>
-      {loading && <ActivityIndicator size="large" marginVertical={30} />}
-      {error && (
-        <View style={styles.error}>
-          <FontAwesome name="exclamation-circle" size={36} color={theme.dark} />
-          <Text style={styles.errorText}>There was an error.</Text>
+    <RootSiblingParent>
+      <View style={styles.foodList}>
+        <Search
+          term={searchTerm}
+          setTerm={setSearchTerm}
+          submit={() => searchTerm.trim() !== "" && searchFoods(searchTerm)}
+        />
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Top Results</Text>
+          <Text>(Per 100g)</Text>
         </View>
-      )}
-      {data?.totalHits !== 0 ? (
-        <FoodList foods={data?.foods} />
-      ) : (
-        <Text style={styles.noMatches}>No matches found.</Text>
-      )}
-    </View>
+        {loading && <ActivityIndicator size="large" marginVertical={30} />}
+        {error && (
+          <View style={styles.error}>
+            <FontAwesome
+              name="exclamation-circle"
+              size={36}
+              color={theme.dark}
+            />
+            <Text style={styles.errorText}>There was an error.</Text>
+          </View>
+        )}
+        {data?.totalHits !== 0 ? (
+          <FoodList foods={data?.foods} />
+        ) : (
+          <Text style={styles.noMatches}>No matches found.</Text>
+        )}
+      </View>
+    </RootSiblingParent>
   );
 }
 
