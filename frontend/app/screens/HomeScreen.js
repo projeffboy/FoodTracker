@@ -64,7 +64,7 @@ function HomeScreen({ navigation }) {
           Platform.OS !== "android" || !isKeyboardVisible ? {} : { flex: 2.5 }, // magic number
         ]}
       >
-        <Image style={styles.logo} source={require("../assets/icon.png")} />
+        <Image style={styles.logo} source={require("../assets/logo.png")} />
         <Text style={styles.appTitle}>Food Tracker</Text>
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>
@@ -80,16 +80,19 @@ function HomeScreen({ navigation }) {
               label="Take Picture"
               icon="camera"
               onPress={() => navigation.navigate("Camera")}
+              backgroundColor="#599f54"
             />
             <MainMenuButton
               label="Pick from Photos"
               icon="images"
               onPress={openImagePicker}
+              backgroundColor="#e1ad5d"
             />
             <MainMenuButton
               label="Daily Summary"
               icon="chart-pie"
               onPress={goToDailySummary}
+              backgroundColor="#9e292c"
             />
           </>
         )}
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    width: 1024 / 4,
+    width: 768 / 4,
     height: 768 / 4,
     marginBottom: 16,
   },

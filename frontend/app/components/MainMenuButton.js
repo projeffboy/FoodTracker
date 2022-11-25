@@ -3,8 +3,13 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 import theme from "../config/theme";
 
-export default MainMenuButton = ({ label, icon, onPress }) => (
-  <Pressable style={styles.button} onPress={onPress}>
+export default MainMenuButton = ({
+  label,
+  icon,
+  onPress,
+  backgroundColor = theme.dark,
+}) => (
+  <Pressable style={[styles.button, { backgroundColor }]} onPress={onPress}>
     {({ pressed }) => (
       <>
         <Text
@@ -32,7 +37,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 20,
     borderRadius: 4,
-    backgroundColor: theme.dark,
   },
   buttonText: {
     fontSize: 24,
