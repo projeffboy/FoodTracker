@@ -17,7 +17,9 @@ const FoodListItem = ({
     addToDiaryWithFeedback(description, nutrition.getValues());
   }
 
-  const kcal = kJ_to_kcal(getNutrient(foodNutrients, "energy"));
+  const kcal = foodNutrients
+    ? kJ_to_kcal(getNutrient(foodNutrients, "energy"))
+    : ["", ""];
   const { paddingVertical } = styles.itemText;
 
   return (
@@ -26,7 +28,7 @@ const FoodListItem = ({
       onPress={() =>
         navigation.navigate("NutritionFacts", {
           description,
-          foodNutrients,
+          foodNutrients: foodNutrients || [],
           id,
         })
       }

@@ -9,7 +9,7 @@ const usda = axios.create({
   },
 });
 
-export async function searchFoods(term) {
+export async function searchFoods(term, size = 20) {
   const dataTypes = ["Foundation, Survey (FNDDS), SR Legacy", "Branded"];
 
   const resArr = await Promise.all(
@@ -18,7 +18,7 @@ export async function searchFoods(term) {
         params: {
           query: term,
           dataType,
-          pageSize: 20,
+          pageSize: size,
         },
       })
     )

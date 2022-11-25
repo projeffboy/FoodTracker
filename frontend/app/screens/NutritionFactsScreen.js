@@ -21,7 +21,9 @@ const veryBold = "Helvetica-Black";
 
 export default function NutritionFactsScreen({ navigation }) {
   const foodName = navigation.getParam("description");
-  const allNutrients = navigation.getParam("foodNutrients");
+  const [allNutrients, setAllNutrients] = useState(
+    navigation.getParam("foodNutrients")
+  );
 
   const defaultServings = "1";
   const defaultServingSize = "100";
@@ -51,13 +53,22 @@ export default function NutritionFactsScreen({ navigation }) {
     if (gramWeight) {
       setServingSize(String(gramWeight));
     }
+
+    if (allNutrients?.length === 0 && data) {
+      setAllNutrients(
+        data.foodNutrients.map(nutrient => ({
+          nutrientName: nutrient.nutrient.name,
+          value: nutrient.amount,
+          unitName: nutrient.nutrient.unitName,
+        }))
+      );
+    }
   }, [data]);
   useEffect(() => {
     setServingSize(unit === "g" || unit === "ml" ? defaultServingSize : "1");
   }, [unit]);
   useEffect(() => {
     // can be made more efficient
-    const allNutrients = navigation.getParam("foodNutrients");
     const nutrition = new Nutrition(
       allNutrients,
       servings,

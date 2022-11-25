@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import CameraButton from "./CameraButton";
 import { withNavigation } from "react-navigation";
+import * as ImagePicker from "expo-image-picker";
 import theme from "../config/theme";
 
 function CameraBottomButtons({
@@ -11,7 +12,7 @@ function CameraBottomButtons({
   takePicture,
 }) {
   async function openImagePicker() {
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (!pickerResult.cancelled) {
       const { uri } = pickerResult;
       setImage(uri);

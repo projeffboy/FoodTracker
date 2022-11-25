@@ -1,37 +1,43 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import FoodList from "../components/FoodList";
 import MyError from "../components/MyError";
 import theme from "../config/theme";
-import { getFoods } from "../helper/api";
+// import { getFoods } from "../helper/api";
 
 export default Suggestions = ({ loading, error, data }) => {
-  const [foods, setFoods] = useState();
+  // USDA too slow
+  // const [foods, setFoods] = useState();
 
-  useEffect(() => {
-    async function getFoodNutrients() {
-      if (data) {
-        const fmtData = data?.map(food => ({
-          fdcId: food.id,
-          description: food.name.toLowerCase(),
-        }));
-        const ids = fmtData.map(food => food.fdcId);
-        const nutrition = await getFoods(ids);
-        const foodsWithNutritionInfo = fmtData.map((food, i) => ({
-          ...food,
-          foodNutrients: nutrition[i].foodNutrients.map(nutrient => ({
-            nutrientName: nutrient.nutrient.name,
-            value: nutrient.amount,
-            unitName: nutrient.nutrient.unitName,
-          })),
-        })); // assume the order is the same
+  // useEffect(() => {
+  //   async function getFoodNutrients() {
+  //     if (data) {
+  //       const fmtData = data?.map(food => ({
+  //         fdcId: food.id,
+  //         description: food.name.toLowerCase(),
+  //       }));
+  //       const ids = fmtData.map(food => food.fdcId);
+  //       const nutrition = await getFoods(ids);
+  //       const foodsWithNutritionInfo = fmtData.map((food, i) => ({
+  //         ...food,
+  //         foodNutrients: nutrition[i].foodNutrients.map(nutrient => ({
+  //           nutrientName: nutrient.nutrient.name,
+  //           value: nutrient.amount,
+  //           unitName: nutrient.nutrient.unitName,
+  //         })),
+  //       })); // assume the order is the same
 
-        setFoods(foodsWithNutritionInfo);
-      }
-    }
+  //       setFoods(foodsWithNutritionInfo);
+  //     }
+  //   }
 
-    getFoodNutrients();
-  }, [data]);
+  //   getFoodNutrients();
+  // }, [data]);
+
+  const foods = data?.map(food => ({
+    fdcId: food.id,
+    description: food.name.toLowerCase(),
+  }));
 
   if (loading) {
     return (
@@ -46,7 +52,7 @@ export default Suggestions = ({ loading, error, data }) => {
         <MyError />
       </View>
     );
-  } else if (data?.length > 0 && foods) {
+  } else if (data?.length > 0) {
     return <FoodList foods={foods} />;
   } else {
     return (

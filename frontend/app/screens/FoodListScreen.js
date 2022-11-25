@@ -26,8 +26,14 @@ export default function FoodListScreen({ navigation }) {
       return <MyError />;
     } else if (data && data.length > 0) {
       return <FoodList foods={data} />;
-    } else {
+    } else if (data && data.length === 0) {
       return <Text style={styles.noMatches}>No matches found.</Text>;
+    } else {
+      <View style={styles.noPredictions}>
+        <Text style={styles.noMatches}>
+          Either still loading or no matches found.
+        </Text>
+      </View>;
     }
   }
 
