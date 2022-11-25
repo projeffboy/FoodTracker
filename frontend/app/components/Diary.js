@@ -1,21 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import MyButton from "./MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "../config/theme";
 import showToast from "../helper/toast";
 import { deleteAll, deleteKey } from "../helper/async-storage";
 
-const Diary = () => {
-  const [date, setDate] = useState(new Date().toLocaleDateString());
-
+const Diary = ({ fmtDate }) => {
   function deleteHelper(fn) {
     const toastMsg = fn() ? "Deleted." : "Failed to delete.";
     showToast(toastMsg);
   }
 
   function deleteDiaryDay() {
-    deleteHelper(() => deleteKey("@diary:" + date));
+    deleteHelper(() => deleteKey("@diary:" + fmtDate));
   }
 
   function deleteDiary() {
