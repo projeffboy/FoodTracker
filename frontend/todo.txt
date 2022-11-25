@@ -2,3 +2,7 @@ major:
 - search peanut
 - more nutrients
 - serving size
+
+minor:
+- toast for error in nutrition facts useEffect
+- bold only the ingredients word

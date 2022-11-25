@@ -9,6 +9,8 @@ import NutritionEntry from "../components/NutritionEntry";
 import NutritionFactsHeader from "../components/NutritionFactsHeader";
 import NutritionFactsFooter from "../components/NutritionFactsFooter";
 import { Nutrition } from "../helper/nutrition";
+import { getFood } from "../helper/api";
+import useHook from "../helper/useHook";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -18,13 +20,38 @@ const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
 export default function NutritionFactsScreen({ navigation }) {
+  const foodName = navigation.getParam("description");
+  const allNutrients = navigation.getParam("foodNutrients");
+
   const defaultServings = "1";
   const defaultServingSize = "100";
   const defaultUnit = "g";
+
   // hooks have to be placed at the top
+  const [{ data }, getFoodWrapper] = useHook(getFood);
   const [servings, setServings] = useState(defaultServings); // keep it as str
   const [servingSize, setServingSize] = useState(defaultServingSize); // keep it as str
   const [unit, setUnit] = useState(defaultUnit);
+
+  useEffect(() => {
+    async function init() {
+      const id = navigation.getParam("id");
+      await getFoodWrapper(id);
+
+      const gramWeight = data?.foodPortions?.gramWeight;
+      if (gramWeight) {
+        setServingSize(gramWeight);
+      }
+    }
+
+    init();
+  }, []);
+  useEffect(() => {
+    const gramWeight = data?.foodPortions?.[0]?.gramWeight;
+    if (gramWeight) {
+      setServingSize(String(gramWeight));
+    }
+  }, [data]);
   useEffect(() => {
     setServingSize(unit === "g" || unit === "ml" ? defaultServingSize : "1");
   }, [unit]);
@@ -53,9 +80,6 @@ export default function NutritionFactsScreen({ navigation }) {
     return null;
   }
 
-  const foodName = navigation.getParam("description");
-  const allNutrients = navigation.getParam("foodNutrients");
-
   // can be made more efficient but will take more code
   let nutrition = new Nutrition(
     allNutrients,
@@ -79,6 +103,11 @@ export default function NutritionFactsScreen({ navigation }) {
           <Text style={styles.title}> {foodName} </Text>
           <Text> </Text>
         </View>
+
+        <Text style={styles.defaultServingSize}>
+          Default serving size: {data?.foodPortions?.[0].portionDescription}
+        </Text>
+
         {nutrition && (
           <FlatList
             style={styles.label}
@@ -88,6 +117,7 @@ export default function NutritionFactsScreen({ navigation }) {
               <NutritionFactsHeader
                 styles={styles}
                 nutrition={nutrition}
+                detailedNutrition={data}
                 servings={servings}
                 setServings={setServings}
                 servingSize={servingSize}
@@ -112,7 +142,10 @@ export default function NutritionFactsScreen({ navigation }) {
               )
             }
             ListFooterComponent={
-              <NutritionFactsFooter textStyles={styles.text} />
+              <NutritionFactsFooter
+                textStyles={styles.text}
+                detailedNutrition={data}
+              />
             }
           />
         )}
@@ -150,7 +183,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 8,
-    marginBottom: 16,
+    marginBottom: 8,
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
@@ -166,6 +199,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: theme.dark,
+  },
+  defaultServingSize: {
+    marginBottom: 8,
+    textAlign: "center",
+    color: theme.medium,
   },
   label: {
     borderWidth: 2,

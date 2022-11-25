@@ -3,7 +3,7 @@ import { API_KEY } from "@env";
 import { capitalize } from "./utility";
 
 const usda = axios.create({
-  baseURL: "https://api.nal.usda.gov/fdc/v1/foods",
+  baseURL: "https://api.nal.usda.gov/fdc/v1",
   params: {
     api_key: process.env === "development" ? API_KEY : process.env.API_KEY,
   },
@@ -14,7 +14,7 @@ export async function searchFoods(term) {
 
   const resArr = await Promise.all(
     dataTypes.map(dataType =>
-      usda.get(`/search`, {
+      usda.get(`/foods/search`, {
         params: {
           query: term,
           dataType,
@@ -23,15 +23,13 @@ export async function searchFoods(term) {
       })
     )
   );
-  let foodsArr = resArr.map(res => res.data.foods).flat(foodsArr);
+  let foods = resArr.map(res => res.data.foods).flat(foods);
   // remove duplicate names
-  const foodNames = foodsArr.map(food => food.description);
-  foodsArr = foodsArr.filter(
-    (food, i) => foodNames.indexOf(food.description) === i
-  );
+  const foodNames = foods.map(food => food.description);
+  foods = foods.filter((food, i) => foodNames.indexOf(food.description) === i);
 
   // turn uppercase to capitalize
-  foodsArr = foodsArr.map(food => {
+  foods = foods.map(food => {
     const { description } = food;
     return {
       ...food,
@@ -42,12 +40,26 @@ export async function searchFoods(term) {
     };
   });
 
-  return foodsArr;
+  // Too slow
+  // const fdcIds = foods.slice(0, 2).map(food => food.fdcId);
+  // let detailedFoods = await getFoods(fdcIds);
+  // if (foods.length > 20) {
+  //   const fdcIds2 = foods.slice(2, 4).map(food => food.fdcId);
+  //   const moreDetailedFoods = (await getFoods(fdcIds2)).data;
+  //   detailedFoods = [...detailedFoods, moreDetailedFoods];
+  // }
+
+  return foods;
+}
+
+export async function getFood(fdcId) {
+  const res = await usda.get("/food/" + fdcId);
+  return res.data;
 }
 
 export async function getFoods(fdcIds) {
-  // USDA says it'll return <=20 FDC IDs
   const res = await usda.post("/foods", { fdcIds });
+  return res.data;
 }
 
 // the heart of our app

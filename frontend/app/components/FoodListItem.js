@@ -7,7 +7,10 @@ import { getNutrient, kJ_to_kcal } from "../helper/nutrition";
 import { Nutrition } from "../helper/nutrition";
 import { addToDiaryWithFeedback } from "../helper/toast";
 
-const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
+const FoodListItem = ({
+  food: { description, foodNutrients, fdcId: id },
+  navigation,
+}) => {
   function quickAdd() {
     const nutrition = new Nutrition(foodNutrients);
 
@@ -21,7 +24,11 @@ const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
     <TouchableOpacity
       style={styles.item}
       onPress={() =>
-        navigation.navigate("NutritionFacts", { description, foodNutrients })
+        navigation.navigate("NutritionFacts", {
+          description,
+          foodNutrients,
+          id,
+        })
       }
     >
       <TouchableOpacity
