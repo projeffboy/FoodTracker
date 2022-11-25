@@ -33,11 +33,13 @@ export default function FoodListScreen({ navigation }) {
 
   return (
     <RootSiblingParent>
-      <View style={styles.foodList}>
+      <View style={styles.root}>
         <Search
           term={searchTerm}
           setTerm={setSearchTerm}
-          submit={() => searchTerm.trim() !== "" && searchFoods(searchTerm)}
+          submit={() =>
+            searchTerm.trim() !== "" && searchFoodsWrapper(searchTerm)
+          }
         />
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Top Results</Text>
@@ -50,8 +52,10 @@ export default function FoodListScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  foodList: {
+  root: {
     padding: 16,
+    paddingBottom: 0,
+    flex: 1,
   },
   headerContainer: {
     marginVertical: 16,

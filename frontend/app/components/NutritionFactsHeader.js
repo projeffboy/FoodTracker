@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Platform } from "react-native";
 

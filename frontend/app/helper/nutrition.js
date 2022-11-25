@@ -215,6 +215,6 @@ export function kJ_to_kcal([value, unit]) {
   } else if (unit.toLowerCase() == "kcal") {
     return [value, unit];
   }
-  console.error("Unit is not in kJ or kcal");
+
   return ["--", "kcal"];
 }

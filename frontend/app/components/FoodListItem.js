@@ -15,6 +15,7 @@ const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
   }
 
   const kcal = kJ_to_kcal(getNutrient(foodNutrients, "energy"));
+  const { paddingVertical } = styles.itemText;
 
   return (
     <TouchableOpacity
@@ -23,7 +24,10 @@ const FoodListItem = ({ food: { description, foodNutrients }, navigation }) => {
         navigation.navigate("NutritionFacts", { description, foodNutrients })
       }
     >
-      <TouchableOpacity onPress={quickAdd}>
+      <TouchableOpacity
+        onPress={quickAdd}
+        hitSlop={{ top: paddingVertical, bottom: paddingVertical }}
+      >
         <FontAwesome
           name="plus"
           size={16}
@@ -51,13 +55,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addFoodButton: {
-    paddingVertical: 16,
     paddingHorizontal: 12,
   },
   itemText: {
     fontSize: 16,
     color: theme.dark,
     flex: 1,
+    paddingVertical: 16,
   },
   calories: {
     marginHorizontal: 8,

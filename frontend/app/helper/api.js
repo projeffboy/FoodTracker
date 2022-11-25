@@ -18,6 +18,7 @@ export async function searchFoods(term) {
         params: {
           query: term,
           dataType,
+          pageSize: 20,
         },
       })
     )
@@ -32,23 +33,21 @@ export async function searchFoods(term) {
   // turn uppercase to capitalize
   foodsArr = foodsArr.map(food => {
     const { description } = food;
-    if (description === description.toUpperCase()) {
-      return { ...food, description: capitalize(description.toLowerCase()) };
-    } else {
-      return food;
-    }
+    return {
+      ...food,
+      description:
+        description === description.toUpperCase()
+          ? capitalize(description.toLowerCase())
+          : description.replace(", NFS", ""),
+    };
   });
 
   return foodsArr;
 }
 
-export async function getFoods(foodIds) {
+export async function getFoods(fdcIds) {
   // USDA says it'll return <=20 FDC IDs
-  const res = await usda.post("/foods", {
-    // fdcIds: [
-    // ],
-    // format
-  });
+  const res = await usda.post("/foods", { fdcIds });
 }
 
 // the heart of our app
