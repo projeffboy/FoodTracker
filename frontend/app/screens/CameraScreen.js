@@ -43,8 +43,8 @@ function CameraScreen({ navigation }) {
         const data = await cameraRef.current.takePictureAsync();
         // console.log(data);
         setImage(data.uri);
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        console.error(e);
       }
     }
   }

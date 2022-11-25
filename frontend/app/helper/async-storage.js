@@ -13,13 +13,25 @@ export async function addToDiary(food, nutrients) {
     const newEntry = { food, nutrients };
     diaryDay.push(newEntry);
     await AsyncStorage.setItem(key, JSON.stringify(diaryDay));
-    console.log(JSON.parse(await AsyncStorage.getItem(key)));
+    //console.log(JSON.parse(await AsyncStorage.getItem(key)));
 
     return true;
   } catch (e) {
     console.error(e);
 
     return false;
+  }
+}
+
+export async function getDiaryKey(key) {
+  try {
+    const food = await AsyncStorage.getItem("@diary:" + key);
+
+    return JSON.parse(food);
+  } catch (e) {
+    console.error(e);
+
+    return null;
   }
 }
 

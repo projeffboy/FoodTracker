@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const MyButton = ({ text, onPress, icon, backgroundColor, color }) => {
+export default MyButton = ({ text, onPress, icon, backgroundColor, color }) => {
   const styles = StyleSheet.create({
     button: {
       flexDirection: "row",
@@ -25,5 +25,3 @@ const MyButton = ({ text, onPress, icon, backgroundColor, color }) => {
     </TouchableOpacity>
   );
 };
-
-export default MyButton;

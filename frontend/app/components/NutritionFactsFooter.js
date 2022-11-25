@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-const NutritionFactsFooter = ({ textStyles }) => (
+export default NutritionFactsFooter = ({ textStyles }) => (
   <View style={styles.finePrintContainer}>
     <Text style={[textStyles, styles.finePrint]}>
       The % Daily Value (DV) tells you how much a nutrient in a serving of food
@@ -10,8 +10,6 @@ const NutritionFactsFooter = ({ textStyles }) => (
     </Text>
   </View>
 );
-
-export default NutritionFactsFooter;
 
 const styles = StyleSheet.create({
   finePrintContainer: {

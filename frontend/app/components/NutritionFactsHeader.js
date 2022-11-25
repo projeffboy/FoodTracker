@@ -9,7 +9,7 @@ import Picker from "../components/Picker";
 
 const veryBold = "Helvetica-Black"; // font has to be initialized in parent component
 
-const NutritionFactsHeader = ({
+export default NutritionFactsHeader = ({
   styles: moreStyles,
   nutrition,
   servings,
@@ -89,8 +89,6 @@ const NutritionFactsHeader = ({
     </View>
   );
 };
-
-export default NutritionFactsHeader;
 
 const header = {
   color: theme.dark,
