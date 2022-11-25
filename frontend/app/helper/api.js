@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_KEY } from "@env";
+import { capitalize } from "./utility";
 
 const usda = axios.create({
   baseURL: "https://api.nal.usda.gov/fdc/v1/foods",
@@ -9,18 +10,40 @@ const usda = axios.create({
 });
 
 export async function searchFoods(term) {
-  const res = await usda.get(`/search`, {
-    params: {
-      query: term,
-      dataType: "Foundation, Survey (FNDDS), SR Legacy", // no branded ones
-    },
+  const dataTypes = ["Foundation, Survey (FNDDS), SR Legacy", "Branded"];
+
+  const resArr = await Promise.all(
+    dataTypes.map(dataType =>
+      usda.get(`/search`, {
+        params: {
+          query: term,
+          dataType,
+        },
+      })
+    )
+  );
+  let foodsArr = resArr.map(res => res.data.foods).flat(foodsArr);
+  // remove duplicate names
+  const foodNames = foodsArr.map(food => food.description);
+  foodsArr = foodsArr.filter(
+    (food, i) => foodNames.indexOf(food.description) === i
+  );
+
+  // turn uppercase to capitalize
+  foodsArr = foodsArr.map(food => {
+    const { description } = food;
+    if (description === description.toUpperCase()) {
+      return { ...food, description: capitalize(description.toLowerCase()) };
+    } else {
+      return food;
+    }
   });
 
-  return res.data;
+  return foodsArr;
 }
 
 export async function getFoods(foodIds) {
-  // USDA says it'sll return <=20 FDC IDs
+  // USDA says it'll return <=20 FDC IDs
   const res = await usda.post("/foods", {
     // fdcIds: [
     // ],

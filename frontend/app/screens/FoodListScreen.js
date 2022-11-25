@@ -19,6 +19,18 @@ export default function FoodListScreen({ navigation }) {
     searchFoodsWrapper(searchTerm);
   }, []);
 
+  function List() {
+    if (loading) {
+      return <ActivityIndicator size="large" marginVertical={30} />;
+    } else if (error) {
+      return <MyError />;
+    } else if (data && data.length > 0) {
+      return <FoodList foods={data} />;
+    } else {
+      return <Text style={styles.noMatches}>No matches found.</Text>;
+    }
+  }
+
   return (
     <RootSiblingParent>
       <View style={styles.foodList}>
@@ -31,13 +43,7 @@ export default function FoodListScreen({ navigation }) {
           <Text style={styles.header}>Top Results</Text>
           <Text>(Per 100g)</Text>
         </View>
-        {loading && <ActivityIndicator size="large" marginVertical={30} />}
-        {error && <MyError />}
-        {data?.totalHits !== 0 ? (
-          <FoodList foods={data?.foods} />
-        ) : (
-          <Text style={styles.noMatches}>No matches found.</Text>
-        )}
+        <List />
       </View>
     </RootSiblingParent>
   );

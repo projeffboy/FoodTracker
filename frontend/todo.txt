@@ -3,6 +3,3 @@ major:
 - remove the NFS
 - search peanut
 - more nutrients
-
-minor:
-- add error toast bars for invalid servings and serving size
