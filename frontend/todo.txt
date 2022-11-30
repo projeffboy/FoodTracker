@@ -6,3 +6,4 @@ major:
 minor:
 - toast for error in nutrition facts useEffect
 - bold only the ingredients word
+- android vs ios design

@@ -1,28 +1,20 @@
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { addToDiaryWithFeedback } from "../helper/toast";
+import MyButton from "./MyButton";
 
-export default AddFood = ({ id, food, nutrients }) => (
-  <TouchableOpacity
-    style={styles.buttonContainer}
-    onPress={() => addToDiaryWithFeedback(id, food, nutrients)}
-  >
-    <Text style={styles.buttonText}>Add to Diary </Text>
-    <Ionicons name="ios-add-circle" size={24} color={styles.buttonText.color} />
-  </TouchableOpacity>
-);
+export default function AddFood({ id, food, nutrients }) {
+  const color = "#007aff";
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 8,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: "#007aff",
-    textAlign: "center",
-    marginHorizontal: 2,
-  },
-});
+  return (
+    <MyButton
+      text="Add to Diary"
+      onPress={() => addToDiaryWithFeedback(id, food, nutrients)}
+      icon={<Ionicons name="ios-add-circle" size={24} color={color} />}
+      textStyle={{
+        color,
+        fontSize: 18,
+      }}
+    />
+  );
+}

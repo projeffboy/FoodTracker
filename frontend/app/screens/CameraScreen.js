@@ -16,9 +16,7 @@ import CameraBottomButtons from "../components/CameraBottomButtons";
 import Suggestions from "../components/Suggestions";
 
 export default function CameraScreen({ route }) {
-  const { image: galleryImage } = route.params;
-  const { width } = route.params;
-  const { height } = route.params;
+  const { image: galleryImage, width, height } = route.params || {};
 
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [image, setImage] = useState(galleryImage);

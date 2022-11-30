@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
 import CameraButton from "./CameraButton";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 import theme from "../config/theme";
 
 export default function CameraBottomButtons({
-  navigation,
   image,
   setImage,
   galleryImage,
@@ -13,10 +13,27 @@ export default function CameraBottomButtons({
   async function openImagePicker() {
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (!pickerResult.cancelled) {
-      const { uri } = pickerResult;
-      setImage(uri);
+      setImage(pickerResult.uri);
     }
   }
+
+  function Retry() {
+    return galleryImage ? (
+      <CameraButton
+        label="Other Photos"
+        onPress={openImagePicker}
+        icon="image"
+      />
+    ) : (
+      <CameraButton
+        label="Re-take"
+        onPress={() => setImage()} // do not shorten this line
+        icon="retweet"
+      />
+    );
+  }
+
+  const navigation = useNavigation();
 
   return (
     <View style={styles.buttonContainer}>
@@ -31,18 +48,8 @@ export default function CameraBottomButtons({
           onPress={takePicture}
           icon="camera"
         />
-      ) : galleryImage ? (
-        <CameraButton
-          label="Other Photos"
-          onPress={openImagePicker}
-          icon="image"
-        />
       ) : (
-        <CameraButton
-          label="Re-take"
-          onPress={() => setImage()} // do not shorten this line
-          icon="retweet"
-        />
+        <Retry />
       )}
     </View>
   );
