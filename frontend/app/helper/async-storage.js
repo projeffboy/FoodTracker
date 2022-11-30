@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // food as in food name
-export async function addToDiary(food, nutrients) {
+export async function addToDiary(id, food, nutrients) {
   try {
     const date = new Date();
     const fmtDate = date.toLocaleDateString();
@@ -10,7 +10,7 @@ export async function addToDiary(food, nutrients) {
     let diaryDay = await AsyncStorage.getItem(key);
     diaryDay = JSON.parse(diaryDay) || [];
 
-    const newEntry = { food, nutrients };
+    const newEntry = { id, food, nutrients };
     diaryDay.push(newEntry);
     await AsyncStorage.setItem(key, JSON.stringify(diaryDay));
     //console.log(JSON.parse(await AsyncStorage.getItem(key)));

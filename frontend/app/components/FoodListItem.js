@@ -14,7 +14,7 @@ const FoodListItem = ({
   function quickAdd() {
     const nutrition = new Nutrition(foodNutrients);
 
-    addToDiaryWithFeedback(description, nutrition.getValues());
+    addToDiaryWithFeedback(id, description, nutrition.getValues());
   }
 
   const kcal = foodNutrients

@@ -26,6 +26,7 @@ const navigator = createStackNavigator(
         title: "",
         headerRight: () => (
           <AddFood
+            id={navigation.getParam("id")}
             food={navigation.getParam("description")}
             nutrients={navigation.getParam("nutrients")}
           />

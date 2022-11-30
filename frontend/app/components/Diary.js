@@ -1,4 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useEffect } from "react";
 import MyButton from "./MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,29 +19,17 @@ import {
 import DiaryDelete from "./DiaryDelete";
 import useHook from "../helper/useHook";
 import MyError from "./MyError";
+import DiaryEntry from "./DiaryEntry";
 
-export default function Diary({ fmtDate }) {
-  const [{ data, loading, error }, getDiaryKeyWrapper] = useHook(getDiaryKey);
-
-  useEffect(() => {
-    getDiaryKeyWrapper(fmtDate);
-  }, []);
-
-  function entries() {
-    if (loading) {
-      return <Text>Loading</Text>; // this shouldn't appear to the naked eye
-    } else if (error) {
-      return <MyError />;
-    } else if (data && data?.length > 0) {
-      return <Text>{data.map(food => food.food)}</Text>;
-    } else {
-      return <Text>No entries.</Text>;
-    }
-  }
-
+export default function Diary({ data, fmtDate, getDiaryKeyWrapper }) {
   return (
     <View>
-      {entries()}
+      <FlatList
+        data={data}
+        keyExtractor={(key, i) => key.id + "-" + i}
+        ListHeaderComponent={<Text>Daily Diary</Text>}
+        renderItem={({ item }) => <DiaryEntry food={item.food} />}
+      />
       <DiaryDelete
         fmtDate={fmtDate}
         refresh={() => getDiaryKeyWrapper(fmtDate)}

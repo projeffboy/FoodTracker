@@ -3,10 +3,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { addToDiaryWithFeedback } from "../helper/toast";
 
-export default AddFood = ({ food, nutrients }) => (
+export default AddFood = ({ id, food, nutrients }) => (
   <TouchableOpacity
     style={styles.buttonContainer}
-    onPress={() => addToDiaryWithFeedback(food, nutrients)}
+    onPress={() => addToDiaryWithFeedback(id, food, nutrients)}
   >
     <Text style={styles.buttonText}>Add to Diary </Text>
     <Ionicons name="ios-add-circle" size={24} color={styles.buttonText.color} />

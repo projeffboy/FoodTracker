@@ -45,8 +45,8 @@ export function showToastWithIcon(msg) {
   });
 }
 
-export function addToDiaryWithFeedback(food, nutrients) {
-  const toastMsg = addToDiary(food, nutrients)
+export function addToDiaryWithFeedback(id, food, nutrients) {
+  const toastMsg = addToDiary(id, food, nutrients)
     ? "Food added"
     : "Food failed to add";
   if (toastMsg) {
