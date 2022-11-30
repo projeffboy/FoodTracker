@@ -12,9 +12,7 @@ import MyError from "../components/MyError";
 export default function FoodListScreen({ route }) {
   const { searchTerm: initialSearchTerm } = route.params;
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
-
   const [{ data, loading, error }, searchFoodsWrapper] = useHook(searchFoods);
-
   useEffect(() => {
     searchFoodsWrapper(searchTerm);
   }, []);

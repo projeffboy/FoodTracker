@@ -19,7 +19,7 @@ export default function CameraScreen({ route }) {
   const { image: galleryImage, width, height } = route.params || {};
 
   const [hasCameraPermission, setHasCameraPermission] = useState();
-  const [image, setImage] = useState(galleryImage);
+  const [img, setImg] = useState(galleryImage);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef();
 
@@ -31,7 +31,7 @@ export default function CameraScreen({ route }) {
       try {
         const data = await cameraRef.current.takePictureAsync();
         // console.log(data);
-        setImage(data.uri);
+        setImg(data.uri);
       } catch (e) {
         console.error(e);
       }
@@ -48,12 +48,12 @@ export default function CameraScreen({ route }) {
   }, []);
 
   useEffect(() => {
-    if (!image) {
+    if (!img) {
       return;
     }
 
-    recognizeFoodWrapper(image);
-  }, [image]);
+    recognizeFoodWrapper(img);
+  }, [img]);
 
   if (!hasCameraPermission) {
     return <NoCamera />;
@@ -62,14 +62,14 @@ export default function CameraScreen({ route }) {
   return (
     <RootSiblingParent>
       <View style={styles.container}>
-        {!image ? (
+        {!img ? (
           <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
             <Flash flash={flash} setFlash={setFlash} />
           </Camera>
         ) : (
           <View style={styles.camera}>
             <Image
-              source={{ uri: image }}
+              source={{ uri: img }}
               style={
                 width && height ? { aspectRatio: width / height } : { flex: 1 }
               }
@@ -77,7 +77,7 @@ export default function CameraScreen({ route }) {
           </View>
         )}
 
-        {image && (
+        {img && (
           <View
             style={[
               styles.suggestions,
@@ -91,8 +91,8 @@ export default function CameraScreen({ route }) {
         )}
 
         <CameraBottomButtons
-          image={image}
-          setImage={setImage}
+          image={img}
+          setImage={setImg}
           galleryImage={galleryImage}
           takePicture={takePicture}
         />

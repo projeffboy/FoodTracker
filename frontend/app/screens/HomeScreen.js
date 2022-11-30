@@ -17,20 +17,16 @@ import { useEffect, useState } from "react";
 export default function HomeScreen({ navigation }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // https://stackoverflow.com/a/71610889/6454135
+  // State for is keyboard up? https://stackoverflow.com/a/71610889/6454135
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true); // or some other action
-      }
+      () => setKeyboardVisible(true)
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false); // or some other action
-      }
+      () => setKeyboardVisible(false)
     );
 
     return () => {
@@ -60,7 +56,7 @@ export default function HomeScreen({ navigation }) {
       <View
         style={[
           styles.logoContainer,
-          Platform.OS !== "android" || !isKeyboardVisible ? {} : { flex: 2.5 }, // magic number
+          Platform.OS !== "android" || (isKeyboardVisible ? { flex: 2.5 } : {}), // magic number
         ]}
       >
         <Image style={styles.logo} source={require("../assets/logo.png")} />
