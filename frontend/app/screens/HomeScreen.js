@@ -11,7 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import theme from "../config/theme";
 import Search from "../components/Search";
-import MainMenuButton from "../components/MainMenuButton";
+import MainMenuButton from "../components/home-screen/MainMenuButton";
 import { useEffect, useState } from "react";
 
 export default function HomeScreen({ navigation }) {

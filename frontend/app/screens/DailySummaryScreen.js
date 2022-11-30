@@ -1,11 +1,12 @@
 import { Text, View } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
-import Diary from "../components/Diary";
 import { useEffect, useState } from "react";
-import DateHeader from "../components/DateHeader";
-import DailyProgress from "../components/DailyProgress";
+
 import useHook from "../helper/useHook";
 import { getDiaryKey } from "../helper/async-storage";
+import Diary from "../components/daily-summary-screen/Diary";
+import DateHeader from "../components/daily-summary-screen/DateHeader";
+import DailyProgress from "../components/daily-summary-screen/DailyProgress";
 import MyError from "../components/MyError";
 
 export default function DailySummaryScreen() {

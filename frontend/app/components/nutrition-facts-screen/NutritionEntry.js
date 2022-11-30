@@ -13,7 +13,7 @@ export default function NutritionEntry({
   borderBottomStyleName,
 }) {
   const [loaded] = useFonts({
-    "Helvetica-Italic": require("../assets/fonts/Helvetica-Italic.ttf"),
+    "Helvetica-Italic": require("../../assets/fonts/Helvetica-Italic.ttf"),
   });
   if (!loaded) {
     return null;

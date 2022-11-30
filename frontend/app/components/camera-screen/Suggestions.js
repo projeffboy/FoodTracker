@@ -1,8 +1,8 @@
 // import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import FoodList from "../components/FoodList";
-import MyError from "../components/MyError";
-import theme from "../config/theme";
+import FoodList from "../FoodList";
+import MyError from "../MyError";
+import theme from "../../config/theme";
 // import { getFoods } from "../helper/api";
 
 export default Suggestions = ({ loading, error, data }) => {

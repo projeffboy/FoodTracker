@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import theme from "../config/theme";
+import theme from "../../config/theme";
 
 // when no camera permission
 export default NoCamera = () => (

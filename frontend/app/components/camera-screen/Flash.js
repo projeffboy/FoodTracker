@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
-import theme from "../config/theme";
 import { Camera } from "expo-camera";
+
+import theme from "../../config/theme";
 import CameraButton from "./CameraButton";
 
 export default Flash = ({ flash, setFlash }) => (

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import theme from "../config/theme";
+import theme from "../../config/theme";
 
 export default DateHeader = ({ numDaysBefore, setNumDaysBefore, getDate }) => (
   <View style={styles.dateContainer}>

@@ -1,5 +1,5 @@
 import { FlatList } from "react-native";
-import FoodListItem from "./FoodListItem";
+import FoodListItem from "./food-list/FoodListItem";
 
 export default FoodList = ({ foods }) => (
   <FlatList

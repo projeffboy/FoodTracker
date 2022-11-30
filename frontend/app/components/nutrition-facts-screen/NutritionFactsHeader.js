@@ -2,10 +2,10 @@ import { useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Platform } from "react-native";
 
-import { EditServing, ServingInput } from "../components/ServingInput";
-import { getNutrient, kJ_to_kcal } from "../helper/nutrition";
-import theme from "../config/theme";
-import Picker from "../components/Picker";
+import { EditServing, ServingInput } from "../ServingInput";
+import { getNutrient, kJ_to_kcal } from "../../helper/nutrition";
+import theme from "../../config/theme";
+import Picker from "../Picker";
 
 const veryBold = "Helvetica-Black"; // font has to be initialized in parent component
 

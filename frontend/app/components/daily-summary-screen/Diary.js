@@ -5,21 +5,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { useEffect } from "react";
-import MyButton from "./MyButton";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import theme from "../config/theme";
-import showToast from "../helper/toast";
-import {
-  deleteAll,
-  deleteKey,
-  getDiaryKey,
-  getKey,
-} from "../helper/async-storage";
-import DiaryDelete from "./DiaryDelete";
-import useHook from "../helper/useHook";
-import MyError from "./MyError";
-import DiaryEntry from "./DiaryEntry";
+import DiaryDelete from "./diary/DiaryDelete";
+import DiaryEntry from "./diary/DiaryEntry";
 
 export default function Diary({ data, fmtDate, getDiaryKeyWrapper }) {
   return (

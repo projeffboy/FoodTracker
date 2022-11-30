@@ -5,9 +5,9 @@ import { useFonts } from "expo-font";
 import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "../config/theme";
-import NutritionEntry from "../components/NutritionEntry";
-import NutritionFactsHeader from "../components/NutritionFactsHeader";
-import NutritionFactsFooter from "../components/NutritionFactsFooter";
+import NutritionEntry from "../components/nutrition-facts-screen/NutritionEntry";
+import NutritionFactsHeader from "../components/nutrition-facts-screen/NutritionFactsHeader";
+import NutritionFactsFooter from "../components/nutrition-facts-screen/NutritionFactsFooter";
 import { Nutrition } from "../helper/nutrition";
 import { getFood } from "../helper/api";
 import useHook from "../helper/useHook";

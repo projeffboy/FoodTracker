@@ -10,10 +10,10 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import theme from "../config/theme";
 import { recognizeFood } from "../helper/api";
 import useHook from "../helper/useHook";
-import NoCamera from "../components/NoCamera";
-import Flash from "../components/Flash";
-import CameraBottomButtons from "../components/CameraBottomButtons";
-import Suggestions from "../components/Suggestions";
+import NoCamera from "../components/camera-screen/NoCamera";
+import Flash from "../components/camera-screen/Flash";
+import CameraBottomButtons from "../components/camera-screen/CameraBottomButtons";
+import Suggestions from "../components/camera-screen/Suggestions";
 
 export default function CameraScreen({ route }) {
   const { image: galleryImage, width, height } = route.params || {};
