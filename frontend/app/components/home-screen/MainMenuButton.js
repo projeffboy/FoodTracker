@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import theme from "../../config/theme";
-import MyButton from "../MyButton";
+import theme from "@/config/theme";
+import MyButton from "@/components/MyButton";
 
 export default MainMenuButton = ({
   label,

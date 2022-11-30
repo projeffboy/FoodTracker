@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import theme from "../config/theme";
+import theme from "@/config/theme";
 
 export default MyError = () => (
   <View style={styles.error}>

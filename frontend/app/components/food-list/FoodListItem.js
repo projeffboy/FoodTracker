@@ -2,10 +2,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-import theme from "../../config/theme";
-import { getNutrient, kJ_to_kcal } from "../../helper/nutrition";
-import { Nutrition } from "../../helper/nutrition";
-import { addToDiaryWithFeedback } from "../../helper/toast";
+import theme from "@/config/theme";
+import { getNutrient, kJ_to_kcal } from "@/helper/nutrition";
+import { Nutrition } from "@/helper/nutrition";
+import { addToDiaryWithFeedback } from "@/helper/toast";
 
 export default FoodListItem = ({
   food: { description, foodNutrients, fdcId: id },

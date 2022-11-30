@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 
-import { addToDiaryWithFeedback } from "../helper/toast";
+import { addToDiaryWithFeedback } from "@/helper/toast";
 import MyButton from "./MyButton";
 
 export default function AddFood({ id, food, nutrients }) {

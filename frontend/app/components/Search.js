@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
-import theme from "../config/theme";
+import theme from "@/config/theme";
 
 export default function Search({ term, setTerm, submit }) {
   return (

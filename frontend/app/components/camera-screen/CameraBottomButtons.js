@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-import theme from "../../config/theme";
+import theme from "@/config/theme";
 
-import CameraButton from "./CameraButton";
+import CameraButton from "@/components/camera-screen/CameraButton";
 
 export default function CameraBottomButtons({
   image,

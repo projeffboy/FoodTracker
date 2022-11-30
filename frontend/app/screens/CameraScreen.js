@@ -7,13 +7,13 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { RootSiblingParent } from "react-native-root-siblings";
 
-import theme from "../config/theme";
-import { recognizeFood } from "../helper/api";
-import useHook from "../helper/useHook";
-import NoCamera from "../components/camera-screen/NoCamera";
-import Flash from "../components/camera-screen/Flash";
-import CameraBottomButtons from "../components/camera-screen/CameraBottomButtons";
-import Suggestions from "../components/camera-screen/Suggestions";
+import theme from "@/config/theme";
+import { recognizeFood } from "@/helper/api";
+import useHook from "@/helper/useHook";
+import NoCamera from "@/components/camera-screen/NoCamera";
+import Flash from "@/components/camera-screen/Flash";
+import CameraBottomButtons from "@/components/camera-screen/CameraBottomButtons";
+import Suggestions from "@/components/camera-screen/Suggestions";
 
 export default function CameraScreen({ route }) {
   const { image: galleryImage, width, height } = route.params || {};

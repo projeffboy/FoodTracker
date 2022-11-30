@@ -4,13 +4,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { RootSiblingParent } from "react-native-root-siblings";
 
-import theme from "../config/theme";
-import NutritionEntry from "../components/nutrition-facts-screen/NutritionEntry";
-import NutritionFactsHeader from "../components/nutrition-facts-screen/NutritionFactsHeader";
-import NutritionFactsFooter from "../components/nutrition-facts-screen/NutritionFactsFooter";
-import { Nutrition } from "../helper/nutrition";
-import { getFood } from "../helper/api";
-import useHook from "../helper/useHook";
+import theme from "@/config/theme";
+import NutritionEntry from "@/components/nutrition-facts-screen/NutritionEntry";
+import NutritionFactsHeader from "@/components/nutrition-facts-screen/NutritionFactsHeader";
+import NutritionFactsFooter from "@/components/nutrition-facts-screen/NutritionFactsFooter";
+import { Nutrition } from "@/helper/nutrition";
+import { getFood } from "@/helper/api";
+import useHook from "@/helper/useHook";
 import { useNavigation } from "@react-navigation/native";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
@@ -83,6 +83,7 @@ export default function NutritionFactsScreen({ route }) {
   }, [servings, servingSize, unit]);
 
   const [loaded] = useFonts({
+    // for some reason absolute paths don't work when the string below has a variable in it
     [notBold]: require("../assets/fonts/" + notBold + ".ttf"),
     [italic]: require("../assets/fonts/" + italic + ".ttf"),
     [bold]: require("../assets/fonts/" + bold + ".ttf"),

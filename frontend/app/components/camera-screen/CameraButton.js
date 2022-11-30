@@ -2,8 +2,8 @@ import * as React from "react";
 import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
-import theme from "../../config/theme";
-import MyButton from "../MyButton";
+import theme from "@/config/theme";
+import MyButton from "@/components/MyButton";
 
 const CameraButton = ({ label, onPress, icon, color }) => (
   <MyButton

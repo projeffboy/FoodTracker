@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 
-import theme from "../config/theme";
+import theme from "@/config/theme";
 import { Text, View } from "react-native";
 
 export default function showToast(msg) {

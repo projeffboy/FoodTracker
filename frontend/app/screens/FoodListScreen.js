@@ -1,13 +1,13 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import Search from "../components/Search";
 import { RootSiblingParent } from "react-native-root-siblings";
 
-import theme from "../config/theme";
-import FoodList from "../components/FoodList";
-import { searchFoods } from "../helper/api";
-import useHook from "../helper/useHook";
-import MyError from "../components/MyError";
+import theme from "@/config/theme";
+import Search from "@/components/Search";
+import FoodList from "@/components/FoodList";
+import { searchFoods } from "@/helper/api";
+import useHook from "@/helper/useHook";
+import MyError from "@/components/MyError";
 
 export default function FoodListScreen({ route }) {
   const { searchTerm: initialSearchTerm } = route.params;

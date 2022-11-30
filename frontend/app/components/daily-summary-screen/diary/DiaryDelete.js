@@ -1,10 +1,10 @@
-import { RefreshControl, Text, View } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import MyButton from "../../MyButton";
+import MyButton from "@/components/MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import theme from "../../../config/theme";
-import showToast from "../../../helper/toast";
-import { deleteAll, deleteKey } from "../../../helper/async-storage";
+import theme from "@/config/theme";
+import showToast from "@/helper/toast";
+import { deleteAll, deleteKey } from "@/helper/async-storage";
 
 export default function DiaryDelete({ fmtDate, refresh }) {
   function deleteHelper(fn) {

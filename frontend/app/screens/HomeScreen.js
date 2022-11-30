@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-import theme from "../config/theme";
-import Search from "../components/Search";
-import MainMenuButton from "../components/home-screen/MainMenuButton";
+import theme from "@/config/theme";
+import Search from "@/components/Search";
+import MainMenuButton from "@/components/home-screen/MainMenuButton";
 import { useEffect, useState } from "react";
 
 export default function HomeScreen({ navigation }) {
@@ -59,7 +59,7 @@ export default function HomeScreen({ navigation }) {
           Platform.OS !== "android" || (isKeyboardVisible ? { flex: 2.5 } : {}), // magic number
         ]}
       >
-        <Image style={styles.logo} source={require("../assets/logo.png")} />
+        <Image style={styles.logo} source={require("@/assets/logo.png")} />
         <Text style={styles.appTitle}>Food Tracker</Text>
         <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
       </View>

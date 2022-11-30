@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import theme from "../config/theme";
+import theme from "@/config/theme";
 import { forwardRef } from "react";
 
 // make sure the two ref arguments are the same
