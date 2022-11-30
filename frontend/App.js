@@ -1,3 +1,4 @@
+import { RootSiblingParent } from "react-native-root-siblings";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./app/screens/HomeScreen";
@@ -9,45 +10,48 @@ import AddFood from "./app/components/AddFood";
 
 const Stack = createNativeStackNavigator();
 
+// RootSiblingParent is for the toast/snackbar/popup/in-app-notification
 export default App = () => (
-  <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="FoodList"
-        component={FoodListScreen}
-        options={{ title: "Food List" }}
-      />
-      <Stack.Screen
-        name="Camera"
-        component={CameraScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NutritionFacts"
-        component={NutritionFactsScreen}
-        options={({ route: { params } }) => ({
-          title: "",
-          headerRight: () => (
-            <AddFood
-              id={params.id}
-              food={params.description}
-              nutrients={params.nutrients}
-            />
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="DailySummary"
-        component={DailySummaryScreen}
-        options={{
-          title: "Summary",
-        }}
-      />
-    </Stack.Navigator>
-  </NavigationContainer>
+  <RootSiblingParent>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="FoodList"
+          component={FoodListScreen}
+          options={{ title: "Food List" }}
+        />
+        <Stack.Screen
+          name="Camera"
+          component={CameraScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NutritionFacts"
+          component={NutritionFactsScreen}
+          options={({ route: { params } }) => ({
+            title: "",
+            headerRight: () => (
+              <AddFood
+                id={params.id}
+                food={params.description}
+                nutrients={params.nutrients}
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="DailySummary"
+          component={DailySummaryScreen}
+          options={{
+            title: "Summary",
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </RootSiblingParent>
 );

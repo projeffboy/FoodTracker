@@ -1,7 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { RootSiblingParent } from "react-native-root-siblings";
-
 import theme from "@/config/theme";
 import Search from "@/components/Search";
 import FoodList from "@/components/FoodList";
@@ -36,22 +34,20 @@ export default function FoodListScreen({ route }) {
   }
 
   return (
-    <RootSiblingParent>
-      <View style={styles.root}>
-        <Search
-          term={searchTerm}
-          setTerm={setSearchTerm}
-          submit={() =>
-            searchTerm.trim() !== "" && searchFoodsWrapper(searchTerm)
-          }
-        />
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Top Results</Text>
-          <Text>(Per 100g)</Text>
-        </View>
-        <List />
+    <View style={styles.root}>
+      <Search
+        term={searchTerm}
+        setTerm={setSearchTerm}
+        submit={() =>
+          searchTerm.trim() !== "" && searchFoodsWrapper(searchTerm)
+        }
+      />
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Top Results</Text>
+        <Text>(Per 100g)</Text>
       </View>
-    </RootSiblingParent>
+      <List />
+    </View>
   );
 }
 

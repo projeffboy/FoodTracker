@@ -1,5 +1,4 @@
 import { Text, View } from "react-native";
-import { RootSiblingParent } from "react-native-root-siblings";
 import { useEffect, useState } from "react";
 
 import useHook from "@/helper/useHook";
@@ -28,20 +27,18 @@ export default function DailySummaryScreen() {
   }
 
   return (
-    <RootSiblingParent>
-      <View>
-        <DateHeader
-          numDaysBefore={numDaysBefore}
-          setNumDaysBefore={setNumDaysBefore}
-          getDate={getDate}
-        />
-        <DailyProgress data={data} />
-        <Diary
-          data={data}
-          fmtDate={getDate().toLocaleDateString()}
-          getDiaryKeyWrapper={getDiaryKeyWrapper}
-        />
-      </View>
-    </RootSiblingParent>
+    <View>
+      <DateHeader
+        numDaysBefore={numDaysBefore}
+        setNumDaysBefore={setNumDaysBefore}
+        getDate={getDate}
+      />
+      <DailyProgress data={data} />
+      <Diary
+        data={data}
+        fmtDate={getDate().toLocaleDateString()}
+        getDiaryKeyWrapper={getDiaryKeyWrapper}
+      />
+    </View>
   );
 }

@@ -5,7 +5,6 @@ import { View, StyleSheet, Image } from "react-native";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { RootSiblingParent } from "react-native-root-siblings";
 
 import theme from "@/config/theme";
 import { recognizeFood } from "@/helper/api";
@@ -60,44 +59,42 @@ export default function CameraScreen({ route }) {
   }
 
   return (
-    <RootSiblingParent>
-      <View style={styles.container}>
-        {!img ? (
-          <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
-            <Flash flash={flash} setFlash={setFlash} />
-          </Camera>
-        ) : (
-          <View style={styles.camera}>
-            <Image
-              source={{ uri: img }}
-              style={
-                width && height ? { aspectRatio: width / height } : { flex: 1 }
-              }
-            />
-          </View>
-        )}
+    <View style={styles.container}>
+      {!img ? (
+        <Camera style={styles.camera} ref={cameraRef} flashMode={flash}>
+          <Flash flash={flash} setFlash={setFlash} />
+        </Camera>
+      ) : (
+        <View style={styles.camera}>
+          <Image
+            source={{ uri: img }}
+            style={
+              width && height ? { aspectRatio: width / height } : { flex: 1 }
+            }
+          />
+        </View>
+      )}
 
-        {img && (
-          <View
-            style={[
-              styles.suggestions,
-              width && height && width > height
-                ? styles.suggestionsForLandscape
-                : styles.suggestionsForPortrait,
-            ]}
-          >
-            <Suggestions loading={loading} error={error} data={data} />
-          </View>
-        )}
+      {img && (
+        <View
+          style={[
+            styles.suggestions,
+            width && height && width > height
+              ? styles.suggestionsForLandscape
+              : styles.suggestionsForPortrait,
+          ]}
+        >
+          <Suggestions loading={loading} error={error} data={data} />
+        </View>
+      )}
 
-        <CameraBottomButtons
-          image={img}
-          setImage={setImg}
-          galleryImage={galleryImage}
-          takePicture={takePicture}
-        />
-      </View>
-    </RootSiblingParent>
+      <CameraBottomButtons
+        image={img}
+        setImage={setImg}
+        galleryImage={galleryImage}
+        takePicture={takePicture}
+      />
+    </View>
   );
 }
 
