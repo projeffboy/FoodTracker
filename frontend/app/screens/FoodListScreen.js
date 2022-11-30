@@ -9,8 +9,8 @@ import { searchFoods } from "../helper/api";
 import useHook from "../helper/useHook";
 import MyError from "../components/MyError";
 
-export default function FoodListScreen({ navigation }) {
-  const initialSearchTerm = navigation.getParam("searchTerm");
+export default function FoodListScreen({ route }) {
+  const { searchTerm: initialSearchTerm } = route.params;
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
   const [{ data, loading, error }, searchFoodsWrapper] = useHook(searchFoods);

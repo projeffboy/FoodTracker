@@ -11,6 +11,7 @@ import NutritionFactsFooter from "../components/NutritionFactsFooter";
 import { Nutrition } from "../helper/nutrition";
 import { getFood } from "../helper/api";
 import useHook from "../helper/useHook";
+import { useNavigation } from "@react-navigation/native";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -19,11 +20,11 @@ const italic = "Helvetica-Italic";
 const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
-export default function NutritionFactsScreen({ navigation }) {
-  const foodName = navigation.getParam("description");
-  const [allNutrients, setAllNutrients] = useState(
-    navigation.getParam("foodNutrients")
-  );
+export default function NutritionFactsScreen({ route }) {
+  const navigation = useNavigation();
+
+  const { description: foodName } = route.params;
+  const [allNutrients, setAllNutrients] = useState(route.params.foodNutrients);
 
   const defaultServings = "1";
   const defaultServingSize = "100";

@@ -1,10 +1,9 @@
 import { StyleSheet, View } from "react-native";
 import CameraButton from "./CameraButton";
-import { withNavigation } from "react-navigation";
 import * as ImagePicker from "expo-image-picker";
 import theme from "../config/theme";
 
-function CameraBottomButtons({
+export default function CameraBottomButtons({
   navigation,
   image,
   setImage,
@@ -48,8 +47,6 @@ function CameraBottomButtons({
     </View>
   );
 }
-
-export default withNavigation(CameraBottomButtons);
 
 const styles = StyleSheet.create({
   buttonContainer: {

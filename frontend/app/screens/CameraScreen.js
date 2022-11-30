@@ -15,10 +15,10 @@ import Flash from "../components/Flash";
 import CameraBottomButtons from "../components/CameraBottomButtons";
 import Suggestions from "../components/Suggestions";
 
-export default function CameraScreen({ navigation }) {
-  const galleryImage = navigation.getParam("image");
-  const width = navigation.getParam("width");
-  const height = navigation.getParam("height");
+export default function CameraScreen({ route }) {
+  const { image: galleryImage } = route.params;
+  const { width } = route.params;
+  const { height } = route.params;
 
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [image, setImage] = useState(galleryImage);

@@ -11,7 +11,7 @@ export async function addToDiary(id, food, nutrients) {
     diaryDay = JSON.parse(diaryDay) || [];
 
     const newEntry = { id, food, nutrients };
-    diaryDay.push(newEntry);
+    diaryDay.navigate(newEntry);
     await AsyncStorage.setItem(key, JSON.stringify(diaryDay));
     //console.log(JSON.parse(await AsyncStorage.getItem(key)));
 

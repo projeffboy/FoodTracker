@@ -1,16 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 import { getNutrient, kJ_to_kcal } from "../helper/nutrition";
 import { Nutrition } from "../helper/nutrition";
 import { addToDiaryWithFeedback } from "../helper/toast";
+import { useNavigation } from "@react-navigation/native";
 
-const FoodListItem = ({
+export default FoodListItem = ({
   food: { description, foodNutrients, fdcId: id },
-  navigation,
 }) => {
+  const navigation = useNavigation();
+
   function quickAdd() {
     const nutrition = new Nutrition(foodNutrients);
 
@@ -53,8 +54,6 @@ const FoodListItem = ({
     </TouchableOpacity>
   );
 };
-
-export default withNavigation(FoodListItem);
 
 const styles = StyleSheet.create({
   item: {

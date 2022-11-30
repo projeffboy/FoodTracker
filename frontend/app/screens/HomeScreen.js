@@ -8,14 +8,13 @@ import {
   Keyboard,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { withNavigation } from "react-navigation";
 
 import theme from "../config/theme";
 import Search from "../components/Search";
 import MainMenuButton from "../components/MainMenuButton";
 import { useEffect, useState } from "react";
 
-function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   // https://stackoverflow.com/a/71610889/6454135
@@ -100,8 +99,6 @@ function HomeScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
-export default withNavigation(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

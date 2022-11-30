@@ -1,5 +1,5 @@
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./app/screens/HomeScreen";
 import FoodListScreen from "./app/screens/FoodListScreen";
 import CameraScreen from "./app/screens/CameraScreen";
@@ -7,42 +7,47 @@ import NutritionFactsScreen from "./app/screens/NutritionFactsScreen";
 import DailySummaryScreen from "./app/screens/DailySummaryScreen";
 import AddFood from "./app/components/AddFood";
 
-const navigator = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      navigationOptions: {
-        headerShown: false,
-      },
-    },
-    FoodList: {
-      screen: FoodListScreen,
-      navigationOptions: { title: "Food List" },
-    },
-    Camera: { screen: CameraScreen, navigationOptions: { headerShown: false } },
-    NutritionFacts: {
-      screen: NutritionFactsScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: "",
-        headerRight: () => (
-          <AddFood
-            id={navigation.getParam("id")}
-            food={navigation.getParam("description")}
-            nutrients={navigation.getParam("nutrients")}
-          />
-        ),
-      }),
-    },
-    DailySummary: {
-      screen: DailySummaryScreen,
-      navigationOptions: {
-        title: "Summary",
-      },
-    },
-  },
-  {
-    initialRouteName: "Home",
-  }
-);
+const Stack = createNativeStackNavigator();
 
-export default createAppContainer(navigator);
+export default App = () => (
+  <NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="FoodList"
+        component={FoodListScreen}
+        options={{ title: "Food List" }}
+      />
+      <Stack.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NutritionFacts"
+        component={NutritionFactsScreen}
+        options={({ route: { params } }) => ({
+          title: "",
+          headerRight: () => (
+            <AddFood
+              id={params.id}
+              food={params.description}
+              nutrients={params.nutrients}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="DailySummary"
+        component={DailySummaryScreen}
+        options={{
+          title: "Summary",
+        }}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
