@@ -187,33 +187,11 @@ export class Nutrition {
   }
 }
 
-export function getNutrient(nutrients, nutrientName, substring = false) {
-  for (let nutrient of nutrients) {
-    if (
-      (!substring &&
-        nutrient.nutrientName.toLowerCase() === nutrientName.toLowerCase()) ||
-      (substring &&
-        nutrient.nutrientName
-          .toLowerCase()
-          .includes(nutrientName.toLowerCase()))
-    ) {
-      let unitName = nutrient.unitName;
-      if (unitName === unitName.toUpperCase()) {
-        unitName = unitName.toLowerCase();
-      }
-
-      return [nutrient.value, unitName];
-    }
-  }
-
-  return [0, "g"];
-}
-
-export function kJ_to_kcal([value, unit]) {
+export function kJ_to_kcal([num, unit]) {
   if (unit.toLowerCase() == "kj") {
-    return [Math.round(value * 0.239006), "kcal"];
+    return [Math.round(num * 0.239006), "kcal"];
   } else if (unit.toLowerCase() == "kcal") {
-    return [value, unit];
+    return [num, "kcal"];
   }
 
   return ["--", "kcal"];

@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     width: 768 / 4,
     height: 768 / 4,
     marginBottom: 16,
+    borderRadius: 4,
   },
   appTitle: {
     fontSize: 48,

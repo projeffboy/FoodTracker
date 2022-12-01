@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_KEY } from "@env";
 import { capitalize } from "./utility";
+import { kJ_to_kcal } from "./nutrition";
 
 const usda = axios.create({
   baseURL: "https://api.nal.usda.gov/fdc/v1",
@@ -11,7 +12,6 @@ const usda = axios.create({
 
 export async function searchFoods(term, size = 20) {
   const dataTypes = ["Foundation, Survey (FNDDS), SR Legacy", "Branded"];
-
   const resArr = await Promise.all(
     dataTypes.map(dataType =>
       usda.get(`/foods/search`, {
@@ -23,31 +23,84 @@ export async function searchFoods(term, size = 20) {
       })
     )
   );
-  let foods = resArr.map(res => res.data.foods).flat(foods);
+  let foods = resArr.map(res => res.data.foods).flat();
   // remove duplicate names
   const foodNames = foods.map(food => food.description);
   foods = foods.filter((food, i) => foodNames.indexOf(food.description) === i);
 
-  // turn uppercase to capitalize
+  // modify it to suit the needs of FoodList
   foods = foods.map(food => {
-    const { description } = food;
+    const {
+      description,
+      fdcId,
+      foodNutrients,
+      foodMeasures,
+      servingSize,
+      servingSizeUnit,
+      finalFoodInputFoods,
+    } = food;
+
+    let servingSizeStr;
+    let servingSizeInG = servingSize;
+    if (foodMeasures) {
+      for (const { disseminationText: text, gramWeight } of foodMeasures) {
+        servingSizeStr = text;
+        servingSizeInG = gramWeight;
+
+        if (text.toLowerCase() !== "quantity not specified") {
+          break;
+        }
+      }
+    } else {
+      servingSizeUnit = servingSizeUnit.toLowerCase();
+      if (
+        servingSize !== undefined &&
+        servingSizeUnit !== undefined &&
+        servingSize !== "g"
+      ) {
+        servingSizeInG = remove_prefix(servingSize, servingSizeUnit)[0];
+      }
+    }
+
+    function getNutrient(nutrients, nutrientName, substring = false) {
+      for (let nutrient of nutrients) {
+        if (
+          (!substring &&
+            nutrient.nutrientName.toLowerCase() ===
+              nutrientName.toLowerCase()) ||
+          (substring &&
+            nutrient.nutrientName
+              .toLowerCase()
+              .includes(nutrientName.toLowerCase()))
+        ) {
+          let { unitName } = nutrient;
+          if (unitName === unitName.toUpperCase()) {
+            unitName = unitName.toLowerCase();
+          }
+
+          return [nutrient.value, unitName];
+        }
+      }
+
+      return ["--", "g"];
+    }
+
     return {
-      ...food,
+      id: fdcId,
       description:
         description === description.toUpperCase()
           ? capitalize(description.toLowerCase())
           : description.replace(", NFS", ""),
+      optional: {
+        kcal: kJ_to_kcal(getNutrient(foodNutrients, "energy", true)),
+        foodNutrients,
+        servingSizeStr,
+        servingSizeInG,
+        finalFoodInputFoods,
+        getNutrient,
+      },
     };
   });
-
-  // Too slow
-  // const fdcIds = foods.slice(0, 2).map(food => food.fdcId);
-  // let detailedFoods = await getFoods(fdcIds);
-  // if (foods.length > 20) {
-  //   const fdcIds2 = foods.slice(2, 4).map(food => food.fdcId);
-  //   const moreDetailedFoods = (await getFoods(fdcIds2)).data;
-  //   detailedFoods = [...detailedFoods, moreDetailedFoods];
-  // }
 
   return foods;
 }

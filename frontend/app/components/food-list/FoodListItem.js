@@ -3,25 +3,29 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import theme from "@/config/theme";
-import { getNutrient, kJ_to_kcal } from "@/helper/nutrition";
 import { Nutrition } from "@/helper/nutrition";
 import { addToDiaryWithFeedback } from "@/helper/toast";
 
 export default FoodListItem = ({
-  food: { description, foodNutrients, fdcId: id },
+  food: {
+    id,
+    description,
+    optional: {
+      kcal = ["", ""],
+      foodNutrients,
+      servingSizeStr,
+      servingSizeInG,
+    },
+  },
 }) => {
   const navigation = useNavigation();
+  const { paddingVertical } = styles.itemText;
 
   function quickAdd() {
     const nutrition = new Nutrition(foodNutrients);
 
     addToDiaryWithFeedback(id, description, nutrition.getValues());
   }
-
-  const kcal = foodNutrients
-    ? kJ_to_kcal(getNutrient(foodNutrients, "energy"))
-    : ["", ""];
-  const { paddingVertical } = styles.itemText;
 
   return (
     <TouchableOpacity
