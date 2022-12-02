@@ -3,8 +3,12 @@ export function round(num, decimalPlaces = 2) {
     return num;
   }
 
+  if (decimalPlaces === 0) {
+    return Math.round(num);
+  }
+
   const rounder = Math.pow(10, decimalPlaces);
-  return Math.round((num + Number.EPSILON) * rounder) / rounder;
+  return Math.round((num + Number.EPSILON) * rounder) / rounder; // the epsilon is for floating point edge cases, try rounding 1.255
 }
 
 export function capitalize(str) {

@@ -44,7 +44,6 @@ export default function FoodListScreen({ route }) {
       />
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Top Results</Text>
-        <Text>(Per 100g)</Text>
       </View>
       <List />
     </View>
