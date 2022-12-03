@@ -19,7 +19,7 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
   }
 
   function servingSizeKcal() {
-    const servingGrams = servingSizes?.[0]?.gramWeight;
+    const servingGrams = servingSizes?.[0]?.grams;
     if (servingGrams === undefined) {
       return kcal[0];
     }

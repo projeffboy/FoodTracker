@@ -9,7 +9,7 @@ export default Ingredients = ({ ingredients }) =>
     <FlatList
       ListHeaderComponent={<Text style={styles.ingredients}>Ingredients</Text>}
       data={ingredients}
-      keyExtractor={ingredient => ingredient.food}
+      keyExtractor={ingredient => ingredient.food + " - " + ingredient.grams}
       renderItem={({ item: { food, num, unit, grams } }) => {
         unit = unit.toLowerCase();
 
@@ -19,8 +19,9 @@ export default Ingredients = ({ ingredients }) =>
             fo: "fl oz",
             ts: "tsp",
             tb: "tbsp",
+            c: "cup",
           };
-          value = ` ${num}${mapping[unit] || unit} or`;
+          value = ` ${num} ${mapping[unit] || unit} or`;
         }
 
         return (

@@ -66,6 +66,7 @@ export function total(
   servings,
   servingSize,
   servingSizeUnit,
+  servingSizeConvertToGrams,
   defaultServingGrams,
   roundTotal = true
 ) {
@@ -73,34 +74,19 @@ export function total(
   //   [num, unit] = remove_prefix([num, unit]);
   // }
 
-  let unitMult = 1;
-  switch (servingSizeUnit) {
-    case "g":
-      break;
-    case "oz":
-      unitMult = 28.3495;
-      break;
-    case "lb":
-      unitMult = 453.592;
-      break;
-    // case "ml": // assume 1g = 1ml
-    //   break;
-    // case "tsp":
-    //   unitMult = 4.92892;
-    //   break;
-    // case "tbsp":
-    //   unitMult = 14.79;
-    //   break;
-    // case "cup":
-    //   unitMult = 250;
-    //   break;
-    default:
-      console.error(servingSizeUnit + " is not one of the units.");
-      break;
+  const convertToGrams = {
+    g: 1,
+    oz: 28.3495,
+    lb: 453.592,
+    ...servingSizeConvertToGrams,
+  };
+  let unitMult = convertToGrams[servingSizeUnit];
+  if (unitMult === undefined) {
+    unitMult = 1;
   }
+  const servingSizeGrams = servingSize * unitMult;
 
-  const total =
-    num * servings * ((servingSize * unitMult) / defaultServingGrams);
+  const total = num * servings * (servingSizeGrams / defaultServingGrams);
 
   if (!roundTotal) {
     return total;

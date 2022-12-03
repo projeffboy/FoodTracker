@@ -13,7 +13,7 @@ import {
   stdNutrients,
   total,
 } from "@/helper/nutrition";
-import { remove_prefix } from "@/helper/utility";
+import { createObj, remove_prefix } from "@/helper/utility";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -23,31 +23,6 @@ const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
 export default function NutritionFactsScreen({ route }) {
-  // let servingSizeStr;
-  // let servingGrams = servingSize;
-  // if (foodMeasures) {
-  //   for (const { disseminationText: text, gramWeight } of foodMeasures) {
-  //     servingSizeStr = text;
-  //     servingGrams = gramWeight;
-
-  //     if (
-  //       servingSizeStr.toLowerCase() !== "quantity not specified" &&
-  //       servingSizeStr.toLowerCase() !== "1 serving"
-  //     ) {
-  //       break;
-  //     }
-  //   }
-  // } else {
-  //   servingSizeUnit = servingSizeUnit.toLowerCase();
-  //   if (
-  //     servingSize !== undefined &&
-  //     servingSizeUnit !== undefined &&
-  //     servingSizeUnit !== "g"
-  //   ) {
-  //     servingGrams = remove_prefix([servingSize, servingSizeUnit])[0];
-  //   }
-  // }
-
   const {
     id,
     food,
@@ -58,15 +33,18 @@ export default function NutritionFactsScreen({ route }) {
   const defaultServingGrams = "100";
 
   // hooks have to be placed at the top
-  const [servings, setServings] = useState(defaultServings); // keep it as str
-  const [servingSize, setServingSize] = useState(defaultServingGrams); // keep it as str
+  const [servings, setServings] = useState(defaultServings); // NOTE: it is a str
+  const [servingSize, setServingSize] = useState(defaultServingGrams); // NOTE: it is a str
   const [servingSizeUnit, setServingSizeUnit] = useState("g");
   useEffect(() => {
-    setServingSize(
-      servingSizeUnit === "g" || servingSizeUnit === "ml"
-        ? defaultServingGrams
-        : "1"
-    );
+    let newServingSize = "1";
+    if (servingSizeUnit === "g" || servingSizeUnit === "ml") {
+      newServingSize = defaultServingGrams;
+    } else if (servingSizeUnit === "oz") {
+      newServingSize = "5";
+    }
+
+    setServingSize(newServingSize);
   }, [servingSizeUnit]);
 
   const [loaded] = useFonts({
@@ -80,15 +58,21 @@ export default function NutritionFactsScreen({ route }) {
     return null;
   }
 
-  const getTotal = (num, round = true) =>
-    total(
+  function getTotal(num, round = true) {
+    const text = servingSizes.map(({ text }) => text);
+    const grams = servingSizes.map(({ grams }) => grams);
+    const servingSizeConvertToGrams = createObj(text, grams);
+
+    return total(
       num,
       servings,
       servingSize,
       servingSizeUnit,
+      servingSizeConvertToGrams,
       defaultServingGrams,
       round
     );
+  }
   const getTotalWithArr = ([num, unit]) => [getTotal(num), unit];
   function getKcal() {
     if (!nutrients.Energy) {
@@ -136,7 +120,7 @@ export default function NutritionFactsScreen({ route }) {
               setServingSize={setServingSize}
               servingSizeUnit={servingSizeUnit}
               setServingSizeUnit={setServingSizeUnit}
-              servingSizes={servingSizes}
+              servingSizesText={servingSizes.map(({ text }) => text)}
             />
           }
           data={Object.entries(stdNutrients)}

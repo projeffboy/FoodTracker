@@ -17,25 +17,20 @@ export default NutritionFactsHeader = ({
   setServingSize,
   servingSizeUnit,
   setServingSizeUnit,
-  servingSizes,
+  servingSizesText,
 }) => {
   styles = { ...styles, ...moreStyles };
 
   const servingsRef = useRef();
   const servingSizeRef = useRef();
   const unitRef = useRef();
-  const servingSizesPickerItems = servingSizes
-    .filter(({ gramWeight }) => gramWeight !== undefined)
-    .map(({ text, gramWeight }) => {
-      if (text === "Quantity not specified") {
-        text = "1 serving"; // hopefully we don't end up with two items with "1 serving"
-      }
-      return {
-        label: text,
-        inputLabel: text,
-        value: gramWeight + "g",
-      };
-    });
+  const servingSizesPickerItems = servingSizesText.map(text => {
+    return {
+      label: text,
+      inputLabel: text.replace(/^1/, ""),
+      value: text,
+    };
+  });
 
   return (
     <View>

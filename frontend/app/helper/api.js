@@ -44,27 +44,36 @@ function searchFoodsConformToSchema({
   servingSizeUnit,
   finalFoodInputFoods,
 }) {
+  // Get serving sizes
+  const servingSizes = foodMeasures
+    .filter(({ gramWeight }) => gramWeight !== undefined)
+    .map(({ disseminationText: text, gramWeight: grams }) => ({
+      text:
+        text.toLowerCase() === "quantity not specified"
+          ? `1 serving (${grams}g)`
+          : text,
+      grams,
+    }));
   // put the less desirable serving sizes at the end
-  const servingSizes = foodMeasures.map(
-    ({ disseminationText, gramWeight }) => ({
-      text: disseminationText,
-      gramWeight,
-    })
-  );
   servingSizes.sort(servingSize1 =>
-    ["quantity not specified", "1 serving"].includes(
-      servingSize1.text.toLowerCase()
-    )
-      ? 1
-      : -1
+    servingSize1.text.toLowerCase().includes("1 serving") ? 1 : -1
   );
-  if (servingSizes.length === 0) {
+  // try to get at least one serving size
+  if (
+    servingSizes.length === 0 &&
+    servingSize !== undefined &&
+    servingSizeUnit !== undefined
+  ) {
     servingSizes[0] = {
-      text: servingSize + servingSizeUnit,
+      text: `1 serving (${servingSize}${servingSizeUnit})`,
+      grams: ["g", "gm", "gram"].includes(servingSizeUnit.toLowerCase())
+        ? servingSize
+        : undefined,
     };
   }
+  // save some code duplication
   const defaultServingSize =
-    servingSizes?.[0]?.text || servingSizes?.[0]?.gramWeight;
+    servingSizes?.[0]?.text || servingSizes?.[0]?.grams;
 
   // we only want the nutrient value -- number and unit
   const mapping = {
@@ -95,7 +104,7 @@ function searchFoodsConformToSchema({
   // ingredients
   const ingredients = finalFoodInputFoods.map(
     ({ foodDescription, value, unit, gramWeight }) => ({
-      food: foodDescription,
+      food: foodDescription.replace(", NFS", ""),
       num: value,
       unit,
       grams: gramWeight,
