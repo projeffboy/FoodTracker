@@ -3,6 +3,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // food as in food name
 export async function addToDiary(id, food, nutrients) {
   try {
+    if (id === undefined || food === undefined || nutrients === undefined) {
+      throw Exception("One of id, food, or nutrients is missing.");
+    }
+
     const date = new Date();
     const fmtDate = date.toLocaleDateString();
     const key = "@diary:" + fmtDate;

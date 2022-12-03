@@ -3,10 +3,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import theme from "@/config/theme";
-import { Nutrition } from "@/helper/nutrition";
+import { kJ_to_kcal } from "@/helper/nutrition";
 import { addToDiaryWithFeedback } from "@/helper/toast";
-import { round } from "../../helper/utility";
-import { kJ_to_kcal } from "../../helper/nutrition";
+import { round } from "@/helper/utility";
 
 export default FoodListItem = ({
   food: {
@@ -22,9 +21,7 @@ export default FoodListItem = ({
     : ["", ""];
 
   function quickAdd() {
-    const nutrition = new Nutrition(foodNutrients);
-
-    addToDiaryWithFeedback(id, description, nutrition.getValues());
+    addToDiaryWithFeedback(id, description, foodNutrients);
   }
 
   function servingSizeKcal() {

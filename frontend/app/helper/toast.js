@@ -4,54 +4,63 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 
 import theme from "@/config/theme";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
+const options = {
+  duration: Toast.durations.SHORT,
+  opacity: 1,
+  backgroundColor: theme.pink,
+  textColor: theme.light,
+  shadowColor: theme.medium,
+};
 
 export default function showToast(msg) {
-  Toast.show(msg, {
-    duration: Toast.durations.SHORT,
-    opacity: 1,
-    backgroundColor: theme.green,
-    textColor: theme.dark,
-    shadowColor: theme.medium,
-  });
+  Toast.show(msg, options);
 }
 
-export function showToastWithIcon(msg) {
+export function showToastWithIcon(msg, Icon) {
+  const styles = StyleSheet.create({
+    msgContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 0,
+      margin: 0,
+      marginBottom: -6, // magic numbers
+    },
+    msg: {
+      color: options.textColor,
+      fontSize: 16,
+    },
+  });
+
   const ToastContent = () => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 0,
-        margin: 0,
-        marginBottom: -6, // magic numbers
-      }}
-    >
-      <Text>{msg} </Text>
-      {Platform.OS === "ios" ? (
-        <Ionicons name="ios-checkmark" size={20} color="black" />
-      ) : (
-        <MaterialIcons name="check" size={20} color="black" />
-      )}
+    <View style={styles.msgContainer}>
+      <Text style={styles.msg}>{msg} </Text>
+      <Icon size={20} color={options.textColor} />
     </View>
   );
 
-  Toast.show(<ToastContent />, {
-    duration: Toast.durations.SHORT,
-    opacity: 1,
-    backgroundColor: theme.green,
-    textColor: theme.dark,
-    shadowColor: theme.medium,
-  });
+  Toast.show(<ToastContent />, options);
 }
 
 export function addToDiaryWithFeedback(id, food, nutrients) {
-  const toastMsg = addToDiary(id, food, nutrients)
-    ? "Food added"
-    : "Food failed to add";
-  if (toastMsg) {
-    showToastWithIcon(toastMsg);
-  } else {
-    showToast(toastMsg);
+  let toastMsg = "Error, food failed to add";
+  let Icon = props =>
+    Platform.OS === "ios" ? (
+      <Ionicons name="ios-alert-circle-outline" {...props} />
+    ) : (
+      <MaterialIcons name="error-outline" {...props} />
+    );
+
+  if (addToDiary(id, food, nutrients)) {
+    toastMsg = "Food added";
+    Icon = props =>
+      Platform.OS === "ios" ? (
+        <Ionicons name="ios-checkmark" {...props} />
+      ) : (
+        <MaterialIcons name="check" {...props} />
+      );
   }
+
+  showToastWithIcon(toastMsg, Icon);
 }
