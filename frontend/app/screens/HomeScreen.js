@@ -75,19 +75,19 @@ export default function HomeScreen({ navigation }) {
               label="Take Picture"
               icon="camera"
               onPress={() => navigation.navigate("Camera")}
-              backgroundColor="#599f54"
+              backgroundColor={theme.green}
             />
             <MainMenuButton
               label="Pick from Photos"
               icon="images"
               onPress={openImagePicker}
-              backgroundColor="#e1ad5d"
+              backgroundColor={theme.yellow}
             />
             <MainMenuButton
               label="Daily Summary"
               icon="chart-pie"
               onPress={goToDailySummary}
-              backgroundColor="#9e292c"
+              backgroundColor={theme.pink}
             />
           </>
         )}

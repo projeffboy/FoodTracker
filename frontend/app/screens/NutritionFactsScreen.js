@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
-    backgroundColor: theme.accent,
+    backgroundColor: theme.green,
     paddingVertical: 4,
     paddingHorizontal: 16,
     maxWidth: "100%",

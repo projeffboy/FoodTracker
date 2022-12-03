@@ -18,8 +18,8 @@ export const ServingInput = forwardRef(
       maxLength={maxLength}
       value={value}
       onChangeText={text => setValue(text)}
-      cursorColor={theme.darkAccent}
-      selectionColor={theme.darkAccent}
+      cursorColor={theme.violetBlue}
+      selectionColor={theme.violetBlue}
       selectTextOnFocus={selectTextOnFocus}
       onEndEditing={() => {
         let formattedValue = String(Number(value));
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   editServingButton: {
     flexDirection: "row",
     marginLeft: 8,
-    backgroundColor: theme.darkAccent,
+    backgroundColor: theme.violetBlue,
     alignItems: "center",
     paddingVertical: 2,
     paddingHorizontal: 8,

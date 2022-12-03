@@ -10,7 +10,7 @@ export default function showToast(msg) {
   Toast.show(msg, {
     duration: Toast.durations.SHORT,
     opacity: 1,
-    backgroundColor: theme.accent,
+    backgroundColor: theme.green,
     textColor: theme.dark,
     shadowColor: theme.medium,
   });
@@ -39,7 +39,7 @@ export function showToastWithIcon(msg) {
   Toast.show(<ToastContent />, {
     duration: Toast.durations.SHORT,
     opacity: 1,
-    backgroundColor: theme.accent,
+    backgroundColor: theme.green,
     textColor: theme.dark,
     shadowColor: theme.medium,
   });
