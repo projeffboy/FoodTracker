@@ -7,10 +7,13 @@ import theme from "@/config/theme";
 import NutritionEntry from "@/components/nutrition-facts-screen/NutritionEntry";
 import NutritionFactsHeader from "@/components/nutrition-facts-screen/NutritionFactsHeader";
 import NutritionFactsFooter from "@/components/nutrition-facts-screen/NutritionFactsFooter";
-import { getPercentDailyValue, stdNutrients } from "@/helper/nutrition";
-import { getFood } from "@/helper/api";
-import useHook from "@/helper/useHook";
-import { useNavigation } from "@react-navigation/native";
+import {
+  getPercentDailyValue,
+  kJ_to_kcal,
+  stdNutrients,
+  total,
+} from "@/helper/nutrition";
+import { remove_prefix } from "@/helper/utility";
 
 // %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 
@@ -20,27 +23,51 @@ const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
 export default function NutritionFactsScreen({ route }) {
-  const navigation = useNavigation();
+  // let servingSizeStr;
+  // let servingGrams = servingSize;
+  // if (foodMeasures) {
+  //   for (const { disseminationText: text, gramWeight } of foodMeasures) {
+  //     servingSizeStr = text;
+  //     servingGrams = gramWeight;
+
+  //     if (
+  //       servingSizeStr.toLowerCase() !== "quantity not specified" &&
+  //       servingSizeStr.toLowerCase() !== "1 serving"
+  //     ) {
+  //       break;
+  //     }
+  //   }
+  // } else {
+  //   servingSizeUnit = servingSizeUnit.toLowerCase();
+  //   if (
+  //     servingSize !== undefined &&
+  //     servingSizeUnit !== undefined &&
+  //     servingSizeUnit !== "g"
+  //   ) {
+  //     servingGrams = remove_prefix([servingSize, servingSizeUnit])[0];
+  //   }
+  // }
 
   const {
     id,
     food,
-    optional: {
-      nutrients,
-      servingSizeStr,
-      servingSizeInG,
-      finalFoodInputFoods,
-    },
+    optional: { nutrients, servingSizes, defaultServingSize, ingredients },
   } = route.params;
 
   const defaultServings = "1";
-  const defaultServingSize = "100";
-  const defaultUnit = "g";
+  const defaultServingGrams = "100";
 
   // hooks have to be placed at the top
   const [servings, setServings] = useState(defaultServings); // keep it as str
-  const [servingSize, setServingSize] = useState(defaultServingSize); // keep it as str
-  const [unit, setUnit] = useState(defaultUnit);
+  const [servingSize, setServingSize] = useState(defaultServingGrams); // keep it as str
+  const [servingSizeUnit, setServingSizeUnit] = useState("g");
+  useEffect(() => {
+    setServingSize(
+      servingSizeUnit === "g" || servingSizeUnit === "ml"
+        ? defaultServingGrams
+        : "1"
+    );
+  }, [servingSizeUnit]);
 
   const [loaded] = useFonts({
     // for some reason absolute paths don't work when the string below has a variable in it
@@ -53,21 +80,44 @@ export default function NutritionFactsScreen({ route }) {
     return null;
   }
 
+  const getTotal = (num, round = true) =>
+    total(
+      num,
+      servings,
+      servingSize,
+      servingSizeUnit,
+      defaultServingGrams,
+      round
+    );
+  const getTotalWithArr = ([num, unit]) => [getTotal(num), unit];
+  function getKcal() {
+    if (!nutrients.Energy) {
+      return;
+    }
+
+    const total = getTotal(kJ_to_kcal(nutrients.Energy)[0]);
+    if (total >= 1) {
+      return Math.round(total);
+    } else {
+      return total;
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.titleContainer, { alignItems: "center" }]}>
         <MaterialCommunityIcons
           name="food-fork-drink"
           size={24}
-          color={theme.dark}
+          color={styles.title.color}
         />
         <Text style={styles.title}> {food} </Text>
         <Text> </Text>
       </View>
 
-      {servingSizeStr ? (
+      {defaultServingSize ? (
         <Text style={styles.defaultServingSize}>
-          Default serving size: {servingSizeStr}
+          Default serving size: {defaultServingSize}
         </Text>
       ) : (
         <View style={{ height: 10 }}></View>
@@ -76,33 +126,42 @@ export default function NutritionFactsScreen({ route }) {
       {nutrients && (
         <FlatList
           style={styles.label}
-          data={Object.entries(stdNutrients)}
-          keyExtractor={stdNutrient => stdNutrient[0]}
           ListHeaderComponent={
             <NutritionFactsHeader
               styles={styles}
-              kcal={nutrients.Energy}
+              kcal={getKcal()}
               servings={servings}
               setServings={setServings}
               servingSize={servingSize}
               setServingSize={setServingSize}
-              unit={unit}
-              setUnit={setUnit}
+              servingSizeUnit={servingSizeUnit}
+              setServingSizeUnit={setServingSizeUnit}
+              servingSizes={servingSizes}
             />
           }
+          data={Object.entries(stdNutrients)}
+          keyExtractor={stdNutrient => stdNutrient[0]}
           renderItem={({ item: [stdNutrientName, stdNutrient] }) =>
             stdNutrientName !== "Energy" && (
               <NutritionEntry
                 styles={styles}
                 nutrient={stdNutrientName}
-                value={nutrients[stdNutrientName]}
-                dailyValue={
+                value={
                   nutrients[stdNutrientName] &&
+                  getTotalWithArr(nutrients[stdNutrientName])
+                }
+                dailyValue={
+                  Array.isArray(nutrients[stdNutrientName]) &&
                   getPercentDailyValue(
-                    nutrients[stdNutrientName],
-                    stdNutrient.dailyValueInG,
+                    getTotal(
+                      remove_prefix(nutrients[stdNutrientName])[0],
+                      false
+                    ),
+                    stdNutrient.dailyGrams,
                     servings,
-                    servingSize
+                    servingSize,
+                    servingSizeUnit,
+                    defaultServingGrams
                   )
                 }
                 hide0Pct={stdNutrient.hide0Pct}
@@ -114,7 +173,10 @@ export default function NutritionFactsScreen({ route }) {
             )
           }
           ListFooterComponent={
-            <NutritionFactsFooter textStyles={styles.text} />
+            <NutritionFactsFooter
+              textStyles={styles.text}
+              ingredients={ingredients}
+            />
           }
         />
       )}
@@ -155,7 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
-    backgroundColor: theme.green,
+    backgroundColor: theme.yellow,
     paddingVertical: 4,
     paddingHorizontal: 16,
     maxWidth: "100%",

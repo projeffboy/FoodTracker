@@ -8,7 +8,7 @@ import { addToDiaryWithFeedback } from "@/helper/toast";
 import { round } from "@/helper/utility";
 
 export default FoodListItem = ({ food: { id, food, optional } }) => {
-  const { nutrients, servingSizeStr, servingSizeInG } = optional; // there is also a `finalFoodInputFoods`
+  const { nutrients, servingSizes, defaultServingSize } = optional; // there is also `ingredients`
 
   const navigation = useNavigation();
   const { paddingVertical } = styles.itemText;
@@ -19,17 +19,18 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
   }
 
   function servingSizeKcal() {
-    if (servingSizeInG === undefined) {
+    const servingGrams = servingSizes?.[0]?.gramWeight;
+    if (servingGrams === undefined) {
       return kcal[0];
     }
 
-    let output = kcal[0] * (servingSizeInG / 100);
-    if (output >= 10) {
-      return round(output, 0);
-    } else if (output >= 1) {
-      return round(output, 1);
+    const servingKcal = kcal[0] * (servingGrams / 100);
+    if (servingKcal >= 10) {
+      return round(servingKcal, 0);
+    } else if (servingKcal >= 1) {
+      return round(servingKcal, 1);
     } else {
-      return round(output, 2);
+      return round(servingKcal, 2);
     }
   }
 
@@ -62,7 +63,9 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
             {servingSizeKcal()}
             <Text style={styles.unit}>{kcal[1]}</Text>
             {" - "}
-            <Text style={styles.servingSize}>{servingSizeStr || "100g"}</Text>
+            <Text style={styles.servingSize}>
+              {defaultServingSize || "100g"}
+            </Text>
           </Text>
         </View>
       </View>

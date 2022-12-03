@@ -1,89 +1,80 @@
-import { remove_prefix } from "./utility";
+import { round } from "./utility";
 
 export const stdNutrients = {
   Energy: {
-    dailyValueInG: 2000,
+    dailyGrams: 2000,
   },
   "Total Fat": {
-    dailyValueInG: 78,
+    dailyGrams: 78,
     bold: true,
   },
   "Saturated Fat": {
-    dailyValueInG: 20,
+    dailyGrams: 20,
     indent: true,
   },
   "Trans Fat": {
-    dailyValueInG: 2.2,
+    dailyGrams: 2.2,
     indent: true,
     hide0Pct: true,
     italic: true,
   },
   Cholesterol: {
-    dailyValueInG: 0.3,
+    dailyGrams: 0.3,
     bold: true,
   },
   Sodium: {
-    dailyValueInG: 2.3,
+    dailyGrams: 2.3,
     bold: true,
   },
   "Total Carbohydrates": {
-    dailyValueInG: 275,
+    dailyGrams: 275,
     bold: true,
   },
   Fiber: {
-    dailyValueInG: 28,
+    dailyGrams: 28,
     indent: true,
   },
   "Total Sugars": {
-    dailyValueInG: 50,
+    dailyGrams: 50,
     indent: true,
   },
   Protein: {
-    dailyValueInG: 50,
+    dailyGrams: 50,
     bold: true,
     borderBottomStyleName: "veryThickBorderBottom",
   },
   "Vitamin D": {
-    dailyValueInG: 20e-6,
+    dailyGrams: 20e-6,
   },
   Calcium: {
-    dailyValueInG: 1.3,
+    dailyGrams: 1.3,
   },
   Iron: {
-    dailyValueInG: 18e-3,
+    dailyGrams: 18e-3,
   },
   Potassium: {
-    dailyValueInG: 4.7,
+    dailyGrams: 4.7,
     borderBottomStyleName: "thickBorderBottom",
   },
 };
 
-export function getPercentDailyValue(
-  [num, unit],
-  dailyValueInG,
+export const getPercentDailyValue = (grams, dailyGrams) =>
+  Math.round((grams / dailyGrams) * 100) + "%";
+
+export function total(
+  num,
   servings,
-  servingSize
+  servingSize,
+  servingSizeUnit,
+  defaultServingGrams,
+  roundTotal = true
 ) {
-  // normalize it to grams
-  if (unit.includes("k")) {
-    num *= 1000;
-  } else if (unit.includes("m")) {
-    num /= 1000;
-  } else if (unit.includes("u")) {
-    num /= 10e6;
-  }
-
-  const valueInG = formula([num, unit], servings, servingSize);
-  return Math.round((valueInG / dailyValueInG) * 100) + "%";
-}
-
-function formula([num, unit], servings, servingSize) {
-  if (["kg", "mg", "ug", "μg"].includes(unit)) {
-    [num, unit] = remove_prefix([num, unit]);
-  }
+  // if (["kg", "mg", "ug", "μg"].includes(unit)) {
+  //   [num, unit] = remove_prefix([num, unit]);
+  // }
 
   let unitMult = 1;
-  switch (unit) {
+  switch (servingSizeUnit) {
     case "g":
       break;
     case "oz":
@@ -92,23 +83,36 @@ function formula([num, unit], servings, servingSize) {
     case "lb":
       unitMult = 453.592;
       break;
-    case "ml": // assume 1g = 1ml
-      break;
-    case "tsp":
-      unitMult = 4.92892;
-      break;
-    case "tbsp":
-      unitMult = 14.79;
-      break;
-    case "cup":
-      unitMult = 250;
-      break;
+    // case "ml": // assume 1g = 1ml
+    //   break;
+    // case "tsp":
+    //   unitMult = 4.92892;
+    //   break;
+    // case "tbsp":
+    //   unitMult = 14.79;
+    //   break;
+    // case "cup":
+    //   unitMult = 250;
+    //   break;
     default:
-      console.error(unit + " is not one of the units.");
+      console.error(servingSizeUnit + " is not one of the units.");
       break;
   }
 
-  return num * servings * ((servingSize * unitMult) / 100);
+  const total =
+    num * servings * ((servingSize * unitMult) / defaultServingGrams);
+
+  if (!roundTotal) {
+    return total;
+  }
+
+  if (total >= 100) {
+    return total.toPrecision(3);
+  } else if (total >= 1) {
+    return round(total, 1);
+  } else {
+    return round(total, 2);
+  }
 }
 
 export function kJ_to_kcal([num, unit]) {

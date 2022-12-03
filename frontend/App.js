@@ -38,8 +38,8 @@ export default App = () => (
             headerRight: () => (
               <AddFood
                 id={params.id}
-                food={params.description}
-                nutrients={params.nutrients}
+                food={params.food}
+                nutrients={params.optional.nutrients}
               />
             ),
           })}

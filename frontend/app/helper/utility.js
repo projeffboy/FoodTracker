@@ -23,6 +23,8 @@ export function remove_prefix([num, unit]) {
     num /= 1000;
   } else if (unit.includes("u") || unit.includes("μ")) {
     num /= 10e6;
+  } else {
+    return [num, unit];
   }
 
   return [num, unit.slice(1)];

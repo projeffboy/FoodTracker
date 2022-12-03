@@ -15,14 +15,27 @@ export default NutritionFactsHeader = ({
   setServings,
   servingSize,
   setServingSize,
-  unit,
-  setUnit,
+  servingSizeUnit,
+  setServingSizeUnit,
+  servingSizes,
 }) => {
   styles = { ...styles, ...moreStyles };
 
   const servingsRef = useRef();
   const servingSizeRef = useRef();
   const unitRef = useRef();
+  const servingSizesPickerItems = servingSizes
+    .filter(({ gramWeight }) => gramWeight !== undefined)
+    .map(({ text, gramWeight }) => {
+      if (text === "Quantity not specified") {
+        text = "1 serving"; // hopefully we don't end up with two items with "1 serving"
+      }
+      return {
+        label: text,
+        inputLabel: text,
+        value: gramWeight + "g",
+      };
+    });
 
   return (
     <View>
@@ -65,9 +78,10 @@ export default NutritionFactsHeader = ({
           />
           <Picker
             ref={unitRef}
-            value={unit}
-            onValueChange={setUnit}
+            value={servingSizeUnit}
+            onValueChange={setServingSizeUnit}
             styles={styles.h3}
+            moreItems={servingSizesPickerItems}
           />
         </View>
       </View>

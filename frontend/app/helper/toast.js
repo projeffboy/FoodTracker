@@ -43,7 +43,7 @@ export function showToastWithIcon(msg, Icon) {
   Toast.show(<ToastContent />, options);
 }
 
-export function addToDiaryWithFeedback(id, food, nutrients) {
+export async function addToDiaryWithFeedback(id, food, nutrients) {
   let toastMsg = "Error, food failed to add";
   let Icon = props =>
     Platform.OS === "ios" ? (
@@ -52,7 +52,7 @@ export function addToDiaryWithFeedback(id, food, nutrients) {
       <MaterialIcons name="error-outline" {...props} />
     );
 
-  if (addToDiary(id, food, nutrients)) {
+  if (await addToDiary(id, food, nutrients)) {
     toastMsg = "Food added";
     Icon = props =>
       Platform.OS === "ios" ? (

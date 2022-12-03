@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export async function addToDiary(id, food, nutrients) {
   try {
     if (id === undefined || food === undefined || nutrients === undefined) {
-      throw Exception("One of id, food, or nutrients is missing.");
+      throw "One of id, food, or nutrients is missing.";
     }
 
     const date = new Date();

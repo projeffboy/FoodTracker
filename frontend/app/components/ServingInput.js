@@ -18,8 +18,8 @@ export const ServingInput = forwardRef(
       maxLength={maxLength}
       value={value}
       onChangeText={text => setValue(text)}
-      cursorColor={theme.violetBlue}
-      selectionColor={theme.violetBlue}
+      cursorColor={backgroundColor}
+      selectionColor={backgroundColor}
       selectTextOnFocus={selectTextOnFocus}
       onEndEditing={() => {
         let formattedValue = String(Number(value));
@@ -58,17 +58,19 @@ export const EditServing = forwardRef(
       <MaterialCommunityIcons
         name={iconName}
         size={iconHeight} // magic number
-        color={theme.light}
+        color={styles.editServingText.color}
       />
     </TouchableOpacity>
   )
 );
 
+const backgroundColor = theme.green;
+
 const styles = StyleSheet.create({
   editServingButton: {
     flexDirection: "row",
     marginLeft: 8,
-    backgroundColor: theme.violetBlue,
+    backgroundColor: backgroundColor,
     alignItems: "center",
     paddingVertical: 2,
     paddingHorizontal: 8,

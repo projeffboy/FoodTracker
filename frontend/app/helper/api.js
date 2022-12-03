@@ -30,7 +30,7 @@ export async function searchFoods(term, size = 20) {
   foods = foods.filter((food, i) => foodNames.indexOf(food.description) === i);
 
   // modify it to suit the needs of FoodList
-  foods = foods.map(food => searchFoodsConformToSchema(food));
+  foods = foods.map(searchFoodsConformToSchema);
 
   return foods;
 }
@@ -39,33 +39,32 @@ function searchFoodsConformToSchema({
   description,
   fdcId,
   foodNutrients,
-  foodMeasures,
+  foodMeasures = [],
   servingSize,
   servingSizeUnit,
   finalFoodInputFoods,
 }) {
-  // get the serving size
-  let servingSizeStr;
-  let servingSizeInG = servingSize;
-  if (foodMeasures) {
-    for (const { disseminationText: text, gramWeight } of foodMeasures) {
-      servingSizeStr = text;
-      servingSizeInG = gramWeight;
-
-      if (servingSizeStr.toLowerCase() !== "quantity not specified") {
-        break;
-      }
-    }
-  } else {
-    servingSizeUnit = servingSizeUnit.toLowerCase();
-    if (
-      servingSize !== undefined &&
-      servingSizeUnit !== undefined &&
-      servingSizeUnit !== "g"
-    ) {
-      servingSizeInG = remove_prefix([servingSize, servingSizeUnit])[0];
-    }
+  // put the less desirable serving sizes at the end
+  const servingSizes = foodMeasures.map(
+    ({ disseminationText, gramWeight }) => ({
+      text: disseminationText,
+      gramWeight,
+    })
+  );
+  servingSizes.sort(servingSize1 =>
+    ["quantity not specified", "1 serving"].includes(
+      servingSize1.text.toLowerCase()
+    )
+      ? 1
+      : -1
+  );
+  if (servingSizes.length === 0) {
+    servingSizes[0] = {
+      text: servingSize + servingSizeUnit,
+    };
   }
+  const defaultServingSize =
+    servingSizes?.[0]?.text || servingSizes?.[0]?.gramWeight;
 
   // we only want the nutrient value -- number and unit
   const mapping = {
@@ -93,6 +92,16 @@ function searchFoodsConformToSchema({
   ]);
   const nutrients = createObj(nutrientNames, nutrientValues);
 
+  // ingredients
+  const ingredients = finalFoodInputFoods.map(
+    ({ foodDescription, value, unit, gramWeight }) => ({
+      food: foodDescription,
+      num: value,
+      unit,
+      grams: gramWeight,
+    })
+  );
+
   // valid schema for the frontend
   return {
     id: fdcId,
@@ -102,9 +111,9 @@ function searchFoodsConformToSchema({
         : description.replace(", NFS", ""),
     optional: {
       nutrients,
-      servingSizeStr,
-      servingSizeInG,
-      finalFoodInputFoods,
+      defaultServingSize,
+      servingSizes,
+      ingredients,
     },
   };
 }

@@ -1,0 +1,46 @@
+import { StyleSheet, Text } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import Unorderedlist from "react-native-unordered-list";
+
+import theme from "@/config/theme";
+
+export default Ingredients = ({ ingredients }) =>
+  ingredients.length > 0 && (
+    <FlatList
+      ListHeaderComponent={<Text style={styles.ingredients}>Ingredients</Text>}
+      data={ingredients}
+      keyExtractor={ingredient => ingredient.food}
+      renderItem={({ item: { food, num, unit, grams } }) => {
+        unit = unit.toLowerCase();
+
+        let value = "";
+        if (!["g", "gm"].includes(unit)) {
+          const mapping = {
+            fo: "fl oz",
+            ts: "tsp",
+            tb: "tbsp",
+          };
+          value = ` ${num}${mapping[unit] || unit} or`;
+        }
+
+        return (
+          <Unorderedlist>
+            <Text>{food}</Text>
+            <Unorderedlist>
+              <Text style={{ color: theme.green }}>
+                {value} {grams}g
+              </Text>
+            </Unorderedlist>
+          </Unorderedlist>
+        );
+      }}
+    />
+  );
+
+const styles = StyleSheet.create({
+  ingredients: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 4,
+  },
+});
