@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { Platform } from "react-native";
 
 import { EditServing, ServingInput } from "@/components/ServingInput";
-import { getNutrient, kJ_to_kcal } from "@/helper/nutrition";
 import theme from "@/config/theme";
 import Picker from "@/components/Picker";
 
@@ -11,7 +10,7 @@ const veryBold = "Helvetica-Black"; // font has to be initialized in parent comp
 
 export default NutritionFactsHeader = ({
   styles: moreStyles,
-  nutrition,
+  kcal,
   servings,
   setServings,
   servingSize,
@@ -78,9 +77,7 @@ export default NutritionFactsHeader = ({
         </View>
         <View style={styles.entry}>
           <Text style={styles.h2}>Calories</Text>
-          <Text style={styles.h2}>
-            {kJ_to_kcal(nutrition.getValue("Energy", 0))[0]}
-          </Text>
+          <Text style={styles.h2}>{kcal}</Text>
         </View>
       </View>
       <View style={[styles.thinBorderBottom, { alignItems: "flex-end" }]}>

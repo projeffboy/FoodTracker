@@ -22,6 +22,7 @@ export default function Search({ term, setTerm, submit }) {
         onSubmitEditing={submit}
         enablesReturnKeyAutomatically
         cursorColor={theme.medium}
+        autoCorrect={false}
       />
       <TouchableOpacity>
         <FontAwesome5

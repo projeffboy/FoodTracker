@@ -10,6 +10,7 @@ const usda = axios.create({
 });
 
 export async function searchFoods(term, size = 20) {
+  // Make two requests and join both responses
   const dataTypes = ["Foundation, Survey (FNDDS), SR Legacy", "Branded"];
   const resArr = await Promise.all(
     dataTypes.map(dataType =>
@@ -23,90 +24,95 @@ export async function searchFoods(term, size = 20) {
     )
   );
   let foods = resArr.map(res => res.data.foods).flat();
+
   // remove duplicate names
   const foodNames = foods.map(food => food.description);
   foods = foods.filter((food, i) => foodNames.indexOf(food.description) === i);
 
   // modify it to suit the needs of FoodList
-  foods = foods.map(food => {
-    const {
-      description,
-      fdcId,
-      foodNutrients,
-      foodMeasures,
-      servingSize,
-      servingSizeUnit,
-      finalFoodInputFoods,
-    } = food;
-
-    let servingSizeStr;
-    let servingSizeInG = servingSize;
-    if (foodMeasures) {
-      for (const { disseminationText: text, gramWeight } of foodMeasures) {
-        servingSizeStr = text;
-        servingSizeInG = gramWeight;
-
-        if (text.toLowerCase() !== "quantity not specified") {
-          break;
-        }
-      }
-    } else {
-      servingSizeUnit = servingSizeUnit.toLowerCase();
-      if (
-        servingSize !== undefined &&
-        servingSizeUnit !== undefined &&
-        servingSize !== "g"
-      ) {
-        servingSizeInG = remove_prefix(servingSize, servingSizeUnit)[0];
-      }
-    }
-
-    function substrMapping(nutrientName) {
-      if (nutrientName.toLowerCase().includes("energy")) {
-        return "Energy";
-      }
-    }
-    const mapping = {
-      "Total lipid (fat)": "Total Fat",
-      "Fatty acids, total saturated": "Saturated Fat",
-      "Fatty acids, total trans": "Trans Fat",
-      Cholesterol: "Cholesterol",
-      "Sodium, Na": "Sodium",
-      "Carbohydrate, by difference": "Total Carbohydrates",
-      "Fiber, total dietary": "Fiber",
-      "Sugars, total including NLEA": "Total Sugars",
-      Protein: "Protein",
-      "Vitamin D (D2 + D3)": "Vitamin D",
-      "Calcium, Ca": "Calcium",
-      "Iron, Fe": "Iron",
-      "Potassium, K": "Potassium",
-    };
-    const nutrientNames = foodNutrients.map(
-      ({ nutrientName }) =>
-        mapping[nutrientName] || substrMapping(nutrientName) || nutrientName
-    );
-    const nutrientValues = foodNutrients.map(nutrient => [
-      nutrient.value,
-      nutrient.unitName.toLowerCase(),
-    ]);
-    const formattedFoodNutrients = createObj(nutrientNames, nutrientValues);
-
-    return {
-      id: fdcId,
-      description:
-        description === description.toUpperCase()
-          ? capitalize(description.toLowerCase())
-          : description.replace(", NFS", ""),
-      optional: {
-        foodNutrients: formattedFoodNutrients,
-        servingSizeStr,
-        servingSizeInG,
-        finalFoodInputFoods,
-      },
-    };
-  });
+  foods = foods.map(food => searchFoodsConformToSchema(food));
 
   return foods;
+}
+
+function searchFoodsConformToSchema({
+  description,
+  fdcId,
+  foodNutrients,
+  foodMeasures,
+  servingSize,
+  servingSizeUnit,
+  finalFoodInputFoods,
+}) {
+  // get the serving size
+  let servingSizeStr;
+  let servingSizeInG = servingSize;
+  if (foodMeasures) {
+    for (const { disseminationText: text, gramWeight } of foodMeasures) {
+      servingSizeStr = text;
+      servingSizeInG = gramWeight;
+
+      if (servingSizeStr.toLowerCase() !== "quantity not specified") {
+        break;
+      }
+    }
+  } else {
+    servingSizeUnit = servingSizeUnit.toLowerCase();
+    if (
+      servingSize !== undefined &&
+      servingSizeUnit !== undefined &&
+      servingSizeUnit !== "g"
+    ) {
+      servingSizeInG = remove_prefix([servingSize, servingSizeUnit])[0];
+    }
+  }
+
+  // we only want the nutrient value -- number and unit
+  const mapping = {
+    "Total lipid (fat)": "Total Fat",
+    "Fatty acids, total saturated": "Saturated Fat",
+    "Fatty acids, total trans": "Trans Fat",
+    Cholesterol: "Cholesterol",
+    "Sodium, Na": "Sodium",
+    "Carbohydrate, by difference": "Total Carbohydrates",
+    "Fiber, total dietary": "Fiber",
+    "Sugars, total including NLEA": "Total Sugars",
+    Protein: "Protein",
+    "Vitamin D (D2 + D3)": "Vitamin D",
+    "Calcium, Ca": "Calcium",
+    "Iron, Fe": "Iron",
+    "Potassium, K": "Potassium",
+  };
+  const nutrientNames = foodNutrients.map(
+    ({ nutrientName }) =>
+      mapping[nutrientName] || substrMapping(nutrientName) || nutrientName
+  );
+  const nutrientValues = foodNutrients.map(nutrient => [
+    nutrient.value,
+    nutrient.unitName.toLowerCase(),
+  ]);
+  const nutrients = createObj(nutrientNames, nutrientValues);
+
+  // valid schema for the frontend
+  return {
+    id: fdcId,
+    food:
+      description === description.toUpperCase()
+        ? capitalize(description.toLowerCase())
+        : description.replace(", NFS", ""),
+    optional: {
+      nutrients,
+      servingSizeStr,
+      servingSizeInG,
+      finalFoodInputFoods,
+    },
+  };
+}
+
+function substrMapping(nutrientName) {
+  if (nutrientName.toLowerCase().includes("energy")) {
+    return "Energy";
+  }
 }
 
 export async function getFood(fdcId) {

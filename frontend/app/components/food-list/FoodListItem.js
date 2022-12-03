@@ -7,21 +7,15 @@ import { kJ_to_kcal } from "@/helper/nutrition";
 import { addToDiaryWithFeedback } from "@/helper/toast";
 import { round } from "@/helper/utility";
 
-export default FoodListItem = ({
-  food: {
-    id,
-    description,
-    optional: { foodNutrients, servingSizeStr, servingSizeInG },
-  },
-}) => {
+export default FoodListItem = ({ food: { id, food, optional } }) => {
+  const { nutrients, servingSizeStr, servingSizeInG } = optional; // there is also a `finalFoodInputFoods`
+
   const navigation = useNavigation();
   const { paddingVertical } = styles.itemText;
-  const kcal = foodNutrients?.Energy
-    ? kJ_to_kcal(foodNutrients.Energy)
-    : ["", ""];
+  const kcal = nutrients?.Energy ? kJ_to_kcal(nutrients.Energy) : ["", ""];
 
   function quickAdd() {
-    addToDiaryWithFeedback(id, description, foodNutrients);
+    addToDiaryWithFeedback(id, food, nutrients);
   }
 
   function servingSizeKcal() {
@@ -44,9 +38,9 @@ export default FoodListItem = ({
       style={styles.item}
       onPress={() =>
         navigation.navigate("NutritionFacts", {
-          description,
-          foodNutrients,
           id,
+          food,
+          optional,
         })
       }
     >
@@ -62,7 +56,7 @@ export default FoodListItem = ({
         />
       </TouchableOpacity>
       <View style={styles.description}>
-        <Text style={styles.itemText}>{description}</Text>
+        <Text style={styles.itemText}>{food}</Text>
         <View style={styles.calories}>
           <Text style={styles.caloriesText}>
             {servingSizeKcal()}
