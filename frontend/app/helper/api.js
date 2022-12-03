@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_KEY } from "@env";
-import { capitalize } from "./utility";
-import { kJ_to_kcal } from "./nutrition";
+import { capitalize, createObj } from "./utility";
 
 const usda = axios.create({
   baseURL: "https://api.nal.usda.gov/fdc/v1",
@@ -62,28 +61,35 @@ export async function searchFoods(term, size = 20) {
       }
     }
 
-    function getNutrient(nutrients, nutrientName, substring = false) {
-      for (let nutrient of nutrients) {
-        if (
-          (!substring &&
-            nutrient.nutrientName.toLowerCase() ===
-              nutrientName.toLowerCase()) ||
-          (substring &&
-            nutrient.nutrientName
-              .toLowerCase()
-              .includes(nutrientName.toLowerCase()))
-        ) {
-          let { unitName } = nutrient;
-          if (unitName === unitName.toUpperCase()) {
-            unitName = unitName.toLowerCase();
-          }
-
-          return [nutrient.value, unitName];
-        }
+    function substrMapping(nutrientName) {
+      if (nutrientName.toLowerCase().includes("energy")) {
+        return "Energy";
       }
-
-      return ["--", "g"];
     }
+    const mapping = {
+      "Total lipid (fat)": "Total Fat",
+      "Fatty acids, total saturated": "Saturated Fat",
+      "Fatty acids, total trans": "Trans Fat",
+      Cholesterol: "Cholesterol",
+      "Sodium, Na": "Sodium",
+      "Carbohydrate, by difference": "Total Carbohydrates",
+      "Fiber, total dietary": "Fiber",
+      "Sugars, total including NLEA": "Total Sugars",
+      Protein: "Protein",
+      "Vitamin D (D2 + D3)": "Vitamin D",
+      "Calcium, Ca": "Calcium",
+      "Iron, Fe": "Iron",
+      "Potassium, K": "Potassium",
+    };
+    const nutrientNames = foodNutrients.map(
+      ({ nutrientName }) =>
+        mapping[nutrientName] || substrMapping(nutrientName) || nutrientName
+    );
+    const nutrientValues = foodNutrients.map(nutrient => [
+      nutrient.value,
+      nutrient.unitName.toLowerCase(),
+    ]);
+    const formattedFoodNutrients = createObj(nutrientNames, nutrientValues);
 
     return {
       id: fdcId,
@@ -92,12 +98,10 @@ export async function searchFoods(term, size = 20) {
           ? capitalize(description.toLowerCase())
           : description.replace(", NFS", ""),
       optional: {
-        kcal: kJ_to_kcal(getNutrient(foodNutrients, "energy", true)),
-        foodNutrients,
+        foodNutrients: formattedFoodNutrients,
         servingSizeStr,
         servingSizeInG,
         finalFoodInputFoods,
-        getNutrient,
       },
     };
   });

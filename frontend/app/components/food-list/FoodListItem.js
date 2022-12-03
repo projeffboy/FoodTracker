@@ -6,21 +6,20 @@ import theme from "@/config/theme";
 import { Nutrition } from "@/helper/nutrition";
 import { addToDiaryWithFeedback } from "@/helper/toast";
 import { round } from "../../helper/utility";
+import { kJ_to_kcal } from "../../helper/nutrition";
 
 export default FoodListItem = ({
   food: {
     id,
     description,
-    optional: {
-      kcal = ["", ""],
-      foodNutrients,
-      servingSizeStr,
-      servingSizeInG,
-    },
+    optional: { foodNutrients, servingSizeStr, servingSizeInG },
   },
 }) => {
   const navigation = useNavigation();
   const { paddingVertical } = styles.itemText;
+  const kcal = foodNutrients?.Energy
+    ? kJ_to_kcal(foodNutrients.Energy)
+    : ["", ""];
 
   function quickAdd() {
     const nutrition = new Nutrition(foodNutrients);
@@ -68,11 +67,12 @@ export default FoodListItem = ({
       <View style={styles.description}>
         <Text style={styles.itemText}>{description}</Text>
         <View style={styles.calories}>
-          <Text style={styles.caloriesText}>{servingSizeKcal()}</Text>
-          <Text style={{ ...styles.caloriesText, fontSize: 10 }}>
-            {kcal[1]}
+          <Text style={styles.caloriesText}>
+            {servingSizeKcal()}
+            <Text style={styles.unit}>{kcal[1]}</Text>
+            {" - "}
+            <Text style={styles.servingSize}>{servingSizeStr || "100g"}</Text>
           </Text>
-          <Text style={styles.caloriesText}> - {servingSizeStr || "100g"}</Text>
         </View>
       </View>
       <FontAwesome name="chevron-right" size={16} color={theme.dark} />
@@ -98,6 +98,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.dark,
     flex: 1,
+  },
+  unit: {
+    fontSize: 10,
+  },
+  servingSize: {
+    fontSize: 12,
+    color: theme.green,
   },
   calories: {
     flexDirection: "row",

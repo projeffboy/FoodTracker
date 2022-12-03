@@ -27,3 +27,9 @@ export function remove_prefix([num, unit]) {
 
   return [num, unit.slice(1)];
 }
+
+export function createObj(keys, values) {
+  const output = {};
+  keys.forEach((key, i) => (output[key] = values[i]));
+  return output;
+}
