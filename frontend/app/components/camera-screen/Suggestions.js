@@ -49,7 +49,10 @@ export default Suggestions = ({ loading, error, data }) => {
   } else if (error !== null) {
     return (
       <View style={styles.noPredictions}>
-        <MyError />
+        {/* <MyError /> */}
+        <Text style={{ textAlign: "center" }}>
+          Our remote ML server is down. Local ML coming in the future.
+        </Text>
       </View>
     );
   } else if (data?.length > 0) {
