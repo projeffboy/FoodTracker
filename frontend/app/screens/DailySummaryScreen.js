@@ -46,7 +46,7 @@ export default function DailySummaryScreen() {
     return;
   }
   if (datesErr) {
-    return <Text>Error.</Text>;
+    return <MyError />;
   }
   if (dates === null) {
     return;
@@ -57,12 +57,8 @@ export default function DailySummaryScreen() {
   return (
     <View>
       <DateHeader dates={dates} dateIdx={dateIdx} setDateIdx={setDateIdx} />
-      {/* <DailyProgress data={data} />
-      <Diary
-        data={data}
-        fmtDate={getDate().toLocaleDateString()}
-        getDiaryKeyWrapper={getDiaryKeyWrapper}
-      /> */}
+      {/* <DailyProgress data={data} /> */}
+      <Diary food={food} />
     </View>
   );
 }

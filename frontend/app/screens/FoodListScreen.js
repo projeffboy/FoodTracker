@@ -17,9 +17,15 @@ export default function FoodListScreen({ route }) {
 
   function List() {
     if (loading) {
-      return <ActivityIndicator size="large" marginVertical={30} />;
+      return (
+        <ActivityIndicator
+          size="large"
+          marginVertical={30}
+          style={{ flex: 0.75 }}
+        />
+      );
     } else if (err) {
-      return <MyError />;
+      return <MyError flex={0.75} />;
     } else if (res && res.length > 0) {
       return <FoodList foods={res} />;
     } else if (res && res.length === 0) {

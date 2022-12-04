@@ -8,11 +8,11 @@ import {
 import DiaryDelete from "./diary/DiaryDelete";
 import DiaryEntry from "./diary/DiaryEntry";
 
-export default function Diary({ data, fmtDate, getDiaryKeyWrapper }) {
+export default function Diary({ food }) {
   return (
     <View>
       <FlatList
-        data={data}
+        data={food}
         keyExtractor={(key, i) => key.id + "-" + i}
         ListHeaderComponent={<Text>Daily Diary</Text>}
         renderItem={({ item }) => <DiaryEntry food={item.food} />}
