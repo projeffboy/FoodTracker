@@ -8,11 +8,13 @@ import { addToDiaryWithFeedback } from "@/helper/toast";
 import { round } from "@/helper/utility";
 
 export default FoodListItem = ({ food: { id, food, optional } }) => {
-  const { nutrients, servingSizes, defaultServingSize } = optional; // there is also `ingredients`
+  const { nutrients, servingSizes } = optional; // there is also `ingredients`
 
   const navigation = useNavigation();
+
   const { paddingVertical } = styles.itemText;
   const kcal = nutrients?.Energy ? kJ_to_kcal(nutrients.Energy) : ["", ""];
+  const defaultServingSize = servingSizes?.[0];
 
   function quickAdd() {
     addToDiaryWithFeedback(id, food, nutrients);
@@ -64,7 +66,9 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
             <Text style={styles.unit}>{kcal[1]}</Text>
             {" - "}
             <Text style={styles.servingSize}>
-              {defaultServingSize || "100g"}
+              {defaultServingSize
+                ? defaultServingSize.num + " " + defaultServingSize.unit
+                : "100g"}
             </Text>
           </Text>
         </View>

@@ -5,12 +5,8 @@ export default function NutritionEntry({
   styles,
   nutrient,
   value,
-  dailyValue,
-  hide0Pct,
-  indent,
-  bold,
-  italic,
-  borderBottomStyleName,
+  dailyValuePercent,
+  stdNutrient: { hide0Pct, indent, bold, italic, borderBottomStyleName },
 }) {
   const [loaded] = useFonts({
     "Helvetica-Italic": require("@/assets/fonts/Helvetica-Italic.ttf"),
@@ -24,7 +20,9 @@ export default function NutritionEntry({
       style={[
         styles[borderBottomStyleName || "thinBorderBottom"],
         styles.entry,
-        indent ? styles.indent : {},
+        {
+          paddingLeft: indent ? 18 : 0,
+        },
       ]}
     >
       <View style={styles.entry}>
@@ -43,7 +41,7 @@ export default function NutritionEntry({
         <Text style={styles.text}>{value}</Text>
       </View>
       <Text style={styles[bold || indent ? "boldText" : "text"]}>
-        {hide0Pct && dailyValue === 0 ? 0 : dailyValue}
+        {!(hide0Pct && dailyValuePercent === 0) && dailyValuePercent + "%"}
       </Text>
     </View>
   );

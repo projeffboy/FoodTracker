@@ -47,16 +47,25 @@ function searchFoodsConformToSchema({
   // Get serving sizes
   const servingSizes = foodMeasures
     .filter(({ gramWeight }) => gramWeight !== undefined)
-    .map(({ disseminationText: text, gramWeight: grams }) => ({
-      text:
-        text.toLowerCase() === "quantity not specified"
-          ? `1 serving (${grams}g)`
-          : text,
-      grams,
-    }));
+    .map(({ disseminationText: text, gramWeight: grams }) => {
+      text = text.replace(" (NFS)", "").replace(", NFS", "");
+      if (text.toLowerCase() === "quantity not specified") {
+        text = `1 serving (${grams}g)`;
+      } else if (isNaN(text[0]) && !isNaN(text[1])) {
+        console.error("You didn't account for this serving size: " + text);
+      } else if (isNaN(text[0])) {
+        text = "1 " + text;
+      }
+
+      const i = text.indexOf(" ");
+      const num = text.slice(0, i);
+      const unit = text.slice(i + 1);
+
+      return { num, unit, grams };
+    });
   // put the less desirable serving sizes at the end
   servingSizes.sort(servingSize1 =>
-    servingSize1.text.toLowerCase().includes("1 serving") ? 1 : -1
+    servingSize1.unit.toLowerCase().includes("serving") ? 1 : -1
   );
   // try to get at least one serving size
   if (
@@ -65,15 +74,15 @@ function searchFoodsConformToSchema({
     servingSizeUnit !== undefined
   ) {
     servingSizes[0] = {
-      text: `1 serving (${servingSize}${servingSizeUnit})`,
-      grams: ["g", "gm", "gram"].includes(servingSizeUnit.toLowerCase())
+      num: "1",
+      unit: `serving (${servingSize}${servingSizeUnit})`,
+      grams: ["g", "gm", "gram"].includes(
+        servingSizeUnit?.replace("(NFS)", "").toLowerCase()
+      )
         ? servingSize
         : undefined,
     };
   }
-  // save some code duplication
-  const defaultServingSize =
-    servingSizes?.[0]?.text || servingSizes?.[0]?.grams;
 
   // we only want the nutrient value -- number and unit
   const mapping = {
@@ -112,6 +121,7 @@ function searchFoodsConformToSchema({
   );
 
   // valid schema for the frontend
+  // if servingSizes is empty, then it is presumably 100g
   return {
     id: fdcId,
     food:
@@ -120,7 +130,6 @@ function searchFoodsConformToSchema({
         : description.replace(", NFS", ""),
     optional: {
       nutrients,
-      defaultServingSize,
       servingSizes,
       ingredients,
     },
@@ -132,6 +141,9 @@ function substrMapping(nutrientName) {
     return "Energy";
   }
 }
+
+// For the searchFoods api, the nutrition values are not based off the servingSizes (because there can be many recommended serving sizes). Instead it's based off of this variable:
+export const servingGramsUsedToCalculateNutrition = 100;
 
 export async function getFood(fdcId) {
   const res = await usda.get("/food/" + fdcId);

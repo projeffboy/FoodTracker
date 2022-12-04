@@ -1,5 +1,6 @@
 import { round } from "./utility";
 
+// %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
 export const stdNutrients = {
   Energy: {
     dailyGrams: 2000,
@@ -58,15 +59,32 @@ export const stdNutrients = {
   },
 };
 
+export function servingSizeNumOfUnit(unit, servingSizes) {
+  for (const size in servingSizes) {
+    if (unit === size.unit) {
+      return size.num;
+    }
+  }
+
+  const mapping = {
+    g: 100,
+    ml: 100,
+    oz: 5,
+  };
+  const size = mapping[unit] || 1;
+
+  return size; // keep it as str
+}
+
 export const getPercentDailyValue = (grams, dailyGrams) =>
-  Math.round((grams / dailyGrams) * 100) + "%";
+  Math.round((grams / dailyGrams) * 100);
 
 export function total(
   num,
   servings,
   servingSize,
   servingSizeUnit,
-  servingSizeConvertToGrams,
+  servingSizeToGrams,
   defaultServingGrams,
   roundTotal = true
 ) {
@@ -78,7 +96,7 @@ export function total(
     g: 1,
     oz: 28.3495,
     lb: 453.592,
-    ...servingSizeConvertToGrams,
+    ...servingSizeToGrams,
   };
   let unitMult = convertToGrams[servingSizeUnit];
   if (unitMult === undefined) {
@@ -93,7 +111,7 @@ export function total(
   }
 
   if (total >= 100) {
-    return total.toPrecision(3);
+    return Number(total.toPrecision(3)).toFixed(0);
   } else if (total >= 1) {
     return round(total, 1);
   } else {

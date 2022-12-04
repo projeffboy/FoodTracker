@@ -2,9 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { addToDiaryWithFeedback } from "@/helper/toast";
 import MyButton from "./MyButton";
+import theme from "@/config/theme";
 
 export default function AddFood({ id, food, nutrients }) {
-  const color = "#007aff";
+  const color = theme.iosBlue;
 
   return (
     <MyButton

@@ -8,3 +8,4 @@ minor:
 - bold only the ingredients word
 - android vs ios design
 - refactor the iskeyboardup code
+- add ml, tsp, tsbp, and cup if it's not in the recomended serving sizes

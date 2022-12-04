@@ -9,41 +9,39 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 import theme from "@/config/theme";
 
-export default function Search({ term, setTerm, submit }) {
-  return (
-    <View style={styles.searchBar}>
-      <FontAwesome name="search" size={24} color={theme.medium} />
-      <TextInput
-        style={styles.searchText}
-        placeholder="Search food"
-        value={term}
-        onChangeText={text => setTerm(text)}
-        returnKeyType="search"
-        onSubmitEditing={submit}
-        enablesReturnKeyAutomatically
-        cursorColor={theme.medium}
-        autoCorrect={false}
+export default Search = ({ term, setTerm, submit }) => (
+  <View style={styles.searchBar}>
+    <FontAwesome name="search" size={24} color={theme.medium} />
+    <TextInput
+      style={styles.searchText}
+      placeholder="Search food"
+      value={term}
+      onChangeText={text => setTerm(text)}
+      returnKeyType="search"
+      onSubmitEditing={submit}
+      enablesReturnKeyAutomatically
+      cursorColor={theme.medium}
+      autoCorrect={false}
+    />
+    <TouchableOpacity>
+      <FontAwesome5
+        name="times-circle"
+        size={24}
+        color={theme.medium}
+        style={styles.closeSearch}
+        onPress={() => setTerm("")}
       />
-      <TouchableOpacity>
-        <FontAwesome5
-          name="times-circle"
-          size={24}
-          color={theme.medium}
-          style={styles.closeSearch}
-          onPress={() => setTerm("")}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <FontAwesome5
-          name="arrow-alt-circle-down"
-          size={24}
-          color={theme.medium}
-          onPress={Keyboard.dismiss}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
+    </TouchableOpacity>
+    <TouchableOpacity>
+      <FontAwesome5
+        name="arrow-alt-circle-down"
+        size={24}
+        color={theme.medium}
+        onPress={Keyboard.dismiss}
+      />
+    </TouchableOpacity>
+  </View>
+);
 
 const styles = StyleSheet.create({
   searchBar: {

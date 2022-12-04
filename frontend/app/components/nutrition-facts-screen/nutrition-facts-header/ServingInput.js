@@ -24,9 +24,7 @@ export const ServingInput = forwardRef(
       onEndEditing={() => {
         let formattedValue = String(Number(value));
 
-        if (isNaN(formattedValue)) {
-          setValue("0");
-        } else if (value.trim() === "") {
+        if (isNaN(formattedValue) || value.trim() === "") {
           setValue("0");
         } else if (value[0] === "0" && value.length > 1) {
           // remove unnecessary 0's

@@ -10,12 +10,17 @@ import NutritionFactsFooter from "@/components/nutrition-facts-screen/NutritionF
 import {
   getPercentDailyValue,
   kJ_to_kcal,
+  servingSizeNumOfUnit,
   stdNutrients,
   total,
 } from "@/helper/nutrition";
-import { createObj, remove_prefix } from "@/helper/utility";
-
-// %DV: https://www.fda.gov/food/new-nutrition-facts-label/daily-value-new-nutrition-and-supplement-facts-labels
+import {
+  createObj,
+  formatNaN,
+  fractionToDecimal,
+  remove_prefix,
+} from "@/helper/utility";
+import { servingGramsUsedToCalculateNutrition } from "@/helper/api";
 
 const notBold = "Helvetica";
 const italic = "Helvetica-Italic";
@@ -26,25 +31,25 @@ export default function NutritionFactsScreen({ route }) {
   const {
     id,
     food,
-    optional: { nutrients, servingSizes, defaultServingSize, ingredients },
+    optional: { nutrients, servingSizes, ingredients },
   } = route.params;
-
+  const defaultServingGrams = servingGramsUsedToCalculateNutrition;
   const defaultServings = "1";
-  const defaultServingGrams = "100";
-
-  // hooks have to be placed at the top
-  const [servings, setServings] = useState(defaultServings); // NOTE: it is a str
-  const [servingSize, setServingSize] = useState(defaultServingGrams); // NOTE: it is a str
-  const [servingSizeUnit, setServingSizeUnit] = useState("g");
+  let defaultServingSizeNum = servingSizes?.[0]?.num || "100";
+  if (defaultServingSizeNum.includes("/")) {
+    defaultServingSizeNum = fractionToDecimal(defaultServingSizeNum);
+  }
+  const defaultServingSizeUnit = servingSizes?.[0]?.unit || "g";
+  const [servings, setServings] = useState(String(defaultServings)); // NOTE: it is a str
+  const [servingSizeNum, setServingSizeNum] = useState(
+    String(defaultServingSizeNum)
+  ); // NOTE: it is a str
+  const [servingSizeUnit, setServingSizeUnit] = useState(
+    defaultServingSizeUnit
+  );
   useEffect(() => {
-    let newServingSize = "1";
-    if (servingSizeUnit === "g" || servingSizeUnit === "ml") {
-      newServingSize = defaultServingGrams;
-    } else if (servingSizeUnit === "oz") {
-      newServingSize = "5";
-    }
-
-    setServingSize(newServingSize);
+    const num = servingSizeNumOfUnit(servingSizeUnit, servingSizes);
+    setServingSizeNum(String(num));
   }, [servingSizeUnit]);
 
   const [loaded] = useFonts({
@@ -59,18 +64,20 @@ export default function NutritionFactsScreen({ route }) {
   }
 
   function getTotal(num, round = true) {
-    const text = servingSizes.map(({ text }) => text);
+    const text = servingSizes.map(({ unit }) => unit);
     const grams = servingSizes.map(({ grams }) => grams);
-    const servingSizeConvertToGrams = createObj(text, grams);
+    const servingSizeToGrams = createObj(text, grams);
 
-    return total(
-      num,
-      servings,
-      servingSize,
-      servingSizeUnit,
-      servingSizeConvertToGrams,
-      defaultServingGrams,
-      round
+    return formatNaN(
+      total(
+        num,
+        servings,
+        servingSizeNum,
+        servingSizeUnit,
+        servingSizeToGrams,
+        defaultServingGrams,
+        round
+      )
     );
   }
   const getTotalWithArr = ([num, unit]) => [getTotal(num), unit];
@@ -86,6 +93,19 @@ export default function NutritionFactsScreen({ route }) {
       return total;
     }
   }
+  const dailyValuePercent = (nutrientName, dailyGrams) =>
+    Array.isArray(nutrients[nutrientName])
+      ? formatNaN(
+          getPercentDailyValue(
+            getTotal(remove_prefix(nutrients[nutrientName])[0], false),
+            dailyGrams,
+            servings,
+            servingSizeNum,
+            servingSizeUnit,
+            defaultServingGrams
+          )
+        )
+      : 0;
 
   return (
     <View style={styles.container}>
@@ -99,14 +119,6 @@ export default function NutritionFactsScreen({ route }) {
         <Text> </Text>
       </View>
 
-      {defaultServingSize ? (
-        <Text style={styles.defaultServingSize}>
-          Default serving size: {defaultServingSize}
-        </Text>
-      ) : (
-        <View style={{ height: 10 }}></View>
-      )}
-
       {nutrients && (
         <FlatList
           style={styles.label}
@@ -116,11 +128,11 @@ export default function NutritionFactsScreen({ route }) {
               kcal={getKcal()}
               servings={servings}
               setServings={setServings}
-              servingSize={servingSize}
-              setServingSize={setServingSize}
+              servingSizeNum={servingSizeNum}
+              setServingSizeNum={setServingSizeNum}
               servingSizeUnit={servingSizeUnit}
               setServingSizeUnit={setServingSizeUnit}
-              servingSizesText={servingSizes.map(({ text }) => text)}
+              servingSizes={servingSizes}
             />
           }
           data={Object.entries(stdNutrients)}
@@ -134,25 +146,11 @@ export default function NutritionFactsScreen({ route }) {
                   nutrients[stdNutrientName] &&
                   getTotalWithArr(nutrients[stdNutrientName])
                 }
-                dailyValue={
-                  Array.isArray(nutrients[stdNutrientName]) &&
-                  getPercentDailyValue(
-                    getTotal(
-                      remove_prefix(nutrients[stdNutrientName])[0],
-                      false
-                    ),
-                    stdNutrient.dailyGrams,
-                    servings,
-                    servingSize,
-                    servingSizeUnit,
-                    defaultServingGrams
-                  )
-                }
-                hide0Pct={stdNutrient.hide0Pct}
-                bold={stdNutrient.bold}
-                italic={stdNutrient.italic}
-                indent={stdNutrient.indent}
-                borderBottomStyleName={stdNutrient.borderBottomStyleName}
+                dailyValuePercent={dailyValuePercent(
+                  stdNutrientName,
+                  stdNutrient.dailyGrams
+                )}
+                stdNutrient={stdNutrient}
               />
             )
           }
@@ -214,19 +212,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: theme.dark,
   },
-  defaultServingSize: {
-    marginBottom: 8,
-    textAlign: "center",
-    color: theme.medium,
-  },
   label: {
     borderWidth: 2,
     borderColor: theme.dark,
-  },
-  servings: {
-    flexDirection: "row",
-    marginHorizontal: 8,
-    alignItems: "center",
   },
   entry: {
     flexDirection: "row",
@@ -244,15 +232,9 @@ const styles = StyleSheet.create({
     ...borderBottom,
     borderBottomWidth: 16,
   },
-  bold: {
-    fontWeight: "bold",
-  },
   text,
   boldText: {
     ...text,
     ...header,
-  },
-  indent: {
-    paddingLeft: 18,
   },
 });

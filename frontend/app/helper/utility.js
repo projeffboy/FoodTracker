@@ -12,7 +12,7 @@ export function round(num, decimalPlaces = 2) {
 }
 
 export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str[0].toUpperCase() + str.slice(1);
 }
 
 export function remove_prefix([num, unit]) {
@@ -35,3 +35,12 @@ export function createObj(keys, values) {
   keys.forEach((key, i) => (output[key] = values[i]));
   return output;
 }
+
+export function fractionToDecimal(frac) {
+  const [numerator, denominator] = frac.splice("/");
+  const dec = Number(numerator) / Number(denominator);
+
+  return dec;
+}
+
+export const formatNaN = val => (isNaN(val) ? "--" : val);

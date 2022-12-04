@@ -9,6 +9,7 @@ export default {
   red: "#c5322f",
   darkRed: "#9e292c",
   blue: "#6bb4e1",
+  iosBlue: "#007aff",
   violetBlue: "#6672ac",
   violet: "#914691",
 };
