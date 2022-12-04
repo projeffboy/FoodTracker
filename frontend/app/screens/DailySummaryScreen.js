@@ -25,9 +25,11 @@ export default function DailySummaryScreen() {
 
     initState();
   }, []);
-  if (dateIdx === undefined && dates?.length > 0) {
-    setDateIdx(dates.length - 1);
-  }
+  useEffect(() => {
+    if (dateIdx === undefined && dates?.length > 0) {
+      setDateIdx(dates.length - 1);
+    }
+  }, [dates]);
 
   const [
     { res: food, loading: foodLoading, err: foodErr },
@@ -40,7 +42,7 @@ export default function DailySummaryScreen() {
 
     const currentDate = dates[dateIdx];
     getDiaryKeyWrapper(currentDate);
-  }, [dateIdx]);
+  }, [dateIdx, dates]);
 
   if (datesLoading) {
     return;
@@ -58,7 +60,11 @@ export default function DailySummaryScreen() {
     <View>
       <DateHeader dates={dates} dateIdx={dateIdx} setDateIdx={setDateIdx} />
       {/* <DailyProgress data={data} /> */}
-      <Diary food={food} />
+      <Diary
+        food={food}
+        date={dates[dateIdx]}
+        refresh={() => getKeyWrapper(diaryDatesKey)}
+      />
     </View>
   );
 }

@@ -33,16 +33,7 @@ export default App = () => (
         <Stack.Screen
           name="NutritionFacts"
           component={NutritionFactsScreen}
-          options={({ route: { params } }) => ({
-            title: "",
-            headerRight: () => (
-              <AddFood
-                id={params.id}
-                food={params.food}
-                nutrients={params.optional.nutrients}
-              />
-            ),
-          })}
+          options={{ title: "" }}
         />
         <Stack.Screen
           name="DailySummary"

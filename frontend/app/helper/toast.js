@@ -5,6 +5,7 @@ import Toast from "react-native-root-toast";
 
 import theme from "@/config/theme";
 import { StyleSheet, Text, View } from "react-native";
+import { isMissingDetails } from "./nutrition";
 
 const options = {
   duration: Toast.durations.SHORT,
@@ -43,7 +44,7 @@ export function showToastWithIcon(msg, Icon) {
   Toast.show(<ToastContent />, options);
 }
 
-export async function addToDiaryWithFeedback(id, food, nutrients) {
+export async function addToDiaryWithFeedback(foodEntry) {
   let toastMsg = "Error, food failed to add";
   let Icon = props =>
     Platform.OS === "ios" ? (
@@ -52,7 +53,7 @@ export async function addToDiaryWithFeedback(id, food, nutrients) {
       <MaterialIcons name="error-outline" {...props} />
     );
 
-  if (await addToDiary(id, food, nutrients)) {
+  if (!isMissingDetails(foodEntry) && (await addToDiary(foodEntry))) {
     toastMsg = "Food added";
     Icon = props =>
       Platform.OS === "ios" ? (

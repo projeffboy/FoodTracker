@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import theme from "@/config/theme";
 import { addToDiaryWithFeedback } from "@/helper/toast";
 import FoodDetails from "./food-list-item/FoodDetails";
+import { fractionToDecimal } from "@/helper/utility";
 
 export default FoodListItem = ({ food: { id, food, optional } }) => {
   const { nutrients, servingSizes } = optional; // there is also `ingredients`
@@ -13,8 +14,27 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
 
   const { paddingVertical } = styles.itemText;
 
+  const defaultServingSize = servingSizes?.[0];
   function quickAdd() {
-    addToDiaryWithFeedback(id, food, nutrients);
+    let num = defaultServingSize?.num;
+    if (num !== undefined) {
+      num = num.includes("/") ? fractionToDecimal(num) : Number(num);
+    }
+
+    let grams = defaultServingSize?.grams;
+    if (grams !== undefined) {
+      grams = Number(grams);
+    }
+
+    addToDiaryWithFeedback({
+      id,
+      food,
+      nutrients,
+      servings: 1,
+      servingSizeNum: num,
+      servingSizeUnit: defaultServingSize?.unit,
+      servingGrams: grams,
+    });
   }
 
   return (
@@ -42,7 +62,7 @@ export default FoodListItem = ({ food: { id, food, optional } }) => {
       <FoodDetails
         styles={styles}
         food={food}
-        servingSizes={servingSizes}
+        defaultServingSize={defaultServingSize}
         energy={nutrients?.Energy}
       />
       <FontAwesome name="chevron-right" size={16} color={theme.dark} />

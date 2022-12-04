@@ -7,16 +7,15 @@ import { round } from "@/helper/utility";
 export default function FoodDetails({
   styles: moreStyles,
   food,
-  servingSizes,
+  defaultServingSize,
   energy,
 }) {
   styles = { ...styles, moreStyles };
 
   const kcal = energy ? kJ_to_kcal(energy) : ["", ""];
-  const defaultServingSize = servingSizes?.[0];
 
   function servingSizeKcal() {
-    const servingGrams = servingSizes?.[0]?.grams;
+    const servingGrams = defaultServingSize?.grams;
     if (servingGrams === undefined) {
       return kcal[0];
     }

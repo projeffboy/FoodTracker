@@ -1,14 +1,25 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { isMissingDetails } from "./nutrition";
 
-// food as in food name
-export async function addToDiary(id, food, nutrients) {
+// foodEntry schema:
+// {
+//   id: Number,
+//   food: String,
+//   nutrients: Object,
+//   servings: Number,
+//   servingSizeNum: Number,
+//   servingSizeUnit: String,
+//   servingGrams: Number,
+// }
+
+export async function addToDiary(foodEntry) {
   try {
-    if (id === undefined || food === undefined || nutrients === undefined) {
-      throw "One of id, food, or nutrients is missing.";
+    if (isMissingDetails(foodEntry)) {
+      throw "foodEntry is missing details";
     }
 
     const date = new Date().toLocaleDateString(); // formatted date
-    await addEntry(date, id, food, nutrients);
+    await addEntry(date, foodEntry);
     await addDate(date);
 
     return true;
@@ -19,13 +30,13 @@ export async function addToDiary(id, food, nutrients) {
   }
 }
 
-async function addEntry(fmtDate, id, food, nutrients) {
+async function addEntry(fmtDate, foodEntry) {
   // Get value from key
   const key = "@diary:" + fmtDate;
   let diaryDay = await AsyncStorage.getItem(key);
   diaryDay = JSON.parse(diaryDay) || [];
   // Update value and put it back in key
-  const newEntry = { id, food, nutrients };
+  const newEntry = foodEntry;
   diaryDay.push(newEntry);
   AsyncStorage.setItem(key, JSON.stringify(diaryDay));
 }

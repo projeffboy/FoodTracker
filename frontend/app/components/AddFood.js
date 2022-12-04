@@ -4,18 +4,16 @@ import { addToDiaryWithFeedback } from "@/helper/toast";
 import MyButton from "./MyButton";
 import theme from "@/config/theme";
 
-export default function AddFood({ id, food, nutrients }) {
+export default function AddFood({ foodEntry }) {
   const color = theme.iosBlue;
 
   return (
     <MyButton
       text="Add to Diary"
-      onPress={() => addToDiaryWithFeedback(id, food, nutrients)}
+      onPress={() => addToDiaryWithFeedback(foodEntry)}
       icon={<Ionicons name="ios-add-circle" size={24} color={color} />}
-      textStyle={{
-        color,
-        fontSize: 18,
-      }}
+      buttonStyle={{ padding: 0 }}
+      textStyle={{ color, fontSize: 18 }}
     />
   );
 }

@@ -88,17 +88,7 @@ export function total(
   defaultServingGrams,
   roundTotal = true
 ) {
-  // if (["kg", "mg", "ug", "μg"].includes(unit)) {
-  //   [num, unit] = remove_prefix([num, unit]);
-  // }
-
-  const convertToGrams = {
-    g: 1,
-    oz: 28.3495,
-    lb: 453.592,
-    ...servingSizeToGrams,
-  };
-  let unitMult = convertToGrams[servingSizeUnit];
+  let unitMult = servingSizeToGrams[servingSizeUnit];
   if (unitMult === undefined) {
     unitMult = 1;
   }
@@ -127,4 +117,27 @@ export function kJ_to_kcal([num, unit]) {
   }
 
   return ["--", "kcal"];
+}
+
+export function isMissingDetails(foodEntry) {
+  const {
+    id,
+    food,
+    nutrients,
+    servings,
+    servingSizeNum,
+    servingSizeUnit,
+    servingGrams,
+  } = foodEntry;
+  const answer = [
+    id,
+    food,
+    nutrients,
+    servings,
+    servingSizeNum,
+    servingSizeUnit,
+    servingGrams,
+  ].includes(undefined);
+
+  return answer;
 }

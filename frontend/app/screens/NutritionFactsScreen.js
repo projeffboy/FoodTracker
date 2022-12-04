@@ -21,13 +21,14 @@ import {
   remove_prefix,
 } from "@/helper/utility";
 import { servingGramsUsedToCalculateNutrition } from "@/helper/api";
+import AddFood from "@/components/AddFood";
 
 const notBold = "Helvetica";
 const italic = "Helvetica-Italic";
 const bold = "Helvetica-Bold";
 const veryBold = "Helvetica-Black";
 
-export default function NutritionFactsScreen({ route }) {
+export default function NutritionFactsScreen({ route, navigation }) {
   const {
     id,
     food,
@@ -51,6 +52,33 @@ export default function NutritionFactsScreen({ route }) {
     const num = servingSizeNumOfUnit(servingSizeUnit, servingSizes);
     setServingSizeNum(String(num));
   }, [servingSizeUnit]);
+  const text = servingSizes.map(({ unit }) => unit);
+  const grams = servingSizes.map(({ grams }) => grams);
+  let servingSizeToGrams = createObj(text, grams);
+  servingSizeToGrams = {
+    ...servingSizeToGrams,
+    g: 1,
+    oz: 28.3495,
+    lb: 453.592,
+  };
+  // For the add food button
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddFood
+          foodEntry={{
+            id,
+            food,
+            nutrients,
+            servings,
+            servingSizeNum,
+            servingSizeUnit,
+            servingGrams: servingSizeToGrams[servingSizeUnit],
+          }}
+        />
+      ),
+    });
+  }, [servings, servingSizeNum, servingSizeUnit]);
 
   const [loaded] = useFonts({
     // for some reason absolute paths don't work when the string below has a variable in it
@@ -64,10 +92,6 @@ export default function NutritionFactsScreen({ route }) {
   }
 
   function getTotal(num, round = true) {
-    const text = servingSizes.map(({ unit }) => unit);
-    const grams = servingSizes.map(({ grams }) => grams);
-    const servingSizeToGrams = createObj(text, grams);
-
     return formatNaN(
       total(
         num,

@@ -6,7 +6,7 @@ import theme from "@/config/theme";
 import showToast from "@/helper/toast";
 import { deleteAll, deleteKey } from "@/helper/async-storage";
 
-export default function DiaryDelete({ fmtDate, refresh }) {
+export default function DiaryDelete({ date, refresh }) {
   function deleteHelper(fn) {
     const toastMsg = fn() ? "Deleted." : "Failed to delete.";
     showToast(toastMsg);
@@ -14,7 +14,7 @@ export default function DiaryDelete({ fmtDate, refresh }) {
   }
 
   function deleteDiaryDay() {
-    deleteHelper(() => deleteKey("@diary:" + fmtDate));
+    deleteHelper(() => deleteKey("@diary:" + date));
   }
 
   function deleteDiary() {
@@ -34,8 +34,8 @@ export default function DiaryDelete({ fmtDate, refresh }) {
               color={theme.light}
             />
           }
-          backgroundColor="#ed702d"
-          color={theme.light}
+          buttonStyle={{ backgroundColor: theme.violet }}
+          textStyle={{ color: theme.light }}
         />
         <MyButton
           text="Delete Everything"
@@ -47,8 +47,8 @@ export default function DiaryDelete({ fmtDate, refresh }) {
               color={theme.light}
             />
           }
-          backgroundColor="#bb271a"
-          color={theme.light}
+          buttonStyle={{ backgroundColor: theme.darkRed }}
+          textStyle={{ color: theme.light }}
         />
       </View>
     </View>
