@@ -44,3 +44,25 @@ export function fractionToDecimal(frac) {
 }
 
 export const formatNaN = val => (isNaN(val) ? "--" : val);
+
+export function binarySearch(arr, val) {
+  // https://stackoverflow.com/a/50612218/6454135
+
+  let start = 0;
+  let end = arr.length - 1;
+
+  while (start <= end) {
+    let mid = Math.floor((start + end) / 2);
+
+    if (arr[mid] === val) {
+      return mid;
+    }
+
+    if (val < arr[mid]) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+  return -1;
+}

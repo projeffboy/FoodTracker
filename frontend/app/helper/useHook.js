@@ -2,31 +2,31 @@ import { useState } from "react";
 
 export default function useHook(req) {
   const [result, setResult] = useState({
-    data: null,
+    res: null,
     loading: false,
-    error: null,
+    err: null,
   });
 
   async function fn(...args) {
     setResult({
-      data: null,
+      res: null,
       loading: true,
-      error: null,
+      err: null,
     });
 
     try {
       const res = await req(...args);
 
       setResult({
-        data: res,
+        res,
         loading: false,
-        error: null,
+        err: null,
       });
     } catch (error) {
       setResult({
-        data: null,
+        res: null,
         loading: false,
-        error,
+        err: error,
       });
     }
   }

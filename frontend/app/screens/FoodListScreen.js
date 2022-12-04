@@ -10,7 +10,7 @@ import MyError from "@/components/MyError";
 export default function FoodListScreen({ route }) {
   const { searchTerm: initialSearchTerm } = route.params;
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
-  const [{ data, loading, error }, searchFoodsWrapper] = useHook(searchFoods);
+  const [{ res, loading, err }, searchFoodsWrapper] = useHook(searchFoods);
   useEffect(() => {
     searchFoodsWrapper(searchTerm);
   }, []);
@@ -18,11 +18,11 @@ export default function FoodListScreen({ route }) {
   function List() {
     if (loading) {
       return <ActivityIndicator size="large" marginVertical={30} />;
-    } else if (error) {
+    } else if (err) {
       return <MyError />;
-    } else if (data && data.length > 0) {
-      return <FoodList foods={data} />;
-    } else if (data && data.length === 0) {
+    } else if (res && res.length > 0) {
+      return <FoodList foods={res} />;
+    } else if (res && res.length === 0) {
       return <Text style={styles.noMatches}>No matches found.</Text>;
     } else {
       <View style={styles.noPredictions}>

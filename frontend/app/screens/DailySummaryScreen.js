@@ -2,43 +2,67 @@ import { Text, View } from "react-native";
 import { useEffect, useState } from "react";
 
 import useHook from "@/helper/useHook";
-import { getDiaryKey } from "@/helper/async-storage";
+import {
+  deleteAll,
+  diaryDatesKey,
+  getDiaryKey,
+  getKey,
+} from "@/helper/async-storage";
 import Diary from "@/components/daily-summary-screen/Diary";
 import DateHeader from "@/components/daily-summary-screen/DateHeader";
 import DailyProgress from "@/components/daily-summary-screen/DailyProgress";
 import MyError from "@/components/MyError";
 
 export default function DailySummaryScreen() {
-  const [numDaysBefore, setNumDaysBefore] = useState(0);
-
-  const [{ data, loading, error }, getDiaryKeyWrapper] = useHook(getDiaryKey);
-
+  // NOTE: when I refer to today or date, I mean this format: MM/dd/yyyy
+  const [dateIdx, setDateIdx] = useState();
+  const [{ res: dates, loading: datesLoading, err: datesErr }, getKeyWrapper] =
+    useHook(getKey);
   useEffect(() => {
-    getDiaryKeyWrapper(getDate().toLocaleDateString());
-  }, [numDaysBefore]);
-
-  function getDate() {
-    const date = new Date();
-    if (numDaysBefore !== 0) {
-      date.setDate(date.getDate() - numDaysBefore);
+    async function initState() {
+      await getKeyWrapper(diaryDatesKey);
     }
 
-    return date;
+    initState();
+  }, []);
+  if (dateIdx === undefined && dates?.length > 0) {
+    setDateIdx(dates.length - 1);
   }
 
+  const [
+    { res: food, loading: foodLoading, err: foodErr },
+    getDiaryKeyWrapper,
+  ] = useHook(getDiaryKey);
+  useEffect(() => {
+    if (dateIdx === undefined || dates?.[dateIdx] === undefined) {
+      return;
+    }
+
+    const currentDate = dates[dateIdx];
+    getDiaryKeyWrapper(currentDate);
+  }, [dateIdx]);
+
+  if (datesLoading) {
+    return;
+  }
+  if (datesErr) {
+    return <Text>Error.</Text>;
+  }
+  if (dates === null) {
+    return;
+  }
+  if (dates.length === 0) {
+    return <Text>Your diary is empty.</Text>;
+  }
   return (
     <View>
-      <DateHeader
-        numDaysBefore={numDaysBefore}
-        setNumDaysBefore={setNumDaysBefore}
-        getDate={getDate}
-      />
-      <DailyProgress data={data} />
+      <DateHeader dates={dates} dateIdx={dateIdx} setDateIdx={setDateIdx} />
+      {/* <DailyProgress data={data} />
       <Diary
         data={data}
         fmtDate={getDate().toLocaleDateString()}
         getDiaryKeyWrapper={getDiaryKeyWrapper}
-      />
+      /> */}
     </View>
   );
 }

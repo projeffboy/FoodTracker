@@ -22,8 +22,7 @@ export default function CameraScreen({ route }) {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef();
 
-  const [{ data, loading, error }, recognizeFoodWrapper] =
-    useHook(recognizeFood);
+  const [{ res, loading, err }, recognizeFoodWrapper] = useHook(recognizeFood);
 
   async function takePicture() {
     if (cameraRef) {
@@ -84,7 +83,7 @@ export default function CameraScreen({ route }) {
               : styles.suggestionsForPortrait,
           ]}
         >
-          <Suggestions loading={loading} error={error} data={data} />
+          <Suggestions loading={loading} error={err} data={res} />
         </View>
       )}
 

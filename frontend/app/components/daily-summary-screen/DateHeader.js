@@ -2,30 +2,36 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import theme from "@/config/theme";
 
-export default DateHeader = ({ numDaysBefore, setNumDaysBefore, getDate }) => (
+export default DateHeader = ({ dates, dateIdx, setDateIdx }) => (
   <View style={styles.dateContainer}>
-    <TouchableOpacity onPress={() => setNumDaysBefore(numDaysBefore + 1)}>
+    <TouchableOpacity
+      onPress={() => setDateIdx(dateIdx - 1)}
+      disabled={dateIdx === 0}
+    >
       <FontAwesome5
         name="chevron-circle-left"
         size={styles.date.fontSize}
-        color={theme.dark}
+        color={theme[dateIdx === 0 ? "medium" : "dark"]}
       />
     </TouchableOpacity>
     <Text style={styles.date}>
-      {getDate().toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })}
+      {
+        //current date
+        new Date(dates[dateIdx]).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      }
     </Text>
     <TouchableOpacity
-      onPress={() => setNumDaysBefore(numDaysBefore - 1)}
-      disabled={numDaysBefore === 0}
+      onPress={() => setDateIdx(dateIdx + 1)}
+      disabled={dateIdx === dates.length - 1}
     >
       <FontAwesome5
         name="chevron-circle-right"
         size={styles.date.fontSize}
-        color={theme[numDaysBefore === 0 ? "medium" : "dark"]}
+        color={theme[dateIdx === dates.length - 1 ? "medium" : "dark"]}
       />
     </TouchableOpacity>
   </View>
