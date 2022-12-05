@@ -60,8 +60,10 @@ export default function HomeScreen({ navigation }) {
         ]}
       >
         <Image style={styles.logo} source={require("@/assets/logo.png")} />
-        <Text style={styles.appTitle}>Food Tracker</Text>
-        <Text style={styles.appSubtitle}>Analyze your food anywhere</Text>
+        <Text style={styles.appTitle}>DeepDishes</Text>
+        <Text style={styles.appSubtitle}>
+          Track calories. Identify foods with your camera.
+        </Text>
       </View>
       <View style={styles.buttonContainer}>
         <Search

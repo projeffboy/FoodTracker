@@ -1,5 +1,4 @@
-import { StyleSheet, Text } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { StyleSheet, Text, FlatList } from "react-native";
 import Unorderedlist from "react-native-unordered-list";
 
 import theme from "@/config/theme";
