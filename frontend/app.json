@@ -1,72 +1,72 @@
 {
-  "expo": {
-    "name": "DeepDishes",
-    "slug": "DeepDishes",
-    "version": "0.1.0",
-    "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./app/assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#f4dacf"
-    },
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Your photo will be sent to our server (if running) to be analyzed. It will NOT be stored."
+    "expo": {
+        "name": "DeepDishes",
+        "slug": "DeepDishes",
+        "version": "0.1.1",
+        "orientation": "portrait",
+        "icon": "./app/assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./app/assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#f4dacf"
+        },
+        "plugins": [
+            [
+                "expo-image-picker",
+                {
+                    "photosPermission": "Your photo will be sent to our server (if running) to be analyzed. It will NOT be stored."
+                }
+            ],
+            [
+                "expo-media-library",
+                {
+                    "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+                    "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+                    "isAccessMediaLocationEnabled": true
+                }
+            ]
+        ],
+        "updates": {
+            "fallbackToCacheTimeout": 0,
+            "url": "https://u.expo.dev/5813ac9f-7632-41e7-a3f1-a08de2676097"
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "infoPlist": {
+                "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
+                "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos.",
+                "NSCameraUsageDescription": "Your photo will be sent to our server (if running) to be analyzed. It will NOT be stored."
+            },
+            "bundleIdentifier": "com.projeffboy.DeepDishes",
+            "buildNumber": "1"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./app/assets/icon.png",
+                "backgroundColor": "#EEEEEE"
+            },
+            "permissions": [
+                "android.permission.RECORD_AUDIO",
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE",
+                "android.permission.ACCESS_MEDIA_LOCATION"
+            ],
+            "package": "com.projeffboy.DeepDishes"
+        },
+        "web": {
+            "favicon": "./app/assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "5813ac9f-7632-41e7-a3f1-a08de2676097"
+            }
+        },
+        "runtimeVersion": {
+            "policy": "sdkVersion"
         }
-      ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
-          "isAccessMediaLocationEnabled": true
-        }
-      ]
-    ],
-    "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/5813ac9f-7632-41e7-a3f1-a08de2676097"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
-        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos.",
-        "NSCameraUsageDescription": "Your photo will be sent to our server (if running) to be analyzed. It will NOT be stored."
-      },
-      "bundleIdentifier": "com.projeffboy.DeepDishes",
-      "buildNumber": "2"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./app/assets/icon.png",
-        "backgroundColor": "#EEEEEE"
-      },
-      "permissions": [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.ACCESS_MEDIA_LOCATION"
-      ],
-      "package": "com.projeffboy.DeepDishes"
-    },
-    "web": {
-      "favicon": "./app/assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "5813ac9f-7632-41e7-a3f1-a08de2676097"
-      }
-    },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
     }
-  }
 }
