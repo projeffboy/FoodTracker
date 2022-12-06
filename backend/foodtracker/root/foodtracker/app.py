@@ -115,6 +115,54 @@ def handler():
 
     return response
 
+@app.route('/image_query_3', methods=['POST'])
+def handler3():
+    def extract_image(request_in):
+        if 'file' not in request_in.files:
+            raise BadRequest("Missing file (image/jpeg).")
+        file = request_in.files['file']
+        if file.filename == '':
+            raise BadRequest("File name is invalid.")
 
+        return file
+
+    file = extract_image(request)
+    image = Image.open(io.BytesIO(file.read()))
+    image = preprocess(image).unsqueeze(0)
+    print("OK")
+    result = clippify(image)
+
+    def parse_result(r):
+        json_content = []
+        counter = 0
+
+        for x in r:
+            if counter > 3:
+                break
+            food = Food(x[0][0], x[0][1], x[0][2], x[0][3])
+            get_food_info(food)
+            food_dict = {'name': food.get_name(),
+                         'id': food.get_id(),
+                         'default_quantity': food.get_default_quantity(),
+                         'default_quantity_unit': food.get_deafult_quantity_unit(),
+                         'calories': food.get_calories(),
+                         'protein': food.get_protien(),
+                         'fat': food.get_fat(),
+                         'sugar': food.get_sugar(),
+                         'fiber': food.get_fiber(),
+                         'calcium': food.get_calcium(),
+                         'sodium': food.get_sodium(),
+                         'confidence': x[1]}
+            json_content.append(food_dict)
+            counter = counter+1
+
+        return json.dumps(json_content)
+
+    res_json = parse_result(result)
+    response = make_response(res_json, 200)
+    response.headers['Content-type'] = 'application/json'
+
+    return response
+  
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
