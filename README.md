@@ -1,4 +1,6 @@
-Hi, our mobile app is split into 3 parts:
+This is the Food Tracker (aka Deep Dishes) mobile application repository. It's main goal is to analyze a given food image using a machine learning model and return nutritional information back to the user to facilitate their diet.
+
+Our mobile app is split into 3 parts:
 
 Machine learning model -> Backend -> Mobile Frontend
 
