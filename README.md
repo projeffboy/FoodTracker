@@ -12,4 +12,4 @@ Authors:
 - Jeffery Tang
 - Hyunbum Cho
 - Junlin Zhuo
-- Panayiotis
+- Panayiotis Demopoulos
