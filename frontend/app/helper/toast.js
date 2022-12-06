@@ -10,7 +10,7 @@ import { isMissingDetails } from "./nutrition";
 const options = {
   duration: Toast.durations.SHORT,
   opacity: 1,
-  backgroundColor: theme.pink,
+  backgroundColor: theme.green,
   textColor: theme.light,
   shadowColor: theme.medium,
 };

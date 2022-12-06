@@ -39,8 +39,8 @@ export default function HomeScreen({ navigation }) {
     searchTerm.trim() && navigation.navigate("FoodList", { searchTerm });
   }
 
-  function goToDailySummary() {
-    navigation.navigate("DailySummary");
+  function goToSummary() {
+    navigation.navigate("Summary");
   }
 
   async function openImagePicker() {
@@ -88,7 +88,7 @@ export default function HomeScreen({ navigation }) {
             <MainMenuButton
               label="Daily Summary"
               icon="chart-pie"
-              onPress={goToDailySummary}
+              onPress={goToSummary}
               backgroundColor={theme.pink}
             />
           </>

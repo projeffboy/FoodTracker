@@ -5,12 +5,12 @@ import { kJ_to_kcal } from "@/helper/nutrition";
 import { round } from "@/helper/utility";
 
 export default function FoodDetails({
-  styles: moreStyles,
+  styles: inheritedStyles,
   food,
   defaultServingSize,
   energy,
 }) {
-  styles = { ...styles, moreStyles };
+  styles = { ...inheritedStyles, ...styles };
 
   const kcal = energy ? kJ_to_kcal(energy) : ["", ""];
 

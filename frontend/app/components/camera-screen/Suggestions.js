@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import FoodList from "@/components/FoodList";
 import MyError from "@/components/MyError";
 import theme from "@/config/theme";
+import CenteredView from "../CenteredView";
 // import { getFoods } from "../helper/api";
 
 export default Suggestions = ({ loading, error, data }) => {
@@ -48,12 +49,10 @@ export default Suggestions = ({ loading, error, data }) => {
     );
   } else if (error !== null) {
     return (
-      <View style={styles.noPredictions}>
-        {/* <MyError /> */}
-        <Text style={{ textAlign: "center" }}>
-          Our remote ML server is down. Local ML coming in the future.
-        </Text>
-      </View>
+      <CenteredView>
+        <Text style={styles.error}>Our remote ML server is down.</Text>
+        <Text style={styles.error}>Local ML coming in the future.</Text>
+      </CenteredView>
     );
   } else if (data?.length > 0) {
     return <FoodList foods={foods} />;
@@ -67,10 +66,8 @@ export default Suggestions = ({ loading, error, data }) => {
 };
 
 const styles = StyleSheet.create({
-  noPredictions: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  error: {
+    fontSize: 16,
   },
   loadingText: {
     color: theme.medium,

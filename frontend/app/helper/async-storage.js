@@ -12,6 +12,10 @@ import { isMissingDetails } from "./nutrition";
 //   servingGrams: Number,
 // }
 
+const diaryDatesKey = "@diaryDates";
+
+/* Composite Methods */
+
 export async function addToDiary(foodEntry) {
   try {
     if (isMissingDetails(foodEntry)) {
@@ -30,9 +34,9 @@ export async function addToDiary(foodEntry) {
   }
 }
 
-async function addEntry(fmtDate, foodEntry) {
+async function addEntry(date, foodEntry) {
   // Get value from key
-  const key = "@diary:" + fmtDate;
+  const key = getDateKey(date);
   let diaryDay = await AsyncStorage.getItem(key);
   diaryDay = JSON.parse(diaryDay) || [];
   // Update value and put it back in key
@@ -41,26 +45,38 @@ async function addEntry(fmtDate, foodEntry) {
   AsyncStorage.setItem(key, JSON.stringify(diaryDay));
 }
 
-export const diaryDatesKey = "@diaryDates";
+export async function getDiaryDates() {
+  return (await getItem(diaryDatesKey)) || [];
+}
 
 // format: MM/dd/YYYY
 async function addDate(date) {
   // Get value from key
-  const key = diaryDatesKey;
-  let diaryDates = await AsyncStorage.getItem(key);
-  diaryDates = JSON.parse(diaryDates) || [];
+  let diaryDates = await getDiaryDates();
   // Update value and put it back in key
   if (!diaryDates.includes(date)) {
     diaryDates.push(date);
   }
-  AsyncStorage.setItem(key, JSON.stringify(diaryDates));
+  AsyncStorage.setItem(diaryDatesKey, JSON.stringify(diaryDates));
 }
 
-export async function getDiaryKey(key) {
-  return await getKey("@diary:" + key);
+export async function getDiaryDay(date) {
+  return (await getItem(getDateKey(date))) || [];
 }
 
-export async function getKey(key) {
+export async function deleteDiaryDay(date) {
+  deleteItem(getDateKey(date));
+  let diaryDates = await getDiaryDates();
+  diaryDates = diaryDates.filter(diaryDate => diaryDate !== date);
+  AsyncStorage.setItem(diaryDatesKey, JSON.stringify(diaryDates));
+
+  return true;
+}
+
+/* Basic Methods */
+const getDateKey = date => "@diary:" + date;
+
+async function getItem(key) {
   try {
     const food = await AsyncStorage.getItem(key);
 
@@ -72,7 +88,7 @@ export async function getKey(key) {
   }
 }
 
-export async function deleteKey(key) {
+async function deleteItem(key) {
   try {
     await AsyncStorage.removeItem(key);
 

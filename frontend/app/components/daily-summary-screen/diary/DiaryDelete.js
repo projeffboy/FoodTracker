@@ -1,32 +1,33 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import MyButton from "@/components/MyButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import theme from "@/config/theme";
 import showToast from "@/helper/toast";
-import { deleteAll, deleteKey } from "@/helper/async-storage";
+import { deleteAll, deleteDiaryDay } from "@/helper/async-storage";
 
 export default function DiaryDelete({ date, refresh }) {
-  function deleteHelper(fn) {
-    const toastMsg = fn() ? "Deleted." : "Failed to delete.";
+  async function deleteHelper(fn) {
+    const success = await fn();
+    const toastMsg = success ? "Deleted." : "Failed to delete.";
     showToast(toastMsg);
     refresh();
   }
 
-  function deleteDiaryDay() {
-    deleteHelper(() => deleteKey("@diary:" + date));
+  function deleteDiaryDayWrapper() {
+    deleteHelper(() => deleteDiaryDay(date));
   }
 
-  function deleteDiary() {
+  function deleteAllWrapper() {
     deleteHelper(deleteAll);
   }
 
   return (
     <View>
-      <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+      <View style={styles.btns}>
         <MyButton
           text="Delete Today"
-          onPress={deleteDiaryDay}
+          onPress={deleteDiaryDayWrapper}
           icon={
             <MaterialCommunityIcons
               name="delete"
@@ -39,7 +40,7 @@ export default function DiaryDelete({ date, refresh }) {
         />
         <MyButton
           text="Delete Everything"
-          onPress={deleteDiary}
+          onPress={deleteAllWrapper}
           icon={
             <MaterialCommunityIcons
               name="delete-alert"
@@ -54,3 +55,11 @@ export default function DiaryDelete({ date, refresh }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  btns: {
+    marginTop: 32,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+});

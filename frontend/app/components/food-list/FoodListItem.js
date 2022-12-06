@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   addFoodButton: {
     paddingHorizontal: 12,
   },
+  // don't remove
   itemText: {
     fontSize: 16,
     color: theme.dark,

@@ -5,7 +5,7 @@ import HomeScreen from "./app/screens/HomeScreen";
 import FoodListScreen from "./app/screens/FoodListScreen";
 import CameraScreen from "./app/screens/CameraScreen";
 import NutritionFactsScreen from "./app/screens/NutritionFactsScreen";
-import DailySummaryScreen from "./app/screens/DailySummaryScreen";
+import SummaryScreen from "./app/screens/SummaryScreen";
 import AddFood from "./app/components/AddFood";
 
 const Stack = createNativeStackNavigator();
@@ -36,8 +36,8 @@ export default App = () => (
           options={{ title: "" }}
         />
         <Stack.Screen
-          name="DailySummary"
-          component={DailySummaryScreen}
+          name="Summary"
+          component={SummaryScreen}
           options={{
             title: "Summary",
           }}

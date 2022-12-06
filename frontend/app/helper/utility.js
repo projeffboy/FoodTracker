@@ -66,3 +66,12 @@ export function binarySearch(arr, val) {
   }
   return -1;
 }
+
+// https://stackoverflow.com/a/42488360/6454135
+export const sumObjectsByKey = (...objs) =>
+  objs.reduce((total, val) => {
+    for (let k in val) {
+      if (val.hasOwnProperty(k)) total[k] = (total[k] || 0) + val[k];
+    }
+    return total;
+  }, {});

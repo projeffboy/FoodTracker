@@ -6,6 +6,7 @@ import FoodList from "@/components/FoodList";
 import { searchFoods } from "@/helper/api";
 import useHook from "@/helper/useHook";
 import MyError from "@/components/MyError";
+import CenteredView from "@/components/CenteredView";
 
 export default function FoodListScreen({ route }) {
   const { searchTerm: initialSearchTerm } = route.params;
@@ -29,13 +30,19 @@ export default function FoodListScreen({ route }) {
     } else if (res && res.length > 0) {
       return <FoodList foods={res} />;
     } else if (res && res.length === 0) {
-      return <Text style={styles.noMatches}>No matches found.</Text>;
+      return (
+        <CenteredView flex={0.9}>
+          <Text style={styles.noMatches}>No matches found.</Text>
+        </CenteredView>
+      );
     } else {
-      <View style={styles.noPredictions}>
-        <Text style={styles.noMatches}>
-          Either still loading or no matches found.
-        </Text>
-      </View>;
+      return (
+        <CenteredView flex={0.9}>
+          <Text style={styles.noMatches}>
+            Either still loading or no matches found.
+          </Text>
+        </CenteredView>
+      );
     }
   }
 
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   noMatches: {
-    marginTop: 16,
-    fontSize: 16,
+    fontSize: 18,
+    color: theme.medium,
   },
 });
